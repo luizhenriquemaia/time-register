@@ -5,6 +5,7 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
 import Navbar from './layout/Navbar'
 import Home from './layout/Home'
+import NewRegister from './register/NewRegister'
 
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
             <div className="container">
                 <Navbar />
                 <Switch>
-                    <Route path="/" component={Home} />
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/new-register" component={NewRegister} />
                 </Switch>
             </div>
         </Router>

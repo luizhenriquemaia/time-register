@@ -3,6 +3,7 @@
     src: url('./fonts/Raleway-Regular.ttf');
 }
 
+/* general elements */
 .grid {
     grid-template-columns: repeat(12fr);
 }
@@ -11,40 +12,77 @@ body {
     font-family: 'Raleway-Regular';
 }
 
+input {
+    border: 0;
+    border-radius: 0;
+    border-bottom: #14213D 1px solid;
+}
+
 .container {
-    display: grid;
+    display: flex;
     width: 100%;
-    margin-right: auto;
-    margin-left: auto;
+    height: 100%;
     position: fixed;
     left: 0;
     top: 0;
-    height: 100%;
+    justify-content: space-between;
 }
 
+/* navbar */
 .navbar-vertical {
-    height: 100%;
-    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: black;
     color: white;
-    grid-column: 1/4;
 }
 
 .navbar-vertical ul {
     list-style: none;
+    padding: 0 30px 0px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: white;
 }
 
 .list-navbar {
-    position: fixed;
-    top: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .list-navbar li {
     padding: 15px 0px 15px;
 }
 
+/* contents */
 .content {
-    grid-column: 5/13;
-    padding-left: 20px;
-    margin-top: 25%;
+    width: 100%;
+}
+
+.home-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* titles */
+.title-page {
+    margin-top: 2em;
+    margin-bottom: 3em;
+    text-align: center;
+}
+
+/* forms */
+.form-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 35% 15px;
+}
+
+.form-input label {
+    margin-right: 50px;
 }

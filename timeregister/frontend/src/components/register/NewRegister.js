@@ -1,0 +1,27 @@
+import React from 'react'
+
+
+export default function NewRegister() {
+    return (
+        <div className="content">
+            <h1 className="title-page">New Register</h1>
+            <div className="form-input">
+                <label>Employee</label>
+                <input type="text" />
+            </div>
+            <div className="form-input">
+                <label>Type of contract</label>
+                <input type="text" />
+            </div>
+            <div className="form-input">
+                <label>Initial date</label>
+                <input type="text" />
+            </div>
+            <div className="form-input">
+                <label>Final date</label>
+                <input type="text" />
+            </div>
+        </div>
+
+    )
+}
