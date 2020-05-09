@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack --mode development --watch ./src/index.js --output ./static/frontend/main.js",
-    "build": "webpack --mode production ./src/index.js --output ./static/frontend/main.js"
+    "dev": "webpack --mode development --watch ./timeregister/frontend/src/index.js --output ./timeregister/frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./timeregister/frontend/src/index.js --output ./timeregister/frontend/static/frontend/main.js"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
