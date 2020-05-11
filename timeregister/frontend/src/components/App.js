@@ -4,7 +4,7 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
 import Navbar from './layout/Navbar'
 import Home from './layout/Home'
-import NewRegister from './register/NewRegister'
+import NewReport from './register/NewReport'
 import UnsentReport from './register/UnsentReport'
 // Redux things
 import { Provider } from 'react-redux'
@@ -19,7 +19,7 @@ export default function App() {
                     <Navbar />
                     <Switch>
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/new-register" component={NewRegister} />
+                        <Route exact path="/new-report" component={NewReport} />
                         <Route exact path="/unsent-report" component={UnsentReport} />
                     </Switch>
                 </div>

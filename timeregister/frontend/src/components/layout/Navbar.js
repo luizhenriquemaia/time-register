@@ -10,7 +10,7 @@ export default function Navbar() {
                 <li><Link to="/" className="nav-link">Home</Link></li>
             </ul>
             <ul className="list-navbar">
-                <li><Link to="/new-register" className="nav-link">New Register</Link></li>
+                <li><Link to="/new-report" className="nav-link">New Report</Link></li>
                 <li><Link to="/unsent-report" className="nav-link">Unsent Reports</Link></li>
                 <li><Link to="/reports" className="nav-link">Reports</Link></li>
                 <li>Sign Out</li>
