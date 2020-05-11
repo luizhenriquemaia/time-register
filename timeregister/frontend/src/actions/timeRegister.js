@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { GET_TIME_REGISTERS, DELETE_REGISTER, ADD_REGISTER } from './types'
+import { GET_TIME_REGISTERS, DELETE_TIME_REGISTER, ADD_TIME_REGISTER } from './types'
 // import { createMessage, returnErrors } from './messages'
 
 
-// GET LEADS
+// GET TIME REGISTERS
 // we can create a function inside the getLeads to dispatch action but the simple way is passing like this
 export function getTimeRegisters() {
     return dispatch => {
@@ -20,20 +20,21 @@ export function getTimeRegisters() {
                 )
     }
 }
-/* export const getTimeRegisters = () => dispatch => {
-    console.log("get api time")
-    axios.get('/api/time/')
+
+// ADD TIME REGISTER
+export function addTimeRegister(timeRegister) {
+    dispatch => {
+        axios.post("api/time/", timeRegister)
         .then(res => {
-            dispatch({
-                type: GET_TIME_REGISTERS,
-                payload: res.data
+                dispatch({
+                    type: ADD_TIME_REGISTER,
+                    payload: res.data
+                })
             })
-            console.log(res.data)
-        })
-        .catch(
-            console.log(err),
-            err => dispatch(returnErrors(err.response.data, err.response.status)))
-} */
+        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+    }
+}
+
 
 
 /* // DELETE LEAD

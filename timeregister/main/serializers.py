@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import b01Schedule, b02TypeContract, c01Employee, d01Time
+from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Time
 
 
 # Schedule Serializer
@@ -12,6 +12,12 @@ class ScheduleSerializer(serializers.ModelSerializer):
 class TypeContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = b02TypeContract
+        fields = '__all__'
+
+# Function Employee Serializer
+class FunctionEmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = b03FunctionEmployee
         fields = '__all__'
 
 

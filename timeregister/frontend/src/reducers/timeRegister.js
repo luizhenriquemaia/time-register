@@ -1,4 +1,4 @@
-import { GET_TIME_REGISTERS, DELETE_REGISTER, ADD_REGISTER } from '../actions/types.js'
+import { GET_TIME_REGISTERS, DELETE_TIME_REGISTER, ADD_TIME_REGISTER } from '../actions/types.js'
 
 
 const initialState = {
@@ -12,12 +12,12 @@ export default function (state = initialState, action) {
                 ...state,
                 timeRegister: action.payload
             }
-        case DELETE_REGISTER:
+        case DELETE_TIME_REGISTER:
             return {
                 ...state,
                 timeRegister: state.timeRegister.filter(timeRegister => timeRegister.id !== action.payload)
             }
-        case ADD_REGISTER:
+        case ADD_TIME_REGISTER:
             return {
                 ...state,
                 timeRegister: [...state.timeRegister, action.payload]

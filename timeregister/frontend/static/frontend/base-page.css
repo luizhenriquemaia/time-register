@@ -144,9 +144,15 @@ form {
 }
 
 /* focus */
-input[type=text]:focus {
+input:focus {
     outline: none;
     padding-bottom: 10px;
+    border-width: 2px;
+    border-color: #FCA311;
+}
+
+select:focus {
+    outline: none;
     border-width: 2px;
     border-color: #FCA311;
 }
