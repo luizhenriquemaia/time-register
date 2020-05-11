@@ -86,8 +86,8 @@ form {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-left: 30%;
-    margin-right: 30%;
+    margin-left: 25%;
+    margin-right: 25%;
 }
 .form-input {
     display: flex;
@@ -96,8 +96,13 @@ form {
     height: 70px;
 }
 
-.form-input label, .form-input input {
+.form-input label {
     width: 200px;
+    float: left;
+}
+
+.form-input input, .form-input select {
+    width: 300px;
     float: left;
     transition: 0.15s;
 }
