@@ -35,7 +35,7 @@ class c01Employee(models.Model):
 
 
 class d01Report(models.Model):
-    initalDate = models.DateField(default=date(2000, 1, 1))
+    initialDate = models.DateField(default=date(2000, 1, 1))
     finalDate = models.DateField(default=date(2000, 1, 1))
     employee = models.ForeignKey(c01Employee, on_delete=models.CASCADE)
     # set null = false in production

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getEmployees } from '../../actions/employees'
 import { getTypeContracts } from '../../actions/typeContract'
+import { addReport } from '../../actions/reports'
 
 
 export default function NewRegister() {
@@ -34,7 +35,7 @@ export default function NewRegister() {
         })
     }
     // verification of the changes in state
-    console.log(newReportState)
+    //console.log(newReportState)
 
     // submit the form
     function handleSubmit(e) {
@@ -43,6 +44,8 @@ export default function NewRegister() {
         const { employee, typeContract, initialDate, finalDate } = newReportState
         const newReport = { employee, typeContract, initialDate, finalDate }
         console.log(newReport)
+        // to do -> if the values in newReport != initial Report
+        dispatch(addReport(newReport))        
     }
 
     return (
