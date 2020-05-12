@@ -1,6 +1,6 @@
-from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Time
+from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02Time
 from rest_framework import viewsets, permissions
-from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, TimeSerializer
+from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, TimeSerializer
 
 
 # Schedule Viewset
@@ -62,6 +62,20 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     #    serializer.save(owner=self.request.user)
 
 
+# Report Viewset
+class ReportViewSet(viewsets.ModelViewSet):
+    #permission_classes = [
+    #    permissions.IsAuthenticated
+    #]
+    serializer_class = ReportSerializer
+
+    def get_queryset(self):
+        return d01Report.objects.all()
+
+    # Allow us to save the owner when we create a time
+    #def perform_create(self, serializer):
+    #    serializer.save(owner=self.request.user)
+
 
 # Time Viewset
 class TimeViewSet(viewsets.ModelViewSet):
@@ -71,7 +85,7 @@ class TimeViewSet(viewsets.ModelViewSet):
     serializer_class = TimeSerializer
 
     def get_queryset(self):
-        return d01Time.objects.all()
+        return d02Time.objects.all()
 
     # Allow us to save the owner when we create a time
     #def perform_create(self, serializer):
