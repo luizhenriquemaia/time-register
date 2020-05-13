@@ -15,9 +15,6 @@ class b02TypeContract(models.Model):
     durationLunch = models.TimeField()
     objects = models.Manager()
 
-    def __str__(self):
-        return self.description
-
 
 class b03FunctionEmployee(models.Model):
     description = models.CharField(max_length=200)

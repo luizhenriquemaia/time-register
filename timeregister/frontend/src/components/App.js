@@ -5,10 +5,12 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './layout/Navbar'
 import Home from './layout/Home'
 import NewReport from './register/NewReport'
+import Report from './register/Report'
 import UnsentReport from './register/UnsentReport'
 // Redux things
 import { Provider } from 'react-redux'
 import store from '../store'
+import "babel-polyfill"
 
 
 export default function App() {
@@ -20,6 +22,7 @@ export default function App() {
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/new-report" component={NewReport} />
+                        <Route exact path="/report" component={Report} />
                         <Route exact path="/unsent-report" component={UnsentReport} />
                     </Switch>
                 </div>

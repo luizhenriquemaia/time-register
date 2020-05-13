@@ -2,7 +2,8 @@ import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from '../actions/types.js'
 
 
 const initialState = {
-    report: []
+    report: [],
+    isReportAdded: false
 }
 
 export default function (state = initialState, action) {
@@ -18,9 +19,11 @@ export default function (state = initialState, action) {
                 report: state.report.filter(report => report.id !== action.payload)
             }
         case ADD_REPORT:
+            console.log(action.payload.id)
             return {
                 ...state,
-                report: [...state.report, action.payload]
+                report: [...state.report, action.payload],
+                isReportAdded: true
             }
         default:
             return state

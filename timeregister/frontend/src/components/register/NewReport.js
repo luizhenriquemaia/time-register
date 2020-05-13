@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { getEmployees } from '../../actions/employees'
 import { getTypeContracts } from '../../actions/typeContract'
 import { addReport } from '../../actions/reports'
@@ -15,6 +16,7 @@ export default function NewRegister() {
 
     // used to referer to dispatch method from redux
     const dispatch = useDispatch()
+    const history = useHistory()
     // useEffect is similar to component did mount and component did update
     useEffect(() => {
         // get employees for select input
@@ -34,7 +36,6 @@ export default function NewRegister() {
             [name]: value
         })
     }
-    // verification of the changes in state
     //console.log(newReportState)
 
     // submit the form
@@ -43,10 +44,11 @@ export default function NewRegister() {
         // grab the values from the state
         const { employee, typeContract, initialDate, finalDate } = newReportState
         const newReport = { employee, typeContract, initialDate, finalDate }
-        console.log(newReport)
         // to do -> if the values in newReport != initial Report
-        dispatch(addReport(newReport))        
+        dispatch(addReport(newReport))
+        history.push('/report')
     }
+
 
     return (
         <div className="content">
@@ -83,6 +85,5 @@ export default function NewRegister() {
                 <button className="submit-button">New Report</button>
             </form>
         </div>
-
     )
 }
