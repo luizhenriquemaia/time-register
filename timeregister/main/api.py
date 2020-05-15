@@ -68,7 +68,11 @@ class ReportViewSet(viewsets.ViewSet):
     #permission_classes = [
     #    permissions.IsAuthenticated
     #]
-    serializer = ReportSerializer
+    def get_serializer(self):
+        if self.action == 'retrieve':
+            return DetailsReportSerializer
+        else:
+            return ReportSerializer
 
     def list(self, request):
         obj_reports = d01Report.objects.all()
@@ -89,9 +93,10 @@ class ReportViewSet(viewsets.ViewSet):
         obj_report.delete()
         return Response("", status=status.HTTP_200_OK)
 
-    def retrive(self, request, pk):
-        obj_details_report = d02DetailsReport.objects.filter(report=pk)
-        return obj_details_report
+    def retrieve(self, request, pk):
+        obj_details_report = d02DetailsReport.objects.filter(report_id=pk)
+        return Response(obj_details_report)
+
 
 
     # Allow us to save the owner when we create a time
@@ -99,17 +104,18 @@ class ReportViewSet(viewsets.ViewSet):
     #    serializer.save(owner=self.request.user)
 
 
-# Details Report Viewset
-class DetailsReportViewSet(viewsets.ViewSet):
+""" # Data Report Viewset
+class DataReportViewSet(viewsets.ViewSet):
     #permission_classes = [
     #    permissions.IsAuthenticated
     #]
     serializer = DetailsReportSerializer
 
-    def retrive(self, request, pk):
+    def list(self, request, pk):
+        print("teste3")
         obj_details_report = d02DetailsReport.objects.filter(report=pk)
         return obj_details_report
 
     # Allow us to save the owner when we create a time
     #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)
+    #    serializer.save(owner=self.request.user) """

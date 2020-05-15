@@ -34,7 +34,7 @@ class ReportSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# Details Report Serializer
+# Data Report Serializer
 class DetailsReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = d02DetailsReport
