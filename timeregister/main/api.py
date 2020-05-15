@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02Time
 from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, TimeSerializer
@@ -83,6 +83,11 @@ class ReportViewSet(viewsets.ViewSet):
             }
             reports.append(dic_report)
         return Response(reports)
+
+    def destroy(self, request, pk):
+        obj_report = d01Report.objects.get(id=pk)
+        obj_report.delete()
+        return Response("", status=status.HTTP_200_OK)
 
 
     """ def get_queryset(self):

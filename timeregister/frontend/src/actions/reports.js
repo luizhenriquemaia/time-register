@@ -12,7 +12,6 @@ export function getReports() {
                     type: GET_REPORTS,
                     payload: res.data
                 })
-                console.log(res.data)
             })
             .catch(
                 err => dispatch(returnErrors(err.response.data, err.response.status))
@@ -29,10 +28,23 @@ export const addReport = (report) => {
                     type: ADD_REPORT,
                     payload: res.data
                 })
-                console.log("added report")
-                console.log(res.data)
             })
             //.catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+            .catch(err => console.log(err))
+    }
+}
+
+// DELETE REPORT
+export const deleteReport = (id) => {
+    return dispatch => {
+        axios.delete(`/api/report/${id}/`)
+            .then(res => {
+                dispatch({
+                    type: DELETE_REPORT,
+                    payload: id
+                })
+            })
+            // .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
             .catch(err => console.log(err))
     }
 }
