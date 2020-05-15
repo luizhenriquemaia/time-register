@@ -40,7 +40,7 @@ class d01Report(models.Model):
     objects = models.Manager()
 
 
-class d02Time(models.Model):
+class d02DetailsReport(models.Model):
     dateRegister = models.DateField(default=date(2000, 1, 1))
     schedule = models.ForeignKey(b01Schedule, on_delete=models.CASCADE)
     timeRegister = models.TimeField()

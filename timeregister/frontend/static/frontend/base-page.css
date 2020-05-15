@@ -149,8 +149,16 @@ th {
     width: 150px;
 }
 
+td {
+    padding: 15px 5px 15px;
+}
+
 tr {
     text-align: center;
+}
+
+.table-reports td {
+    cursor: pointer;
 }
 
 /* hover of elements*/

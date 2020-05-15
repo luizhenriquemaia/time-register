@@ -14,7 +14,6 @@ export default function (state = initialState, action) {
                 report: action.payload
             }
         case DELETE_REPORT:
-            console.log(action.payload)
             return {
                 ...state,
                 report: state.report.filter(report => report.id !== action.payload)
