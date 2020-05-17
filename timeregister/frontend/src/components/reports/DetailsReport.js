@@ -30,7 +30,7 @@ export default function DetailsReport() {
 
     return (
         <div className="content">
-            <h1 className="title-page">Details Report</h1>
+            <h1 className="title-page">Details Report {detailsReport.id}</h1>
         </div>
     )
 }

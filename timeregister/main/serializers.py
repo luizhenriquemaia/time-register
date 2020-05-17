@@ -28,14 +28,34 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # Report Serializer
-class ReportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = d01Report
-        fields = '__all__'
+class ReportSerializer(serializers.Serializer):
+    initialDate = serializers.DateField()
+    finalDate = serializers.DateField()
+    employee = serializers.IntegerField()
+    typeContract = serializers.IntegerField()
+
+    def create(self, validated_data):
+        return d01Report(**validated_data)
+    
+    def destroy(self, id):
+        return d01Report.destroy(d01Report, id)
+
+
+#    class Meta:
+#        model = d01Report
+#        fields = '__all__'
 
 
 # Data Report Serializer
-class DetailsReportSerializer(serializers.ModelSerializer):
-    class Meta:
+class DetailsReportSerializer(serializers.Serializer):
+    dateRegister = serializers.DateField()
+    schedule = serializers.IntegerField()
+    timeRegister = serializers.TimeField()
+    report = serializers.IntegerField()
+
+    def create(self, validated_data):
+        return d02DetailsReport(**validated_data)
+
+    """ class Meta:
         model = d02DetailsReport
-        fields = '__all__'
+        fields = '__all__' """

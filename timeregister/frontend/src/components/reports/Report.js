@@ -19,8 +19,6 @@ export default function Report() {
     }
 
     function handleClick(idReport) {
-        console.log(idReport)
-        console.log("going to details report")
         history.push({ pathname: `details-report/${idReport}`, idReportState: idReport})
     }
     
@@ -39,8 +37,8 @@ export default function Report() {
                 </thead>
                 <tbody>
                     {reports.map(report => (
-                        <tr key={report.id} onClick={() => handleClick(report.id)} >
-                            <td>{report.initialDate}</td>
+                        <tr key={report.id} >
+                            <td onClick={() => handleClick(report.id)} >{report.initialDate}</td>
                             <td>{report.finalDate}</td>
                             <td>{report.employee}</td>
                             <td>{report.typeContract}</td>

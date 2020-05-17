@@ -65,10 +65,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
 # Report Viewset
 class ReportViewSet(viewsets.ViewSet):
-    #permission_classes = [
-    #    permissions.IsAuthenticated
-    #]
-    def get_serializer(self):
+
+    def get_serializer_class(self):
         if self.action == 'retrieve':
             return DetailsReportSerializer
         else:
@@ -87,21 +85,20 @@ class ReportViewSet(viewsets.ViewSet):
             }
             reports.append(dic_report)
         return Response(reports)
+    
+    def create(self, serializer):
+        serializer.is_valid(raise_exception=True)
+        new_report = serializer.save()
+        return Response(new_report)
 
     def destroy(self, request, pk):
-        obj_report = d01Report.objects.get(id=pk)
-        obj_report.delete()
-        return Response("", status=status.HTTP_200_OK)
+        serializer = ReportSerializer
+        deleted_register = serializer.destroy(serializer, id=pk)
+        return Response("", status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
         obj_details_report = d02DetailsReport.objects.filter(report_id=pk)
         return Response(obj_details_report)
-
-
-
-    # Allow us to save the owner when we create a time
-    #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)
 
 
 """ # Data Report Viewset

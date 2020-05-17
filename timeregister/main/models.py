@@ -39,6 +39,13 @@ class d01Report(models.Model):
     typeContract = models.ForeignKey(b02TypeContract, on_delete=models.CASCADE, null=True)    
     objects = models.Manager()
 
+    def create(self, validated_data):
+        return d01Report.objects.create(**validated_data)
+    
+    def destroy(self, id):
+        report = d01Report.objects.get(id=id)        
+        report.delete()
+
 
 class d02DetailsReport(models.Model):
     dateRegister = models.DateField(default=date(2000, 1, 1))
@@ -46,3 +53,6 @@ class d02DetailsReport(models.Model):
     timeRegister = models.TimeField()
     report = models.ForeignKey(d01Report, on_delete=models.CASCADE)
     objects = models.Manager()
+
+    def create(self, validated_data):
+        return d02DetailsReport.objects.create(**validated_data)
