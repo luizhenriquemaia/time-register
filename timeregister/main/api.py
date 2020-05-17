@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02DetailsReport
-from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, DetailsReportSerializer
+from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02TimesReport
+from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, TimesReportSerializer
 
 
 # Schedule Viewset
@@ -73,23 +73,29 @@ class ReportViewSet(viewsets.ViewSet):
             return ReportSerializer
 
     def list(self, request):
-        obj_reports = d01Report.objects.all()
+        """ obj_reports = d01Report.objects.all()
         reports = []
         for report in obj_reports:
             dic_report = {
                 "id": report.id,
                 "initialDate": report.initialDate,
                 "finalDate": report.finalDate,
-                "employee": c01Employee.objects.get(id=report.employee.id).name,
-                "typeContract": b02TypeContract.objects.get(id=report.typeContract.id).description
+                "employee": c01Employee.objects.get(id=report.employee.id),
+                "typeContract": b02TypeContract.objects.get(id=report.typeContract.id)
             }
             reports.append(dic_report)
-        return Response(reports)
+        return Response(reports) """
+        queryset = d01Report.objects.all()
+        serializer = ReportSerializer(queryset, many=True)
+        return Response(serializer.data)
     
-    def create(self, serializer):
-        serializer.is_valid(raise_exception=True)
-        new_report = serializer.save()
-        return Response(new_report)
+    def create(self, request):
+        serializer = ReportSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            new_report = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
         serializer = ReportSerializer
@@ -97,16 +103,17 @@ class ReportViewSet(viewsets.ViewSet):
         return Response("", status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
+        # impossible to add new data in this way, have to separate the view set
         obj_details_report = d02DetailsReport.objects.filter(report_id=pk)
         return Response(obj_details_report)
 
 
-""" # Data Report Viewset
-class DataReportViewSet(viewsets.ViewSet):
+# Time's Report Viewset
+class TimesReportViewSet(viewsets.ViewSet):
     #permission_classes = [
     #    permissions.IsAuthenticated
     #]
-    serializer = DetailsReportSerializer
+    serializer = TimesReportSerializer
 
     def list(self, request, pk):
         print("teste3")
@@ -115,4 +122,4 @@ class DataReportViewSet(viewsets.ViewSet):
 
     # Allow us to save the owner when we create a time
     #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user) """
+    #    serializer.save(owner=self.request.user)

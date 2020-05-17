@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .api import ScheduleViewSet, TypeContractViewSet, FunctionEmployeeViewSet, EmployeeViewSet, ReportViewSet
+from .api import ScheduleViewSet, TypeContractViewSet, FunctionEmployeeViewSet, EmployeeViewSet, ReportViewSet, TimesReportViewSet
 
 
 router = routers.DefaultRouter()

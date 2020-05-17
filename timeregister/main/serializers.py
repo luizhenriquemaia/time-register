@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02DetailsReport
+from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02TimesReport
 
 
 # Schedule Serializer
@@ -27,34 +27,35 @@ class EmployeeSerializer(serializers.ModelSerializer):
         model = c01Employee
         fields = '__all__'
 
-# Report Serializer
-class ReportSerializer(serializers.Serializer):
-    initialDate = serializers.DateField()
-    finalDate = serializers.DateField()
-    employee = serializers.IntegerField()
-    typeContract = serializers.IntegerField()
 
-    def create(self, validated_data):
-        return d01Report(**validated_data)
+# Report Serializer
+class ReportSerializer(serializers.ModelSerializer):
+    # Changing to modelserializer again because of nested fields
+    employee = EmployeeSerializer()
+    typeContract = TypeContractSerializer()
+    class Meta:
+        model = d01Report 
+        fields = ['id', 'initialDate', 'finalDate',
+                  'employee', 'typeContract']
+
+    def create(self, validated_data):        
+        return d01Report.create(d01Report, **validated_data)
     
     def destroy(self, id):
         return d01Report.destroy(d01Report, id)
+    
+    
 
 
-#    class Meta:
-#        model = d01Report
-#        fields = '__all__'
-
-
-# Data Report Serializer
-class DetailsReportSerializer(serializers.Serializer):
+# Time's Report Serializer
+class TimesReportSerializer(serializers.Serializer):
     dateRegister = serializers.DateField()
     schedule = serializers.IntegerField()
     timeRegister = serializers.TimeField()
     report = serializers.IntegerField()
 
     def create(self, validated_data):
-        return d02DetailsReport(**validated_data)
+        return d02TimesReport(**validated_data)
 
     """ class Meta:
         model = d02DetailsReport

@@ -18,9 +18,9 @@ export default function Report() {
         dispatch(deleteReport(idReport))
     }
 
-    function handleClick(idReport) {
+    /* function handleClick(idReport) {
         history.push({ pathname: `details-report/${idReport}`, idReportState: idReport})
-    }
+    } */
     
     return (
         <div className="content">
@@ -40,8 +40,8 @@ export default function Report() {
                         <tr key={report.id} >
                             <td onClick={() => handleClick(report.id)} >{report.initialDate}</td>
                             <td>{report.finalDate}</td>
-                            <td>{report.employee}</td>
-                            <td>{report.typeContract}</td>
+                            <td>{report.employee.name}</td>
+                            <td>{report.typeContract.description}</td>
                             <td><button onClick={() => handleDelete(report.id)}>Delete</button></td>
                         </tr>
                     ))}

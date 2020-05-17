@@ -15,6 +15,9 @@ class b02TypeContract(models.Model):
     durationLunch = models.TimeField()
     objects = models.Manager()
 
+    def __str__(self):
+        return self.description
+
 
 class b03FunctionEmployee(models.Model):
     description = models.CharField(max_length=200)
@@ -30,24 +33,37 @@ class c01Employee(models.Model):
     function = models.ForeignKey(b03FunctionEmployee, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
+    def __str__(self):
+        return self.name
+
 
 class d01Report(models.Model):
     initialDate = models.DateField(default=date(2000, 1, 1))
     finalDate = models.DateField(default=date(2000, 1, 1))
-    employee = models.ForeignKey(c01Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(
+        c01Employee, on_delete=models.CASCADE, related_name='employee')
     # set null = false in production
-    typeContract = models.ForeignKey(b02TypeContract, on_delete=models.CASCADE, null=True)    
+    typeContract = models.ForeignKey(
+        b02TypeContract, on_delete=models.CASCADE, null=True, related_name='typeContract')
     objects = models.Manager()
 
-    def create(self, validated_data):
-        return d01Report.objects.create(**validated_data)
+    def create(self, **validated_data):
+        new_report = d01Report(
+            initialDate = validated_data['initialDate'],
+            finalDate = validated_data['finalDate'],
+            employee = validated_data['employee'],
+            typeContract = validated_data['typeContract']
+        )
+        new_report.save()
+        return new_report
     
     def destroy(self, id):
         report = d01Report.objects.get(id=id)        
         report.delete()
 
 
-class d02DetailsReport(models.Model):
+# Change back to other viewset approach
+class d02TimesReport(models.Model):
     dateRegister = models.DateField(default=date(2000, 1, 1))
     schedule = models.ForeignKey(b01Schedule, on_delete=models.CASCADE)
     timeRegister = models.TimeField()
@@ -55,4 +71,4 @@ class d02DetailsReport(models.Model):
     objects = models.Manager()
 
     def create(self, validated_data):
-        return d02DetailsReport.objects.create(**validated_data)
+        return d02TimesReport.objects.create(**validated_data)
