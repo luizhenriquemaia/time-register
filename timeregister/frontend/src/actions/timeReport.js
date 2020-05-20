@@ -5,7 +5,7 @@ import { GET_TIME_REPORTS, DELETE_TIME_REPORT, ADD_TIME_REPORT } from './types'
 
 // GET TIME REPORTS
 // we can create a function inside the getLeads to dispatch action but the simple way is passing like this
-export function getTimeRegisters() {
+export function getTimeReport() {
     return dispatch => {
         axios.get('/api/time-report/')
             .then(res => {
@@ -22,9 +22,9 @@ export function getTimeRegisters() {
 }
 
 // ADD TIME REPORT
-export function addTimeRegister(timeRegister) {
+export function addTimeReport(timeReport) {
     dispatch => {
-        axios.post("api/time-report/", timeRegister)
+        axios.post("api/time-report/", timeReport)
         .then(res => {
                 dispatch({
                     type: ADD_TIME_REPORT,

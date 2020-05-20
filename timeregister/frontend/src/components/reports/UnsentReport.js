@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getTimeRegisters } from '../../actions/timeRegister'
+//import { getTimeRegisters } from '../../actions/timeRegister'
 
 
 function UnsentReport() {
     // used to referer to dispatch method from redux
     const dispatch = useDispatch()
-    // useEffect is similar to component did mount and component did update
+    /* // useEffect is similar to component did mount and component did update
     useEffect(() => {
         dispatch(getTimeRegisters())
     }, [])
 
     const timeRegisters = useSelector(state => state.timeRegister)
-    console.log(timeRegisters)
+    console.log(timeRegisters) */
 
     return (
         <div className="content">
