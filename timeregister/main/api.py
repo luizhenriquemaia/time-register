@@ -115,10 +115,20 @@ class TimesReportViewSet(viewsets.ViewSet):
     #]
     serializer = TimesReportSerializer
 
-    def list(self, request, pk):
-        print("teste3")
-        obj_details_report = d02DetailsReport.objects.filter(report=pk)
-        return obj_details_report
+    def list(self, request):
+        queryset = d02TimesReport.objects.all()
+        serializer = TimesReportSerializer(queryset, many=True)
+        #print("teste3")
+        #obj_details_report = d02DetailsReport.objects.filter(report=pk)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = ReportSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            new_report = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # Allow us to save the owner when we create a time
     #def perform_create(self, serializer):

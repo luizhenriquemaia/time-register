@@ -7,7 +7,7 @@ import Home from './layout/Home'
 import NewReport from './reports/NewReport'
 import Report from './reports/Report'
 import UnsentReport from './reports/UnsentReport'
-import DetailsReport from './reports/DetailsReport'
+import TimeReport from './reports/TimeReport'
 // Redux things
 import { Provider } from 'react-redux'
 import store from '../store'
@@ -24,7 +24,7 @@ export default function App() {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/new-report" component={NewReport} />
                         <Route exact path="/report" component={Report} />
-                        <Route exact path="/details-report/:id" component={DetailsReport} />
+                        <Route exact path="/time-report/" component={TimeReport} />
                         <Route exact path="/unsent-report" component={UnsentReport} />
                     </Switch>
                 </div>

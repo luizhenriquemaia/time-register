@@ -18,9 +18,9 @@ export default function Report() {
         dispatch(deleteReport(idReport))
     }
 
-    /* function handleClick(idReport) {
-        history.push({ pathname: `details-report/${idReport}`, idReportState: idReport})
-    } */
+    function handleClick(idReport) {
+        history.push({ pathname: `time-report/`, idReportState: idReport})
+    }
     
     return (
         <div className="content">

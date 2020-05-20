@@ -16,6 +16,7 @@ input {
     border: 0;
     border-radius: 0;
     border-bottom: #14213D 1px solid;
+    transition: 0.15s;
 }
 
 button {
@@ -72,6 +73,8 @@ button {
 .content {
     width: 100%;
     margin-left: 150px;
+    display: flex;
+    flex-direction: column;
 }
 
 .home-page {
@@ -110,7 +113,6 @@ form {
 .form-input input, .form-input select {
     width: 300px;
     float: left;
-    transition: 0.15s;
 }
 
 
@@ -157,9 +159,11 @@ tr {
     text-align: center;
 }
 
+/*
 .table-reports td {
     cursor: pointer;
 }
+*/
 
 /* hover of elements*/
 .add-button:hover {
