@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 // actions
-//import { getDetailsReport } from '../../actions/detailsReport'
+import { getReport } from '../../actions/reports'
 
 
 
-export default function DetailsReport() {
+export default function TimeReport() {
     const dispatch = useDispatch()
     const location = useLocation()
     const [idReport, setIdReport] = useState(0)
@@ -17,15 +17,15 @@ export default function DetailsReport() {
         console.log(idReport)
     }, [location])
 
-    /* // get details from report
+    // get details from report
     useEffect(() => {
         if (idReport == 0){   
         }
         else {
-            dispatch(getDetailsReport(idReport))
+            dispatch(getReport(idReport))
         }
     }, [idReport])
-    const detailsReport = useSelector(state => state.detailsReport.detailsReport) */
+    const report = useSelector(state => state.reports.report)
     
 
     return (

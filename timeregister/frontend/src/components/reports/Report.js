@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getReports, deleteReport } from '../../actions/reports'
+import { getReports, deleteReport, getReport } from '../../actions/reports'
 
 
 export default function Report() {
@@ -19,6 +19,8 @@ export default function Report() {
     }
 
     function handleClick(idReport) {
+        console.log(`report clicked: ${idReport}`)
+        dispatch(getReport(idReport))
         history.push({ pathname: `time-report/`, idReportState: idReport})
     }
     

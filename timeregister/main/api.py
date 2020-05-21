@@ -66,12 +66,12 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 # Report Viewset
 class ReportViewSet(viewsets.ViewSet):
 
-    def get_serializer_class(self):
+    """ def get_serializer_class(self):
         if self.action == 'retrieve':
             return DetailsReportSerializer
         else:
             return ReportSerializer
-
+ """
     def list(self, request):
         """ obj_reports = d01Report.objects.all()
         reports = []
@@ -85,6 +85,7 @@ class ReportViewSet(viewsets.ViewSet):
             }
             reports.append(dic_report)
         return Response(reports) """
+        print("LIST")
         queryset = d01Report.objects.all()
         serializer = ReportSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -102,10 +103,14 @@ class ReportViewSet(viewsets.ViewSet):
         deleted_register = serializer.destroy(serializer, id=pk)
         return Response("", status=status.HTTP_204_NO_CONTENT)
 
+    # impossible to add new data in this way, have to separate the view set
     def retrieve(self, request, pk):
-        # impossible to add new data in this way, have to separate the view set
-        obj_details_report = d02DetailsReport.objects.filter(report_id=pk)
-        return Response(obj_details_report)
+        report = d01Report.retrieve(d01Report, id=pk)
+        print(f"RETRIEVE {report}")
+        serializer = ReportSerializer(data=report)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 
 # Time's Report Viewset

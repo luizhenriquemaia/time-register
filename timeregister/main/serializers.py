@@ -34,7 +34,7 @@ class ReportSerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
     typeContract = TypeContractSerializer()
     class Meta:
-        model = d01Report 
+        model = d01Report
         fields = ['id', 'initialDate', 'finalDate',
                   'employee', 'typeContract']
 
@@ -43,6 +43,9 @@ class ReportSerializer(serializers.ModelSerializer):
     
     def destroy(self, id):
         return d01Report.destroy(d01Report, id)
+    
+    # def retrieve(self, id):
+    #     return d01Report.retrieve(d01Report, id)
     
     
 

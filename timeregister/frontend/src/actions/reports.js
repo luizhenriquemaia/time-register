@@ -3,7 +3,7 @@ import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from './types'
 // import { createMessage, returnErrors } from './messages'
 
 
-// GET REPORT
+// GET REPORTS
 export function getReports() {
     return dispatch => {
         axios.get('/api/report/')
@@ -12,6 +12,25 @@ export function getReports() {
                     type: GET_REPORTS,
                     payload: res.data
                 })
+            })
+            .catch(
+                err => dispatch(returnErrors(err.response.data, err.response.status))
+            )
+    }
+}
+
+// RETRIEVE REPORT
+export function getReport(report) {
+    console.log(`report ${report}`)
+    return dispatch => {
+        axios.get(`/api/report/${report}`)
+            .then(res => {
+                dispatch({
+                    type: GET_REPORTS,
+                    payload: res.data
+                })
+                console.log(report)
+                console.log(res.data)
             })
             .catch(
                 err => dispatch(returnErrors(err.response.data, err.response.status))

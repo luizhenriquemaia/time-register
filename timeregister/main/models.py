@@ -58,8 +58,19 @@ class d01Report(models.Model):
         return new_report
     
     def destroy(self, id):
-        report = d01Report.objects.get(id=id)        
+        report = d01Report.objects.get(id=id)
         report.delete()
+    
+    def retrieve(self, id):
+        report = d01Report.objects.get(id=id)
+        report_dict = {
+            "id": id,
+            "initialDate": report.initialDate,
+            "finalDate": report.finalDate,
+            "employee": c01Employee.objects.get(id=report.employee_id).__dict__,
+            "typeContract": b02TypeContract.objects.get(id=report.typeContract_id).__dict__
+        }
+        return report_dict
 
 
 # Change back to other viewset approach
