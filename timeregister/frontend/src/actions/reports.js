@@ -21,7 +21,7 @@ export function getReports() {
 
 // RETRIEVE REPORT
 export function getReport(report) {
-    console.log(`report ${report}`)
+    //console.log(`report ${report}`)
     return dispatch => {
         axios.get(`/api/report/${report}`)
             .then(res => {
@@ -29,8 +29,6 @@ export function getReport(report) {
                     type: GET_REPORTS,
                     payload: res.data
                 })
-                console.log(report)
-                console.log(res.data)
             })
             .catch(
                 err => dispatch(returnErrors(err.response.data, err.response.status))

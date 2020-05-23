@@ -24,7 +24,7 @@ export default function App() {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/new-report" component={NewReport} />
                         <Route exact path="/report" component={Report} />
-                        <Route exact path="/time-report/" component={TimeReport} />
+                        <Route exact path="/time-report/:idReport" component={TimeReport} />
                         <Route exact path="/unsent-report" component={UnsentReport} />
                     </Switch>
                 </div>

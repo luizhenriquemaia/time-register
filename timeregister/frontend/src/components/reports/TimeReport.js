@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 // actions
 import { getReport } from '../../actions/reports'
 
 
 
 export default function TimeReport() {
+    const params = useParams()
     const dispatch = useDispatch()
-    const location = useLocation()
     const [idReport, setIdReport] = useState(0)
+    const idReportParams = params.idReport
     
-    // get state from history.push
-    useEffect(() => {
-        setIdReport(location.idReportState)
-        console.log(idReport)
-    }, [location])
+    console.log(idReport)
 
-    // get details from report
     useEffect(() => {
-        if (idReport == 0){   
-        }
-        else {
+        setIdReport(idReportParams)
+    }, [idReportParams])
+
+    useEffect(() => {
+        if (idReport != 0) {
             dispatch(getReport(idReport))
+            console.log(idReport)
+            
         }
     }, [idReport])
-    const report = useSelector(state => state.reports.report)
     
-
+    
+    
+    /* MAKE A LOADING STATE TO CONTROL RETURN OF TEMPLATE AND SET REPORT CONSTANT */
     return (
         <div className="content">
-            <h1 className="title-page">Time Report</h1>
+            <h1 className="title-page">Time Report Of {idReport}</h1>
             <table>
                 <thead>
                     <tr>

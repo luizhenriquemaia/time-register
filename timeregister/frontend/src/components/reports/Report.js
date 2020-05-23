@@ -19,9 +19,10 @@ export default function Report() {
     }
 
     function handleClick(idReport) {
-        console.log(`report clicked: ${idReport}`)
-        dispatch(getReport(idReport))
-        history.push({ pathname: `time-report/`, idReportState: idReport})
+        //console.log(`report clicked: ${idReport}`)
+        // send the choosen report to state
+        //dispatch(getReport(idReport))
+        history.push(`time-report/${idReport}`)
     }
     
     return (

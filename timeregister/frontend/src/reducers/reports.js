@@ -1,9 +1,11 @@
 import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from '../actions/types.js'
 
 
+
 const initialState = {
     report: [],
-    isReportAdded: false
+    isReportAdded: false,
+    isLoading: true
 }
 
 export default function (state = initialState, action) {
@@ -11,7 +13,8 @@ export default function (state = initialState, action) {
         case GET_REPORTS:
             return {
                 ...state,
-                report: action.payload
+                report: action.payload,
+                isLoading: false
             }
         case DELETE_REPORT:
             return {

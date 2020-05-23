@@ -85,7 +85,7 @@ class ReportViewSet(viewsets.ViewSet):
             }
             reports.append(dic_report)
         return Response(reports) """
-        print("LIST")
+        #print("LIST")
         queryset = d01Report.objects.all()
         serializer = ReportSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -106,7 +106,7 @@ class ReportViewSet(viewsets.ViewSet):
     # impossible to add new data in this way, have to separate the view set
     def retrieve(self, request, pk):
         report = d01Report.retrieve(d01Report, id=pk)
-        print(f"RETRIEVE {report}")
+        #print(f"RETRIEVE {report}")
         serializer = ReportSerializer(data=report)
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
