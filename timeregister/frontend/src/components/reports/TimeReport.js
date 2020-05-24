@@ -16,12 +16,21 @@ export default function TimeReport() {
     const [finalDate, setFinalDate] = useState(new Date(0))
     const idReportParams = params.idReport
     let report = useSelector(state => state.reports.report)
+    const [daysReport, setDaysReport] = useState([])
+    const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
 
     useEffect(() => {
         if (finalDate !== new Date(0)) {
-            var oneDay = 24 * 60 * 60 * 1000 // hours, minutes, seconds, miliseconds
-            const diffDays = Math.round(Math.abs((finalDate - initialDate) / oneDay)) + 1 // count the present day
-            console.log(`difference between = ${diffDays}`)
+            var oneDay = 24 * 60 * 60 * 1000                                                // hours, minutes, seconds, miliseconds
+            const diffDays = Math.round(Math.abs((finalDate - initialDate) / oneDay)) + 1   // count the initial day
+            // set the array of days to map in template
+            var days = []
+            var j = 0
+            for (var i = new Date(initialDate); i <= finalDate; i.setDate(i.getDate() + 1)) {
+                days.push(new Date(i))
+                j++
+            }
+            setDaysReport(days)
         }
     }, [finalDate])
 
@@ -30,10 +39,10 @@ export default function TimeReport() {
             setNameEmployee(report.employee.name)
             var splitInitialDate = report.initialDate.split("-")
             setInitialDate(new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]))
-            console.log(`Date set using db and js: ${initialDate}`)
+            //console.log(`Date set using db and js: ${initialDate}`)
             var splitFinallDate = report.finalDate.split("-")
             setFinalDate(new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]))
-            console.log(`Date set using db and js: ${finalDate}`)
+            //console.log(`Date set using db and js: ${finalDate}`)
             setDateReport(`${report.initialDate} - ${report.finalDate}`)
         }
     }, [report])
@@ -47,7 +56,6 @@ export default function TimeReport() {
     useEffect(() => {
         setIdReport(idReportParams)
     }, [idReportParams])
-
     
     
     return (
@@ -65,20 +73,18 @@ export default function TimeReport() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>01/01/2020</td>
-                        <td>08:00</td>
-                        <td>12:00</td>
-                        <td>13:00</td>
-                        <td>18:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="date"/></td>
-                        <td><input type="time" /></td>
-                        <td><input type="time" /></td>
-                        <td><input type="time" /></td>
-                        <td><input type="time" /></td>
-                    </tr>
+                    {daysReport.map((date, i) => (
+                            <tr key={i}>
+                                <td>
+                                {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-${daysWeek[date.getDay()]}`}
+                                </td>
+                                <td><input type="time" /></td>
+                                <td><input type="time" /></td>
+                                <td><input type="time" /></td>
+                                <td><input type="time" /></td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </div>
