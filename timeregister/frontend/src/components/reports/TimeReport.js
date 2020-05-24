@@ -12,11 +12,32 @@ export default function TimeReport() {
     const [idReport, setIdReport] = useState(0)
     const [nameEmployee, setNameEmployee] = useState('')
     const [dateReport, setDateReport] = useState('')
+    const [initialDate, setInitialDate] = useState(new Date(0))
+    const [finalDate, setFinalDate] = useState(new Date(0))
     const idReportParams = params.idReport
     let report = useSelector(state => state.reports.report)
-    
-    console.log(idReport)
 
+    useEffect(() => {
+        if (finalDate !== new Date(0)) {
+            var oneDay = 24 * 60 * 60 * 1000 // hours, minutes, seconds, miliseconds
+            const diffDays = Math.round(Math.abs((finalDate - initialDate) / oneDay)) + 1 // count the present day
+            console.log(`difference between = ${diffDays}`)
+        }
+    }, [finalDate])
+
+    useEffect(() => {
+        if (report.length !== 0) {
+            setNameEmployee(report.employee.name)
+            var splitInitialDate = report.initialDate.split("-")
+            setInitialDate(new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]))
+            console.log(`Date set using db and js: ${initialDate}`)
+            var splitFinallDate = report.finalDate.split("-")
+            setFinalDate(new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]))
+            console.log(`Date set using db and js: ${finalDate}`)
+            setDateReport(`${report.initialDate} - ${report.finalDate}`)
+        }
+    }, [report])
+    
     useEffect(() => {
         if (idReport != 0) {
             dispatch(getReport(idReport))
@@ -26,17 +47,6 @@ export default function TimeReport() {
     useEffect(() => {
         setIdReport(idReportParams)
     }, [idReportParams])
-
-    useEffect(() => {
-        console.log(`report length: ${report.length}`)
-        if (report.length !== 0) {
-            console.log("passes")
-            setNameEmployee(report.employee.name)
-            setDateReport(`${report.initialDate} - ${report.finalDate}`)
-        }
-    }, [report])
-
-    console.log(report)
 
     
     
