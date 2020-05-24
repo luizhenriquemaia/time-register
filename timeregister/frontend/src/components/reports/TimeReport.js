@@ -10,28 +10,40 @@ export default function TimeReport() {
     const params = useParams()
     const dispatch = useDispatch()
     const [idReport, setIdReport] = useState(0)
+    const [nameEmployee, setNameEmployee] = useState('')
+    const [dateReport, setDateReport] = useState('')
     const idReportParams = params.idReport
+    let report = useSelector(state => state.reports.report)
     
     console.log(idReport)
+
+    useEffect(() => {
+        if (idReport != 0) {
+            dispatch(getReport(idReport))
+        }
+    }, [idReport])
 
     useEffect(() => {
         setIdReport(idReportParams)
     }, [idReportParams])
 
     useEffect(() => {
-        if (idReport != 0) {
-            dispatch(getReport(idReport))
-            console.log(idReport)
-            
+        console.log(`report length: ${report.length}`)
+        if (report.length !== 0) {
+            console.log("passes")
+            setNameEmployee(report.employee.name)
+            setDateReport(`${report.initialDate} - ${report.finalDate}`)
         }
-    }, [idReport])
+    }, [report])
+
+    console.log(report)
+
     
     
-    
-    /* MAKE A LOADING STATE TO CONTROL RETURN OF TEMPLATE AND SET REPORT CONSTANT */
     return (
         <div className="content">
-            <h1 className="title-page">Time Report Of {idReport}</h1>
+            <h1 className="title-page">Time Report Of {nameEmployee}</h1>
+            <h5>Date: {dateReport}</h5>
             <table>
                 <thead>
                     <tr>
