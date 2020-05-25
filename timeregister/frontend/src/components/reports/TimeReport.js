@@ -18,11 +18,12 @@ export default function TimeReport() {
     let report = useSelector(state => state.reports.report)
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
+    const [timesReport, setTimesReport] = useState([])
 
     useEffect(() => {
         if (finalDate !== new Date(0)) {
-            var oneDay = 24 * 60 * 60 * 1000                                                // hours, minutes, seconds, miliseconds
-            const diffDays = Math.round(Math.abs((finalDate - initialDate) / oneDay)) + 1   // count the initial day
+            //var oneDay = 24 * 60 * 60 * 1000                                                // hours, minutes, seconds, miliseconds
+            //const diffDays = Math.round(Math.abs((finalDate - initialDate) / oneDay)) + 1   // count the initial day
             // set the array of days to map in template
             var days = []
             var j = 0
@@ -56,6 +57,16 @@ export default function TimeReport() {
     useEffect(() => {
         setIdReport(idReportParams)
     }, [idReportParams])
+
+
+    const handleChange = e => {
+        setTimesReport({
+            ...timesReport,
+            [e.target.name]: e.target.value
+        })
+        console.log(e.target.value)
+        console.log(timesReport)
+    }
     
     
     return (
@@ -78,16 +89,16 @@ export default function TimeReport() {
                                 <td>
                                 {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
                                 </td>
-                                <td><input type="time" /></td>
-                                <td><input type="time" /></td>
-                                <td><input type="time" /></td>
-                                <td><input type="time" /></td>
+                                <td><input type="time" name={`${i}0`} onChange={handleChange}/></td>
+                                <td><input type="time" name={`${i}1`} onChange={handleChange}/></td>
+                                <td><input type="time" name={`${i}2`} onChange={handleChange}/></td>
+                                <td><input type="time" name={`${i}3`} onChange={handleChange}/></td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
-                    <button className="submit-button medium-button">Submit</button>
+            <button className="submit-button medium-button">Submit</button>
         </div>
     )
 }
