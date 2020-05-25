@@ -56,7 +56,7 @@ export default function TimeReport() {
         setIdReport(idReportParams)
     }, [idReportParams])
 
-
+    // handle actions of page
     const handleChange = e => {
         setTimesReport({
             ...timesReport,

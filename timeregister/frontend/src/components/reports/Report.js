@@ -7,23 +7,16 @@ import { getReports, deleteReport, getReport } from '../../actions/reports'
 export default function Report() {
     const dispatch = useDispatch()
     const history = useHistory()
+    const reports = useSelector(state => state.reports.report)
 
     useEffect(() => {
         dispatch(getReports())
     }, [])
-    const reports = useSelector(state => state.reports.report)
+    
 
-    function handleDelete (idReport) {
-        console.log("deleting report")
-        dispatch(deleteReport(idReport))
-    }
-
-    function handleClick(idReport) {
-        //console.log(`report clicked: ${idReport}`)
-        // send the choosen report to state
-        //dispatch(getReport(idReport))
-        history.push(`time-report/${idReport}`)
-    }
+    const handleDelete = (idReport) => dispatch(deleteReport(idReport))
+    
+    const handleClick = (idReport) => history.push(`time-report/${idReport}`)
     
     return (
         <div className="content">
