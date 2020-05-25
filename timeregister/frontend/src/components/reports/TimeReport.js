@@ -15,7 +15,7 @@ export default function TimeReport() {
     const [initialDate, setInitialDate] = useState(new Date(0))
     const [finalDate, setFinalDate] = useState(new Date(0))
     const idReportParams = params.idReport
-    let report = useSelector(state => state.reports.report)
+    const report = useSelector(state => state.reports.report)
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
     const [timesReport, setTimesReport] = useState([])
@@ -36,14 +36,12 @@ export default function TimeReport() {
     }, [finalDate])
 
     useEffect(() => {
-        if (report.length !== 0) {
+        if (report.length === undefined) {                                                     // the length of the object is undefined so when this is the value the report will be loaded
             setNameEmployee(report.employee.name)
             var splitInitialDate = report.initialDate.split("-")
             setInitialDate(new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]))
-            //console.log(`Date set using db and js: ${initialDate}`)
             var splitFinallDate = report.finalDate.split("-")
             setFinalDate(new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]))
-            //console.log(`Date set using db and js: ${finalDate}`)
             setDateReport(`${report.initialDate} - ${report.finalDate}`)
         }
     }, [report])
