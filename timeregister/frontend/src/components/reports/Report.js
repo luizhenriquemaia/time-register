@@ -1,13 +1,26 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getReports, deleteReport, getReport } from '../../actions/reports'
+import { getReports, deleteReport } from '../../actions/reports'
 
 
 export default function Report() {
     const dispatch = useDispatch()
     const history = useHistory()
     const reports = useSelector(state => state.reports.report)
+    const [reportsState, setReportsState] = useState([{
+        id: "",
+        initialDate: "",
+        finalDate: "",
+        employee: "",
+        typeContract: ""
+    }])
+
+    useEffect(() => {
+        if (reports.length !== undefined) {
+            setReportsState(reports)
+        }
+    }, [reports])
 
     useEffect(() => {
         dispatch(getReports())
@@ -18,6 +31,7 @@ export default function Report() {
     
     const handleClick = (idReport) => history.push(`time-report/${idReport}`)
     
+
     return (
         <div className="content">
             <h1 className="title-page">Report</h1>
@@ -32,7 +46,7 @@ export default function Report() {
                     </tr>
                 </thead>
                 <tbody>
-                    {reports.map(report => (
+                    {reportsState.map(report => (
                         <tr key={report.id} >
                             <td onClick={() => handleClick(report.id)} >{report.initialDate}</td>
                             <td>{report.finalDate}</td>

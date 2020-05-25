@@ -9,7 +9,7 @@ import { getReport } from '../../actions/reports'
 export default function TimeReport() {
     const params = useParams()
     const dispatch = useDispatch()
-    const [idReport, setIdReport] = useState(0)
+    const [idReport, setIdReport] = useState(-1)
     const [nameEmployee, setNameEmployee] = useState('')
     const [dateReport, setDateReport] = useState('')
     const [initialDate, setInitialDate] = useState(new Date(0))
@@ -47,7 +47,7 @@ export default function TimeReport() {
     }, [report])
     
     useEffect(() => {
-        if (idReport != 0) {
+        if (idReport != -1) {
             dispatch(getReport(idReport))
         }
     }, [idReport])
