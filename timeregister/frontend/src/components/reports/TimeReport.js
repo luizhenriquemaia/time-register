@@ -61,7 +61,7 @@ export default function TimeReport() {
     return (
         <div className="content">
             <h1 className="title-page">Time Report Of {nameEmployee}</h1>
-            <h5>Date: {dateReport}</h5>
+            <h4 className="text-date-report">Date: {dateReport}</h4>
             <table>
                 <thead>
                     <tr>
@@ -76,7 +76,7 @@ export default function TimeReport() {
                     {daysReport.map((date, i) => (
                             <tr key={i}>
                                 <td>
-                                {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-${daysWeek[date.getDay()]}`}
+                                {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
                                 </td>
                                 <td><input type="time" /></td>
                                 <td><input type="time" /></td>
@@ -87,6 +87,7 @@ export default function TimeReport() {
                     }
                 </tbody>
             </table>
+                    <button className="submit-button medium-button">Submit</button>
         </div>
     )
 }

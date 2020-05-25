@@ -83,11 +83,17 @@ button {
     align-items: center;
 }
 
-/* titles */
+/* texts */
 .title-page {
     margin-top: 2em;
     margin-bottom: 3em;
     text-align: center;
+}
+
+.text-date-report {
+    margin-bottom: 50px;
+    margin-right: 80px;
+    text-align: right;
 }
 
 /* forms */
@@ -138,6 +144,13 @@ form {
     border-radius: 10px;
     cursor: pointer;
     transition: 0.5s;
+}
+
+.medium-button {
+    width: 20%;
+    min-height: 50px;
+    margin-left: 40%;
+    margin-bottom: 100px;
 }
 
 /* lists */
