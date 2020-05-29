@@ -30,20 +30,18 @@ export default function NewRegister() {
     // send values from the form to state
     const handleChange = e => {
         const { name, value } = e.target
-        // for verification of the change of the state, aways console.log outside this function
         setNewReportState({
             ...newReportState,
             [name]: value
         })
     }
-    //console.log(newReportState)
 
-    // submit the form
     function handleSubmit(e) {
         e.preventDefault()
-        // grab the values from the state
-        const { employee, typeContract, initialDate, finalDate } = newReportState
-        const newReport = { employee, typeContract, initialDate, finalDate }
+        const { initialDate, finalDate } = newReportState
+        const employee_id = newReportState["employee"]
+        const typeContract_id = newReportState["typeContract"]
+        const newReport = { employee_id, typeContract_id, initialDate, finalDate }
         // to do -> if the values in newReport != initial Report
         dispatch(addReport(newReport))
         history.push('/report')

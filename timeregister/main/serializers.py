@@ -1,3 +1,4 @@
+import json
 from rest_framework import serializers
 from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02TimesReport
 
@@ -31,14 +32,16 @@ class EmployeeSerializer(serializers.ModelSerializer):
 # Report Serializer
 class ReportSerializer(serializers.ModelSerializer):
     # Changing to modelserializer again because of nested fields
-    employee = EmployeeSerializer()
-    typeContract = TypeContractSerializer()
+    employee = EmployeeSerializer(read_only=True)
+    employee_id = serializers.IntegerField()
+    typeContract = TypeContractSerializer(read_only=True)
+    typeContract_id = serializers.IntegerField()
     class Meta:
         model = d01Report
         fields = ['id', 'initialDate', 'finalDate',
-                  'employee', 'typeContract']
+                  'employee', 'employee_id', 'typeContract', 'typeContract_id']
 
-    def create(self, validated_data):        
+    def create(self, validated_data):
         return d01Report.create(d01Report, **validated_data)
     
     def destroy(self, id):
@@ -46,20 +49,24 @@ class ReportSerializer(serializers.ModelSerializer):
     
     # def retrieve(self, id):
     #     return d01Report.retrieve(d01Report, id)
-    
-    
 
+    # {
+    #     "initialDate": "2021-01-01",
+    #     "finalDate": "2021-01-31",
+    #     "employee": 1,
+    #     "typeContract": 3
+    # }
+    
 
 # Time's Report Serializer
-class TimesReportSerializer(serializers.Serializer):
-    dateRegister = serializers.DateField()
-    schedule = serializers.IntegerField()
-    timeRegister = serializers.TimeField()
-    report = serializers.IntegerField()
-
+class TimesReportSerializer(serializers.ModelSerializer):
+    print("\n\n\ntimes report serializer")
+    schedule = ScheduleSerializer()
+    report = ReportSerializer()
+    class Meta:
+        model = d02TimesReport
+        fields = ['dateRegister', 'schedule', 'timeRegister', 'report']
+    
     def create(self, validated_data):
-        return d02TimesReport(**validated_data)
-
-    """ class Meta:
-        model = d02DetailsReport
-        fields = '__all__' """
+        print("\n\n\ntimes report serializer - create")
+        return d02TimesReport.create(d02TimesReport, **validated_data)

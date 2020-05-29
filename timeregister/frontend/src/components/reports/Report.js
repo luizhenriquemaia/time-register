@@ -17,18 +17,14 @@ export default function Report() {
     }])
 
     useEffect(() => {
-        if (reports.length !== undefined) {
-            setReportsState(reports)
-        }
+        if (reports.length !== undefined) setReportsState(reports)
     }, [reports])
 
     useEffect(() => {
         dispatch(getReports())
     }, [])
     
-
     const handleDelete = (idReport) => dispatch(deleteReport(idReport))
-    
     const handleClick = (idReport) => history.push(`time-report/${idReport}`)
     
 

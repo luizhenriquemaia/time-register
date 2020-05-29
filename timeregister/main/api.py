@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02TimesReport
@@ -73,27 +74,15 @@ class ReportViewSet(viewsets.ViewSet):
             return ReportSerializer
  """
     def list(self, request):
-        """ obj_reports = d01Report.objects.all()
-        reports = []
-        for report in obj_reports:
-            dic_report = {
-                "id": report.id,
-                "initialDate": report.initialDate,
-                "finalDate": report.finalDate,
-                "employee": c01Employee.objects.get(id=report.employee.id),
-                "typeContract": b02TypeContract.objects.get(id=report.typeContract.id)
-            }
-            reports.append(dic_report)
-        return Response(reports) """
-        #print("LIST")
         queryset = d01Report.objects.all()
         serializer = ReportSerializer(queryset, many=True)
         return Response(serializer.data)
     
     def create(self, request):
+        #### Front end deve retornar o employee_id e o typeContract_id
         serializer = ReportSerializer(data=request.data)
         print(request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             new_report = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -108,7 +97,7 @@ class ReportViewSet(viewsets.ViewSet):
         report = d01Report.retrieve(d01Report, id=pk)
         #print(f"RETRIEVE {report}")
         serializer = ReportSerializer(data=report)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
@@ -123,17 +112,22 @@ class TimesReportViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = d02TimesReport.objects.all()
         serializer = TimesReportSerializer(queryset, many=True)
-        #print("teste3")
-        #obj_details_report = d02DetailsReport.objects.filter(report=pk)
         return Response(serializer.data)
     
     def create(self, request):
-        serializer = ReportSerializer(data=request.data)
-        print(request.data)
-        if serializer.is_valid():
-            new_report = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        #print(request.data)
+        for data in request.data:
+            data_year, data_month, data_day = (data['dateRegister']).split('-')
+            data['dateRegister'] = datetime(int(data_year), int(data_month), int(data_day))
+            data['schedule'] = int(data['schedule'])
+
+            print(f"\n\n\nsepareted data: {data}\n\n\n")
+            serializer = ReportSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                new_report = serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     # Allow us to save the owner when we create a time
     #def perform_create(self, serializer):

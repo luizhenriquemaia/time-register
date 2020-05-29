@@ -28,6 +28,7 @@ class b03FunctionEmployee(models.Model):
 
 
 class c01Employee(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
     # set null = false in production
     function = models.ForeignKey(b03FunctionEmployee, on_delete=models.CASCADE, null=True)
@@ -51,8 +52,8 @@ class d01Report(models.Model):
         new_report = d01Report(
             initialDate = validated_data['initialDate'],
             finalDate = validated_data['finalDate'],
-            employee = validated_data['employee'],
-            typeContract = validated_data['typeContract']
+            employee = c01Employee.objects.get(id=validated_data['employee_id']),
+            typeContract = b02TypeContract.objects.get(id=validated_data['typeContract_id'])
         )
         new_report.save()
         return new_report
@@ -83,3 +84,16 @@ class d02TimesReport(models.Model):
 
     def create(self, validated_data):
         return d02TimesReport.objects.create(**validated_data)
+
+    def create(self, **validated_data):
+        print('\n\n\n\n')
+        print(validated_data['dateRegister'])
+        print('\n\n\n\n')
+        new_report = d02TimesReport(
+            dateRegister=validated_data['dateRegister'],
+            schedule=validated_data['schedule'],
+            timeRegister=validated_data['timeRegister'],
+            report=validated_data['report']
+        )
+        new_report.save()
+        return new_report
