@@ -2,7 +2,7 @@ from datetime import datetime
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02TimesReport
-from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, TimesReportSerializer
+from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, ReportRetrieveSerializer, TimesReportSerializer
 
 
 # Schedule Viewset
@@ -67,19 +67,12 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 # Report Viewset
 class ReportViewSet(viewsets.ViewSet):
 
-    """ def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return DetailsReportSerializer
-        else:
-            return ReportSerializer
- """
     def list(self, request):
         queryset = d01Report.objects.all()
         serializer = ReportSerializer(queryset, many=True)
         return Response(serializer.data)
     
     def create(self, request):
-        #### Front end deve retornar o employee_id e o typeContract_id
         serializer = ReportSerializer(data=request.data)
         print(request.data)
         if serializer.is_valid(raise_exception=True):
@@ -92,11 +85,10 @@ class ReportViewSet(viewsets.ViewSet):
         deleted_register = serializer.destroy(serializer, id=pk)
         return Response("", status=status.HTTP_204_NO_CONTENT)
 
-    # impossible to add new data in this way, have to separate the view set
     def retrieve(self, request, pk):
         report = d01Report.retrieve(d01Report, id=pk)
-        #print(f"RETRIEVE {report}")
-        serializer = ReportSerializer(data=report)
+        serializer = ReportRetrieveSerializer(data=report)
+        print(f"\n\n\nRETRIEVE {report}\n\n\n")
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    

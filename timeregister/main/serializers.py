@@ -26,12 +26,11 @@ class FunctionEmployeeSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = c01Employee
-        fields = '__all__'
+        fields = ['id', 'name', 'function']
 
 
 # Report Serializer
 class ReportSerializer(serializers.ModelSerializer):
-    # Changing to modelserializer again because of nested fields
     employee = EmployeeSerializer(read_only=True)
     employee_id = serializers.IntegerField()
     typeContract = TypeContractSerializer(read_only=True)
@@ -46,23 +45,26 @@ class ReportSerializer(serializers.ModelSerializer):
     
     def destroy(self, id):
         return d01Report.destroy(d01Report, id)
-    
-    # def retrieve(self, id):
-    #     return d01Report.retrieve(d01Report, id)
 
-    # {
-    #     "initialDate": "2021-01-01",
-    #     "finalDate": "2021-01-31",
-    #     "employee": 1,
-    #     "typeContract": 3
-    # }
+
+# Report Retrieve Serializer
+class ReportRetrieveSerializer(serializers.ModelSerializer):
+    employee = EmployeeSerializer(read_only=False)
+    employee_id = serializers.IntegerField()
+    typeContract = TypeContractSerializer(read_only=False)
+    typeContract_id = serializers.IntegerField()
+
+    class Meta:
+        model = d01Report
+        fields = ['id', 'initialDate', 'finalDate',
+                  'employee', 'employee_id', 'typeContract', 'typeContract_id']
     
 
 # Time's Report Serializer
 class TimesReportSerializer(serializers.ModelSerializer):
     print("\n\n\ntimes report serializer")
     schedule = ScheduleSerializer()
-    report = ReportSerializer()
+    report = ReportRetrieveSerializer()
     class Meta:
         model = d02TimesReport
         fields = ['dateRegister', 'schedule', 'timeRegister', 'report']

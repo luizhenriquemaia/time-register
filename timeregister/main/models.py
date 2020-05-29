@@ -49,6 +49,7 @@ class d01Report(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
+        print("\n\n\ncreating report\n\n\n")
         new_report = d01Report(
             initialDate = validated_data['initialDate'],
             finalDate = validated_data['finalDate'],
@@ -68,7 +69,9 @@ class d01Report(models.Model):
             "id": id,
             "initialDate": report.initialDate,
             "finalDate": report.finalDate,
+            "employee_id": report.employee_id,
             "employee": c01Employee.objects.get(id=report.employee_id).__dict__,
+            "typeContract_id": report.typeContract_id,
             "typeContract": b02TypeContract.objects.get(id=report.typeContract_id).__dict__
         }
         return report_dict

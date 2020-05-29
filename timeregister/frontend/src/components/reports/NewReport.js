@@ -38,7 +38,7 @@ export default function NewRegister() {
 
     function handleSubmit(e) {
         e.preventDefault()
-        const { initialDate, finalDate } = newReportState
+        const { initialDate, finalDate, } = newReportState
         const employee_id = newReportState["employee"]
         const typeContract_id = newReportState["typeContract"]
         const newReport = { employee_id, typeContract_id, initialDate, finalDate }
