@@ -7,61 +7,34 @@ from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmp
 
 # Schedule Viewset
 class ScheduleViewSet(viewsets.ModelViewSet):
-    #permission_classes = [
-    #    permissions.IsAuthenticated
-    #]
     serializer_class = ScheduleSerializer
 
     def get_queryset(self):
         return b01Schedule.objects.all()
 
-    # Allow us to save the owner when we create a time
-    #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)
 
 # TypeContract Viewset
 class TypeContractViewSet(viewsets.ModelViewSet):
-    #permission_classes = [
-    #    permissions.IsAuthenticated
-    #]
     serializer_class = TypeContractSerializer
 
     def get_queryset(self):
         return b02TypeContract.objects.all()
 
-    # Allow us to save the owner when we create a time
-    #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)
-
 
 # Function Employee Viewset
 class FunctionEmployeeViewSet(viewsets.ModelViewSet):
-    #permission_classes = [
-    #    permissions.IsAuthenticated
-    #]
     serializer_class = FunctionEmployeeSerializer
 
     def get_queryset(self):
         return b03FunctionEmployee.objects.all()
 
-    # Allow us to save the owner when we create a time
-    #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)
-
 
 # Employee Viewset
 class EmployeeViewSet(viewsets.ModelViewSet):
-    #permission_classes = [
-    #    permissions.IsAuthenticated
-    #]
     serializer_class = EmployeeSerializer
 
     def get_queryset(self):
         return c01Employee.objects.all()
-
-    # Allow us to save the owner when we create a time
-    #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)
 
 
 # Report Viewset
@@ -74,7 +47,6 @@ class ReportViewSet(viewsets.ViewSet):
     
     def create(self, request):
         serializer = ReportSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid(raise_exception=True):
             new_report = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -88,7 +60,6 @@ class ReportViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk):
         report = d01Report.retrieve(d01Report, id=pk)
         serializer = ReportRetrieveSerializer(data=report)
-        print(f"\n\n\nRETRIEVE {report}\n\n\n")
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
@@ -107,14 +78,9 @@ class TimesReportViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     
     def create(self, request):
-        #print(request.data)
         for data in request.data:
-            data_year, data_month, data_day = (data['dateRegister']).split('-')
-            data['dateRegister'] = datetime(int(data_year), int(data_month), int(data_day))
-            data['schedule'] = int(data['schedule'])
-
-            print(f"\n\n\nsepareted data: {data}\n\n\n")
-            serializer = ReportSerializer(data=data)
+            print(f"\n\n\nSepareted data: {data} \n\n\n")
+            serializer = TimesReportSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 new_report = serializer.save()
             else:

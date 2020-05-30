@@ -25,5 +25,5 @@ export const addTimeReport = (timeReport) => dispatch => {
                 payload: res.data
             })
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+        .catch(err => console.log(err.response.data, err.response.status))
 }

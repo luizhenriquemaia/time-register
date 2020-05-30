@@ -62,13 +62,16 @@ class ReportRetrieveSerializer(serializers.ModelSerializer):
 
 # Time's Report Serializer
 class TimesReportSerializer(serializers.ModelSerializer):
-    print("\n\n\ntimes report serializer")
-    schedule = ScheduleSerializer()
-    report = ReportRetrieveSerializer()
+    schedule = ScheduleSerializer(read_only=True)
+    schedule_id = serializers.IntegerField()
+    report = ReportSerializer(read_only=True)
+    report_id = serializers.IntegerField()
+
     class Meta:
         model = d02TimesReport
-        fields = ['dateRegister', 'schedule', 'timeRegister', 'report']
+        fields = ['id', 'dateRegister', 'schedule', 'schedule_id', 
+                  'timeRegister', 'report', 'report_id']
     
     def create(self, validated_data):
-        print("\n\n\ntimes report serializer - create")
+        print(f"\n\n{validated_data}\n\n")
         return d02TimesReport.create(d02TimesReport, **validated_data)

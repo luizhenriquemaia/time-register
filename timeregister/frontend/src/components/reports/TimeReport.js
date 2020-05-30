@@ -63,15 +63,14 @@ export default function TimeReport() {
         const timesForApi = []
         for (var name  in timesReport) {
             var dateSplited = name.split("-")
-            var yearReportApi = dateSplited[0]
-            var monthReportApi = dateSplited[1]
-            var dayReportApi = dateSplited[2]
-            var scheduleeReportApi = dateSplited[3]
+            var scheduleReportApi = dateSplited[3]
+            var timeSplited = timesReport[name].split(":")
+            var dateTimeReportTime = new Date(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1])
             timesForApi.push({
-                dateRegister: `${yearReportApi}-${monthReportApi}-${dayReportApi}`,
-                schedule: scheduleeReportApi,
-                timeRegister: timesReport[name],
-                report: idReport
+                dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDay()}`,
+                schedule_id: scheduleReportApi,
+                timeRegister: `${dateTimeReportTime.getHours()}:${dateTimeReportTime.getMinutes()}`,
+                report_id: idReport
             })
         }
         console.log(timesForApi)

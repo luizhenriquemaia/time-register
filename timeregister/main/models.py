@@ -49,7 +49,6 @@ class d01Report(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        print("\n\n\ncreating report\n\n\n")
         new_report = d01Report(
             initialDate = validated_data['initialDate'],
             finalDate = validated_data['finalDate'],
@@ -85,18 +84,15 @@ class d02TimesReport(models.Model):
     report = models.ForeignKey(d01Report, on_delete=models.CASCADE)
     objects = models.Manager()
 
-    def create(self, validated_data):
-        return d02TimesReport.objects.create(**validated_data)
-
     def create(self, **validated_data):
         print('\n\n\n\n')
         print(validated_data['dateRegister'])
         print('\n\n\n\n')
         new_report = d02TimesReport(
             dateRegister=validated_data['dateRegister'],
-            schedule=validated_data['schedule'],
+            schedule= b01Schedule.objects.get(id=validated_data['schedule_id']),
             timeRegister=validated_data['timeRegister'],
-            report=validated_data['report']
+            report= d01Report.objects.get(id=validated_data['report_id'])
         )
         new_report.save()
         return new_report
