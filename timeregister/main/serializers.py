@@ -69,9 +69,8 @@ class TimesReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = d02TimesReport
-        fields = ['id', 'dateRegister', 'schedule', 'schedule_id', 
+        fields = ['id', 'dateRegister', 'schedule', 'schedule_id',
                   'timeRegister', 'report', 'report_id']
     
     def create(self, validated_data):
-        print(f"\n\n{validated_data}\n\n")
         return d02TimesReport.create(d02TimesReport, **validated_data)

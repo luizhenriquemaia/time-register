@@ -85,14 +85,16 @@ class d02TimesReport(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        print('\n\n\n\n')
-        print(validated_data['dateRegister'])
-        print('\n\n\n\n')
-        new_report = d02TimesReport(
-            dateRegister=validated_data['dateRegister'],
-            schedule= b01Schedule.objects.get(id=validated_data['schedule_id']),
-            timeRegister=validated_data['timeRegister'],
-            report= d01Report.objects.get(id=validated_data['report_id'])
-        )
-        new_report.save()
-        return new_report
+        if d02TimesReport.objects.filter(dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule_id'], report=validated_data['report_id']).exists():
+            report = d02TimesReport.objects.get(
+                dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule_id'], report=validated_data['report_id'])
+            report.timeRegister = validated_data['timeRegister']
+        else:
+            report = d02TimesReport(
+                dateRegister=validated_data['dateRegister'],
+                schedule= b01Schedule.objects.get(id=validated_data['schedule_id']),
+                timeRegister=validated_data['timeRegister'],
+                report= d01Report.objects.get(id=validated_data['report_id'])
+            )
+        report.save()
+        return report

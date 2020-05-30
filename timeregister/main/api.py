@@ -79,13 +79,14 @@ class TimesReportViewSet(viewsets.ViewSet):
     
     def create(self, request):
         for data in request.data:
-            print(f"\n\n\nSepareted data: {data} \n\n\n")
             serializer = TimesReportSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 new_report = serializer.save()
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # CREATE A DESTROY METHOD
 
     # Allow us to save the owner when we create a time
     #def perform_create(self, serializer):
