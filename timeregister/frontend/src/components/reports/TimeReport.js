@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getReport } from '../../actions/reports'
-import { addTimeReport } from '../../actions/timeReport'
+import { addTimeReport, getTimeReportWithReport } from '../../actions/timeReport'
 
 
 export default function TimeReport() {
@@ -30,7 +30,8 @@ export default function TimeReport() {
     }, [finalDate])
 
     useEffect(() => {
-        if (report.length === undefined) {                                                     // the length of the object is undefined so when this is the value the report will be loaded
+        // the length of the object is undefined so when this is the value the report will be loaded
+        if (report.length === undefined) {
             setNameEmployee(report.employee.name)
             const splitInitialDate = report.initialDate.split("-")
             setInitialDate(new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]))
@@ -41,7 +42,10 @@ export default function TimeReport() {
     }, [report])
     
     useEffect(() => {
-        if (idReport != -1) dispatch(getReport(idReport))
+        if (idReport != -1) {
+            dispatch(getTimeReportWithReport(idReport))
+            dispatch(getReport(idReport))
+        }
     }, [idReport])
 
     useEffect(() => {
@@ -59,7 +63,6 @@ export default function TimeReport() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log(timesReport)
         const timesForApi = []
         for (var name  in timesReport) {
             var dateSplited = name.split("-")
@@ -73,8 +76,11 @@ export default function TimeReport() {
                 report_id: idReport
             })
         }
-        console.log(timesForApi)
         dispatch(addTimeReport(timesForApi))
+    }
+
+    const handleShowReport = e => {
+        e.preventDefault()
     }
     
     
@@ -96,7 +102,7 @@ export default function TimeReport() {
                     {daysReport.map((date, i) => (
                             <tr key={i}>
                                 <td>
-                                {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
+                                    {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
                                 </td>
                                 <td><input type="time" name={`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-1`} onChange={handleChange}/></td>
                                 <td><input type="time" name={`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-2`} onChange={handleChange}/></td>
@@ -108,6 +114,7 @@ export default function TimeReport() {
                 </tbody>
             </table>
             <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
+            <button className="submit-button medium-button" onClick={handleShowReport}>Show Report</button>
         </div>
     )
 }

@@ -13,9 +13,7 @@ export function getReports() {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => console.log(err.response.data, err.response.status))
     }
 }
 
@@ -30,9 +28,7 @@ export function getReport(report) {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => console.log(err.response.data, err.response.status))
     }
 }
 

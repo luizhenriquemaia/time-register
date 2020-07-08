@@ -1,47 +1,50 @@
 from datetime import datetime
-from rest_framework import viewsets, permissions, status
+
+from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
-from .models import b01Schedule, b02TypeContract, b03FunctionEmployee, c01Employee, d01Report, d02TimesReport
-from .serializers import ScheduleSerializer, TypeContractSerializer, FunctionEmployeeSerializer, EmployeeSerializer, ReportSerializer, ReportRetrieveSerializer, TimesReportSerializer
+
+from django.core.exceptions import ObjectDoesNotExist
+
+from .models import (
+    Employee, FunctionEmployee, Report, Schedule, TimesReport, TypeContract)
+from .serializers import (EmployeeSerializer, FunctionEmployeeSerializer,
+                          ReportRetrieveSerializer, ReportSerializer,
+                          ScheduleSerializer, TimesReportSerializer,
+                          TypeContractSerializer)
 
 
-# Schedule Viewset
 class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
 
     def get_queryset(self):
-        return b01Schedule.objects.all()
+        return Schedule.objects.all()
 
 
-# TypeContract Viewset
 class TypeContractViewSet(viewsets.ModelViewSet):
     serializer_class = TypeContractSerializer
 
     def get_queryset(self):
-        return b02TypeContract.objects.all()
+        return TypeContract.objects.all()
 
 
-# Function Employee Viewset
 class FunctionEmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = FunctionEmployeeSerializer
 
     def get_queryset(self):
-        return b03FunctionEmployee.objects.all()
+        return FunctionEmployee.objects.all()
 
 
-# Employee Viewset
 class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
 
     def get_queryset(self):
-        return c01Employee.objects.all()
+        return Employee.objects.all()
 
 
-# Report Viewset
 class ReportViewSet(viewsets.ViewSet):
 
     def list(self, request):
-        queryset = d01Report.objects.all()
+        queryset = Report.objects.all()
         serializer = ReportSerializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -58,25 +61,33 @@ class ReportViewSet(viewsets.ViewSet):
         return Response("", status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
-        report = d01Report.retrieve(d01Report, id=pk)
+        report = Report.retrieve(Report, id=pk)
         serializer = ReportRetrieveSerializer(data=report)
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 
-# Time's Report Viewset
 class TimesReportViewSet(viewsets.ViewSet):
-    #permission_classes = [
-    #    permissions.IsAuthenticated
-    #]
     serializer = TimesReportSerializer
 
     def list(self, request):
-        queryset = d02TimesReport.objects.all()
-        serializer = TimesReportSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
+        if request.GET.get("report"):
+            query_from_url = request.GET.get("report")
+            try:
+                data_report_from_db = TimesReport.objects.filter(report_id=query_from_url)
+            except ObjectDoesNotExist:
+                return Response("", status=status.HTTP_204_NO_CONTENT)
+            serializer = TimesReportSerializer(data_report_from_db, many=True)
+            if serializer.data:
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        else:    
+            queryset = TimesReport.objects.all()
+            serializer = TimesReportSerializer(queryset, many=True)
+            return Response(serializer.data)
+        
     def create(self, request):
         for data in request.data:
             serializer = TimesReportSerializer(data=data)
@@ -85,9 +96,3 @@ class TimesReportViewSet(viewsets.ViewSet):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # CREATE A DESTROY METHOD
-
-    # Allow us to save the owner when we create a time
-    #def perform_create(self, serializer):
-    #    serializer.save(owner=self.request.user)

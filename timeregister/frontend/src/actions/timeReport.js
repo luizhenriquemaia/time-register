@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_TIME_REPORTS, DELETE_TIME_REPORT, ADD_TIME_REPORT } from './types'
+import { GET_TIME_REPORTS, GET_TIME_REPORTS_WITH_REPORT, DELETE_TIME_REPORT, ADD_TIME_REPORT } from './types'
 // import { createMessage, returnErrors } from './messages'
 
 
@@ -12,9 +12,18 @@ export const getTimeReport = () => dispatch => {
             })
             console.log(res.data)
         })
-        .catch(
-            err => dispatch(returnErrors(err.response.data, err.response.status))
-        )
+        .catch(err => console.log(err.response.data, err.response.status))
+}
+
+export const getTimeReportWithReport = (idReport) => dispatch => {
+    axios.get(`/api/time-report/?report=${idReport}`)
+        .then(res => {
+            dispatch({
+                type: GET_TIME_REPORTS_WITH_REPORT,
+                payload: res.data
+            })
+        })
+        .catch(err => console.log(err.response.data, err.response.status))
 }
 
 export const addTimeReport = (timeReport) => dispatch => {
