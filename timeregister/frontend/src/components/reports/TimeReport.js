@@ -18,6 +18,7 @@ export default function TimeReport() {
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
     const [timesReport, setTimesReport] = useState([])
+    const [shouldGetTimes, setShouldGetTimes] = useState(false)
 
     useEffect(() => {
         if (finalDate !== new Date(0)) {
@@ -38,15 +39,17 @@ export default function TimeReport() {
             const splitFinallDate = report.finalDate.split("-")
             setFinalDate(new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]))
             setDateReport(`${report.initialDate} - ${report.finalDate}`)
+            setShouldGetTimes(true)
         }
     }, [report])
     
     useEffect(() => {
-        if (idReport != -1) {
-            dispatch(getTimeReportWithReport(idReport))
-            dispatch(getReport(idReport))
-        }
+        if (idReport != -1) dispatch(getReport(idReport))
     }, [idReport])
+
+    useEffect(() => {
+        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReport))
+    }, [shouldGetTimes])
 
     useEffect(() => {
         setIdReport(idReportParams)
