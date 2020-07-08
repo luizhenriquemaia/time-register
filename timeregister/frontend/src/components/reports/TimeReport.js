@@ -9,6 +9,7 @@ export default function TimeReport() {
     const params = useParams()
     const dispatch = useDispatch()
     const report = useSelector(state => state.reports.report)
+    const timesOfReport = useSelector(state => state.timeReport.timeReport)
     const idReportParams = params.idReport
     const [idReport, setIdReport] = useState(-1)
     const [nameEmployee, setNameEmployee] = useState('')
@@ -19,6 +20,8 @@ export default function TimeReport() {
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
     const [timesReport, setTimesReport] = useState([])
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
+    const [timesState, setTimesState] = useState([])
+    const [timeToTemplate, setTimeToTemplate] = useState([])
 
     useEffect(() => {
         if (finalDate !== new Date(0)) {
@@ -42,6 +45,32 @@ export default function TimeReport() {
             setShouldGetTimes(true)
         }
     }, [report])
+
+    useEffect(() => {
+        if (timesOfReport !== undefined) {
+            if (timesOfReport.length !== 0) {
+                setTimesState(timesOfReport)
+                timesOfReport.map(time => {
+                    const splitedDateTime = time.dateRegister.split("-")
+                    const dateToCheck = new Date(splitedDateTime[0], splitedDateTime[1] - 1, splitedDateTime[2])
+                    daysReport.map(date => {
+                        if (dateToCheck.getTime() === date.getTime()) {
+                            setTimeToTemplate(previousState => [
+                                ...previousState,
+                                    {
+                                        [dateToCheck]:
+                                            { [time.schedule_id]: time.timeRegister }                                        
+                                        
+                                    }
+                            ])
+                        }
+                    })
+                })
+            }
+        }
+    }, [timesOfReport])
+
+    console.log(timeToTemplate)
     
     useEffect(() => {
         if (idReport != -1) dispatch(getReport(idReport))
@@ -64,6 +93,7 @@ export default function TimeReport() {
         })
     }
 
+
     const handleSubmit = e => {
         e.preventDefault()
         const timesForApi = []
@@ -73,17 +103,13 @@ export default function TimeReport() {
             var timeSplited = timesReport[name].split(":")
             var dateTimeReportTime = new Date(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1])
             timesForApi.push({
-                dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDay()}`,
+                dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDate()}`,
                 schedule_id: scheduleReportApi,
                 timeRegister: `${dateTimeReportTime.getHours()}:${dateTimeReportTime.getMinutes()}`,
                 report_id: idReport
             })
         }
         dispatch(addTimeReport(timesForApi))
-    }
-
-    const handleShowReport = e => {
-        e.preventDefault()
     }
     
     
@@ -117,7 +143,6 @@ export default function TimeReport() {
                 </tbody>
             </table>
             <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
-            <button className="submit-button medium-button" onClick={handleShowReport}>Show Report</button>
         </div>
     )
 }
