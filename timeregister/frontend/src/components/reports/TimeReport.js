@@ -5,9 +5,11 @@ import { getReport } from '../../actions/reports'
 import { addTimeReport, getTimeReportWithReport } from '../../actions/timeReport'
 
 
+
 export default function TimeReport() {
     const params = useParams()
     const dispatch = useDispatch()
+    const defaultTime = new Date(0, 0, 0, 0, 0)
     const report = useSelector(state => state.reports.report)
     const timesOfReport = useSelector(state => state.timeReport.timeReport)
     const idReportParams = params.idReport
@@ -58,8 +60,9 @@ export default function TimeReport() {
                             setTimeToTemplate(previousState => [
                                 ...previousState,
                                     {
-                                        [dateToCheck]:
-                                            { [time.schedule_id]: time.timeRegister }                                        
+                                        ['date']: dateToCheck,
+                                        ['schedule']: time.schedule_id,
+                                        ['timeRegister']: time.timeRegister
                                         
                                     }
                             ])
@@ -68,9 +71,7 @@ export default function TimeReport() {
                 })
             }
         }
-    }, [timesOfReport])
-
-    console.log(timeToTemplate)
+    }, [timesOfReport])    
     
     useEffect(() => {
         if (idReport != -1) dispatch(getReport(idReport))
@@ -93,7 +94,6 @@ export default function TimeReport() {
         })
     }
 
-
     const handleSubmit = e => {
         e.preventDefault()
         const timesForApi = []
@@ -111,7 +111,19 @@ export default function TimeReport() {
         }
         dispatch(addTimeReport(timesForApi))
     }
-    
+
+    const checkIfDateIsSameAndReturnTime = (date, timeToCheck, scheduleToCheck) => {
+        var timesChecked = timeToCheck.map(time => {
+            if (date.getTime() === time.date.getTime()) {
+                if (time.schedule === scheduleToCheck) return time.timeRegister
+            }
+        })
+        var arrayToReturn = timesChecked.filter(time => (time != null))
+        if (arrayToReturn.length === 0) {
+            arrayToReturn = "00:00:00"
+        }
+        return arrayToReturn
+    }
     
     return (
         <div className="content">
@@ -133,10 +145,26 @@ export default function TimeReport() {
                                 <td>
                                     {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
                                 </td>
-                                <td><input type="time" name={`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-1`} onChange={handleChange}/></td>
-                                <td><input type="time" name={`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-2`} onChange={handleChange}/></td>
-                                <td><input type="time" name={`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-3`} onChange={handleChange}/></td>
-                                <td><input type="time" name={`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-4`} onChange={handleChange}/></td>
+                                <td>
+                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`} onChange={handleChange} 
+                                        value={checkIfDateIsSameAndReturnTime(date, timeToTemplate, 1)}
+                                    />
+                                </td>
+                                <td>
+                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`} onChange={handleChange}
+                                        value={checkIfDateIsSameAndReturnTime(date, timeToTemplate, 2)} 
+                                    />
+                                </td>
+                                <td>
+                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`} onChange={handleChange}
+                                        value={checkIfDateIsSameAndReturnTime(date, timeToTemplate, 3)}
+                                    />
+                                </td>
+                                <td>
+                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`} onChange={handleChange}
+                                        value={checkIfDateIsSameAndReturnTime(date, timeToTemplate, 4)}
+                                    />
+                                </td>
                             </tr>
                         ))
                     }
