@@ -114,14 +114,19 @@ export default function TimeReport() {
 
     const handleChange = e => {
         const { name, value } = e.target
-        
+        var idTimeInTimesReport = 0
         timesReport.map(time => {
             if (time.name === name) {
+                console.log(timesReport[idTimeInTimesReport])
+                setTimesReport([
+                    ...timesReport,
+                    timesReport[idTimeInTimesReport].time = value
+                    ])
+                //time.time = value
                 console.log(name)
-                console.log(time)
+                //console.log(time)
             }
-
-            (time.name === name ? time.time = value : time)
+            idTimeInTimesReport += 1
         })
     }
     console.log(timesReport)
