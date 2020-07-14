@@ -207,7 +207,7 @@ export default function TimeReport() {
                                     </td>
                                 </tr>
                             ))
-                        ) : <td></td>
+                        ) : <tr></tr>
                     }
                 </tbody>
             </table>
