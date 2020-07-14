@@ -48,32 +48,6 @@ export default function TimeReport() {
         }
     }, [report])
 
-
-    /* useEffect(() => {
-        if (timesOfReport !== undefined) {
-            if (timesOfReport.length !== 0) {
-                setTimesState(timesOfReport)
-                timesOfReport.map(time => {
-                    const splitedDateTime = time.dateRegister.split("-")
-                    const dateToCheck = new Date(splitedDateTime[0], splitedDateTime[1] - 1, splitedDateTime[2])
-                    daysReport.map(date => {
-                        if (dateToCheck.getTime() === date.getTime()) {
-                            setTimeToTemplate(previousState => [
-                                ...previousState,
-                                    {
-                                        ['date']: dateToCheck,
-                                        ['schedule']: time.schedule_id,
-                                        ['timeRegister']: time.timeRegister
-                                        
-                                    }
-                            ])
-                        }
-                    })
-                })
-            }
-        }
-    }, [timesOfReport]) */
-
     useEffect(() => {
         if (timesOfReport !== undefined) {
             if (timesOfReport.length !== 0) {
@@ -81,7 +55,6 @@ export default function TimeReport() {
             }
         }
     }, [timesOfReport])
-
 
     useEffect(() => {
         if (timesState != null) {
@@ -107,15 +80,20 @@ export default function TimeReport() {
             }
         })
         var timeToAddToState = timesChecked.filter(time => (time != null))
-        if (timeToAddToState.length === 0) {
-            timeToAddToState = ["00:00:00"]
-        }
-        setTimesReport(prevState => [ 
+        if (timeToAddToState.length === 0) timeToAddToState = ["00:00:00"]
+        setTimesReport(prevState => [
             ...prevState,
             {
-                [name]: timeToAddToState[0]
-            }
-        ])
+                ["name"]: name,
+                ["time"]: timeToAddToState[0]
+            }]
+        )
+        // setTimesReport(prevState => [
+        //     ...prevState,
+        //     {
+        //         [name]: timeToAddToState[0]
+        //     }
+        // ])
     }
 
     console.log(timesReport)
@@ -136,11 +114,17 @@ export default function TimeReport() {
 
     const handleChange = e => {
         const { name, value } = e.target
-        setTimesReport({
-            ...timesReport,
-            [name]: value
+        
+        timesReport.map(time => {
+            if (time.name === name) {
+                console.log(name)
+                console.log(time)
+            }
+
+            (time.name === name ? time.time = value : time)
         })
     }
+    console.log(timesReport)
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -176,49 +160,63 @@ export default function TimeReport() {
                     </tr>
                 </thead>
                 <tbody>
-                    {daysReport.map((date, i) => (
-                            <tr key={i}>
-                                <td>
-                                    {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
-                                </td>
-                                <td>
-                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`} onChange={handleChange} 
-                                        value={
-                                            timesReport.map(
-                                                time => time[`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`]).filter(
-                                                    time => (time != null))
-                                                    }
-                                    />
-                                </td>
-                                <td>
-                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`} onChange={handleChange}
-                                        value={
-                                            timesReport.map(
-                                                time => time[`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`]).filter(
-                                                    time => (time != null))
-                                        }
-                                    />
-                                </td>
-                                <td>
-                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`} onChange={handleChange}
-                                        value={
-                                            timesReport.map(
-                                                time => time[`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`]).filter(
-                                                    time => (time != null))
-                                        }
-                                    />
-                                </td>
-                                <td>
-                                    <input type="time" name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`} onChange={handleChange}
-                                        value={
-                                            timesReport.map(
-                                                time => time[`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`]).filter(
-                                                    time => (time != null))
-                                        }
-                                    />
-                                </td>
-                            </tr>
-                        ))
+                    {timesReport !== undefined && timesReport != null && timesReport.length !== 0 ? 
+                        (daysReport.map((date, i) => (
+                                <tr key={i}>
+                                    <td>
+                                        {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
+                                    </td>
+                                    <td>
+                                        <input 
+                                            type="time" 
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`} 
+                                            onChange={handleChange}
+                                            value={
+                                                timesReport.filter(
+                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1` && time != null
+                                                )[0].time
+                                            }
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            type="time" 
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`} 
+                                            onChange={handleChange}
+                                            value={
+                                                timesReport.filter(
+                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2` && time != null
+                                                )[0].time
+                                            }
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            type="time" 
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`} 
+                                            onChange={handleChange}
+                                            value={
+                                                timesReport.filter(
+                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3` && time != null
+                                                )[0].time
+                                            }
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            type="time" 
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`} 
+                                            onChange={handleChange}
+                                            value={
+                                                timesReport.filter(
+                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4` && time != null
+                                                )[0].time
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            ))
+                        ) : <td></td>
                     }
                 </tbody>
             </table>
