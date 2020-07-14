@@ -88,12 +88,6 @@ export default function TimeReport() {
                 ["time"]: timeToAddToState[0]
             }]
         )
-        // setTimesReport(prevState => [
-        //     ...prevState,
-        //     {
-        //         [name]: timeToAddToState[0]
-        //     }
-        // ])
     }
 
     console.log(timesReport)
@@ -115,19 +109,14 @@ export default function TimeReport() {
     const handleChange = e => {
         const { name, value } = e.target
         var idTimeInTimesReport = 0
+        var timesReportCopy = [...timesReport]
         timesReport.map(time => {
             if (time.name === name) {
-                console.log(timesReport[idTimeInTimesReport])
-                setTimesReport([
-                    ...timesReport,
-                    timesReport[idTimeInTimesReport].time = value
-                    ])
-                //time.time = value
-                console.log(name)
-                //console.log(time)
+                timesReportCopy[idTimeInTimesReport].time = value
             }
             idTimeInTimesReport += 1
         })
+        setTimesReport(timesReportCopy)
     }
     console.log(timesReport)
 
