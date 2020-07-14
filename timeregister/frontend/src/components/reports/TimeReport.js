@@ -90,8 +90,6 @@ export default function TimeReport() {
         )
     }
 
-    console.log(timesReport)
-
     
     useEffect(() => {
         if (idReport != -1) dispatch(getReport(idReport))
@@ -118,15 +116,14 @@ export default function TimeReport() {
         })
         setTimesReport(timesReportCopy)
     }
-    console.log(timesReport)
 
     const handleSubmit = e => {
         e.preventDefault()
         const timesForApi = []
-        for (var name  in timesReport) {
-            var dateSplited = name.split("-")
+        for (var timeOfState  in timesReport) {
+            var dateSplited = timesReport[timeOfState].name.split("-")
             var scheduleReportApi = dateSplited[3]
-            var timeSplited = timesReport[name].split(":")
+            var timeSplited = timesReport[timeOfState].time.split(":")
             var dateTimeReportTime = new Date(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1])
             timesForApi.push({
                 dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDate()}`,
