@@ -9,7 +9,6 @@ import { addTimeReport, getTimeReportWithReport } from '../../actions/timeReport
 export default function TimeReport() {
     const params = useParams()
     const dispatch = useDispatch()
-    const defaultTime = new Date(0, 0, 0, 0, 0)
     const report = useSelector(state => state.reports.report)
     const timesOfReport = useSelector(state => state.timeReport.timeReport)
     const idReportParams = params.idReport
@@ -23,7 +22,7 @@ export default function TimeReport() {
     const [timesReport, setTimesReport] = useState([])
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
     const [timesState, setTimesState] = useState([])
-    //const [timeToTemplate, setTimeToTemplate] = useState([])
+    const [totalHoursDay, setTotalHoursDay] = useState([])
 
     useEffect(() => {
         if (finalDate !== new Date(0)) {
@@ -36,7 +35,6 @@ export default function TimeReport() {
     }, [finalDate])
 
     useEffect(() => {
-        // the length of the object is undefined so when this is the value the report will be loaded
         if (report.length === undefined) {
             setNameEmployee(report.employee.name)
             const splitInitialDate = report.initialDate.split("-")
@@ -89,7 +87,6 @@ export default function TimeReport() {
             }]
         )
     }
-
     
     useEffect(() => {
         if (idReport != -1) dispatch(getReport(idReport))
@@ -103,6 +100,36 @@ export default function TimeReport() {
         setIdReport(idReportParams)
     }, [idReportParams])
 
+
+    const transformHours = (stringHour) => {
+        var splitedHours = stringHour.split(":")
+        return new Date(0, 0, 0, splitedHours[0], splitedHours[1])
+    }
+
+    useEffect(() => {
+        if (timesReport != null) {
+            var dataToTotalsState = []
+            daysReport.map(day => {
+                dataToTotalsState.push(timesReport.filter(
+                    time => new Date(time.name.split("-")[0], time.name.split("-")[1] - 1, time.name.split("-")[2]).getTime() === day.getTime()
+                ))
+            })
+            var totalHoursWorkDay = []
+            dataToTotalsState.map(data => {
+                var totalHour = 0
+                if (data[0].time === "00:00:00" || data[1].time === "00:00:00" || data[2].time === "00:00:00" || data[3].time === "00:00:00") {
+                    totalHour = 0
+                } else {
+                    totalHour = transformHours(data[1].time).getTime() - transformHours(data[0].time).getTime()
+                    totalHour += transformHours(data[3].time).getTime() - transformHours(data[2].time).getTime()
+                }
+                totalHoursWorkDay.push(totalHour)
+                })
+            console.log(timesReport)
+            console.log(dataToTotalsState)
+            console.log(totalHoursWorkDay)
+        }
+    }, [timesReport])
 
     const handleChange = e => {
         const { name, value } = e.target
