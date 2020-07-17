@@ -107,7 +107,7 @@ export default function TimeReport() {
     }
 
     useEffect(() => {
-        if (timesReport != null) {
+        if (timesReport != null && timesReport.length !== 0) {
             var dataToTotalsState = []
             daysReport.map(day => {
                 dataToTotalsState.push(timesReport.filter(
@@ -122,15 +122,17 @@ export default function TimeReport() {
                 } else {
                     totalHour = transformHours(data[1].time).getTime() - transformHours(data[0].time).getTime()
                     totalHour += transformHours(data[3].time).getTime() - transformHours(data[2].time).getTime()
+                    totalHour = totalHour / 1000 / 3600
                 }
                 totalHoursWorkDay.push(totalHour)
                 })
             console.log(timesReport)
             console.log(dataToTotalsState)
-            console.log(totalHoursWorkDay)
+            setTotalHoursDay(totalHoursWorkDay)
         }
     }, [timesReport])
-
+    console.log(totalHoursDay)
+    
     const handleChange = e => {
         const { name, value } = e.target
         var idTimeInTimesReport = 0
@@ -167,6 +169,12 @@ export default function TimeReport() {
         <div className="content">
             <h1 className="title-page">Time Report Of {nameEmployee}</h1>
             <h4 className="text-date-report">Date: {dateReport}</h4>
+            <label>Total of Worked Hours:
+                {totalHoursDay.length !== 0 ? 
+                    <input type="text" value={totalHoursDay.reduce((a, b) => a + b, 0)} readOnly /> : 
+                    <input type="text" value="0" readOnly />
+                }
+            </label>
             <table>
                 <thead>
                     <tr>
