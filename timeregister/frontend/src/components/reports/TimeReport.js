@@ -15,6 +15,7 @@ export default function TimeReport() {
     const [idReport, setIdReport] = useState(-1)
     const [nameEmployee, setNameEmployee] = useState('')
     const [dateReport, setDateReport] = useState('')
+    const [typeContractOfReport, setTypeContractOfReport] = useState('')
     const [initialDate, setInitialDate] = useState(new Date(0))
     const [finalDate, setFinalDate] = useState(new Date(0))
     const [daysReport, setDaysReport] = useState([])
@@ -23,6 +24,9 @@ export default function TimeReport() {
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
     const [timesState, setTimesState] = useState([])
     const [totalHoursDay, setTotalHoursDay] = useState([])
+    const [totalNormalHours, setTotalNormalHours] = useState([])
+    const [totalExtraHours50, setTotalExtraHours50] = useState([])
+    const [totalExtraHours100, setTotalExtraHours100] = useState([])
 
     useEffect(() => {
         if (finalDate !== new Date(0)) {
@@ -42,6 +46,7 @@ export default function TimeReport() {
             const splitFinallDate = report.finalDate.split("-")
             setFinalDate(new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]))
             setDateReport(`${report.initialDate} - ${report.finalDate}`)
+            setTypeContractOfReport(report.typeContract.description)
             setShouldGetTimes(true)
         }
     }, [report])
@@ -100,36 +105,112 @@ export default function TimeReport() {
         setIdReport(idReportParams)
     }, [idReportParams])
 
-
+    // function to transform a string of hours in a date object
     const transformHours = (stringHour) => {
-        var splitedHours = stringHour.split(":")
+        let splitedHours = stringHour.split(":")
         return new Date(0, 0, 0, splitedHours[0], splitedHours[1])
     }
 
+    // function to round value
+    const roundWithDecimals = (value, numberOfDecimals) => {
+        return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, 2)
+    }
+
+    // function to check if a time is bigger that other
+    const time1IsBiggerThanTime0 = (time0, time1) => {
+        return transformHours(time1).getTime() > transformHours(time0).getTime() ? true : false
+    }
+
+    // function to get diference between 2 time objects
+    const differenceBetweenTimes = (time0, time1) => {
+        let totalHour = 0
+        totalHour = transformHours(time1).getTime() - transformHours(time0).getTime()
+        return totalHour = totalHour / 1000 / 3600
+    }
+
+    // function to return total of hours, extra hours 50% and extra hours 100%
+    const getHoursPerDay = (time0, time1, time2, time3, dayOfTime) => {
+        let totalHour = 0
+        let totalNormalHours = 0
+        let totalExtra50 = 0
+        let totalExtra100 = 0
+        switch (typeContractOfReport) {
+            case "Segunda a sábado com hora extra e almoço de 1:00hr":
+                if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
+                if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
+                if (daysReport[dayOfTime].getDay() === 0) {
+                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra100 = differenceBetweenTimes(time0, time1)
+                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra100 += differenceBetweenTimes(time2, time3)
+                } else if (daysReport[dayOfTime].getDay() === 6) {
+                    if (time1IsBiggerThanTime0(time0, time1)) {
+                        totalNormalHours = differenceBetweenTimes(time0, time1)
+                        if (totalNormalHours > 5) {
+                            totalExtra50 = totalNormalHours - 5
+                            totalNormalHours = 5
+                        }
+                    }
+                    if (time1IsBiggerThanTime0(time2, time3)) {
+                        totalNormalHours += differenceBetweenTimes(time2, time3)
+                        if (totalNormalHours > 5) {
+                            totalExtra50 = totalNormalHours - 5
+                            totalNormalHours = 5
+                        }
+                    }
+                } else {
+                    if (time1IsBiggerThanTime0(time0, time1)) {
+                        totalNormalHours = differenceBetweenTimes(time0, time1)
+                        if (totalNormalHours > 8) {
+                            totalExtra50 = totalNormalHours - 8
+                            totalNormalHours = 8
+                        }
+                    }
+                    if (time1IsBiggerThanTime0(time2, time3)) {
+                        totalNormalHours += differenceBetweenTimes(time2, time3)
+                        if (totalNormalHours > 8) {
+                            totalExtra50 = totalNormalHours - 8
+                            totalNormalHours = 8
+                        }
+                    }
+                }
+                break
+            default:
+                console.log("HAVE TO MAKE THIS TYPE OF CONTRACT CASE")
+        }
+        return [roundWithDecimals(totalHour, 2), roundWithDecimals(totalNormalHours, 2), roundWithDecimals(totalExtra50, 2), roundWithDecimals(totalExtra100, 2)]
+    }
+
+    // set total of hours to state
     useEffect(() => {
         if (timesReport != null && timesReport.length !== 0) {
-            var dataToTotalsState = []
+            let dataToTotalHoursState = []
             daysReport.map(day => {
-                dataToTotalsState.push(timesReport.filter(
+                dataToTotalHoursState.push(timesReport.filter(
                     time => new Date(time.name.split("-")[0], time.name.split("-")[1] - 1, time.name.split("-")[2]).getTime() === day.getTime()
                 ))
             })
-            var totalHoursWorkDay = []
-            dataToTotalsState.map(data => {
-                var totalHour = 0
-                if (data[0].time === "00:00:00" || data[1].time === "00:00:00" || data[2].time === "00:00:00" || data[3].time === "00:00:00") {
-                    totalHour = 0
-                } else {
-                    totalHour = transformHours(data[1].time).getTime() - transformHours(data[0].time).getTime()
-                    totalHour += transformHours(data[3].time).getTime() - transformHours(data[2].time).getTime()
-                    totalHour = Math.round((totalHour / 1000 / 3600) * 100) / 100
-                }
-                totalHoursWorkDay.push(totalHour)
+            let totalHoursWorkDay = []
+            let totalNormalHours = []
+            let totalExtraHours50 = []
+            let totalExtraHours100 = []
+            let hoursPerDay = []
+            dataToTotalHoursState.map((data, i) => {
+                hoursPerDay = getHoursPerDay(data[0].time, data[1].time, data[2].time, data[3].time, i)
+                totalHoursWorkDay.push(hoursPerDay[0])
+                totalNormalHours.push(hoursPerDay[1])
+                totalExtraHours50.push(hoursPerDay[2])
+                totalExtraHours100.push(hoursPerDay[3])
                 })
             setTotalHoursDay(totalHoursWorkDay)
+            setTotalNormalHours(totalNormalHours)
+            setTotalExtraHours50(totalExtraHours50)
+            setTotalExtraHours100(totalExtraHours100)
         }
     }, [timesReport])
     console.log(totalHoursDay)
+    console.log(totalNormalHours)
+    console.log(totalExtraHours50)
+    console.log(totalExtraHours100)
+
     
     const handleChange = e => {
         const { name, value } = e.target
@@ -169,7 +250,7 @@ export default function TimeReport() {
             <h4 className="text-date-report">Date: {dateReport}</h4>
             <label>Total of Worked Hours:
                 {totalHoursDay.length !== 0 ? 
-                    <input type="text" value={Math.round(totalHoursDay.reduce((a, b) => a + b, 0) * 100) / 100} readOnly /> : 
+                    <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly /> : 
                     <input type="text" value="0" readOnly />
                 }
             </label>
@@ -181,7 +262,10 @@ export default function TimeReport() {
                         <th>Entry Lunch</th>
                         <th>Out Lunch</th>
                         <th>Out</th>
-                        <th>Total</th>
+                        <th>Total Hours</th>
+                        <th>Total Normal Hours</th>
+                        <th>Total Extra 50%</th>
+                        <th>Total Extra 100%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -242,6 +326,24 @@ export default function TimeReport() {
                                     <td>
                                         {totalHoursDay.length !== 0 ?
                                             <input type="text" value={totalHoursDay[i]} readOnly /> :
+                                            <input type="text" value="0.00" readOnly />
+                                        }
+                                    </td>
+                                    <td>
+                                        {totalNormalHours.length !== 0 ?
+                                            <input type="text" value={totalNormalHours[i]} readOnly /> :
+                                            <input type="text" value="0.00" readOnly />
+                                        }
+                                    </td>
+                                    <td>
+                                        {totalExtraHours50.length !== 0 ?
+                                            <input type="text" value={totalExtraHours50[i]} readOnly /> :
+                                            <input type="text" value="0.00" readOnly />
+                                        }
+                                    </td>
+                                    <td>
+                                        {totalExtraHours100.length !== 0 ?
+                                            <input type="text" value={totalExtraHours100[i]} readOnly /> :
                                             <input type="text" value="0.00" readOnly />
                                         }
                                     </td>
