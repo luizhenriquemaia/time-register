@@ -54,6 +54,24 @@ button {
     padding: 0 30px 0px;
 }
 
+.navbar-horizontal {
+    display: flex;
+    position: fixed;
+    height: 80px;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: black;
+    color: white;
+    top: 0;
+    left: 0;
+}
+
+.navbar-horizontal ul {
+    list-style: none;
+    padding: 0px 30px 0px;
+}
+
 .nav-link {
     text-decoration: none;
     color: white;
@@ -61,18 +79,18 @@ button {
 
 .list-navbar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: flex-end;
 }
 
 .list-navbar li {
-    padding: 15px 0px 15px;
+    padding: 15px 10px 15px;
 }
 
 /* contents */
 .content {
     width: 100%;
-    margin-left: 150px;
+    margin-top: 80px;
     display: flex;
     flex-direction: column;
 }
