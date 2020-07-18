@@ -10,6 +10,7 @@
 
 body {
     font-family: 'Raleway-Regular';
+    background-color: #F0F2F5;
 }
 
 input {
@@ -17,6 +18,7 @@ input {
     border-radius: 0;
     border-bottom: #14213D 1px solid;
     transition: 0.15s;
+    background-color: #F0F2F5;
 }
 
 button {
@@ -91,14 +93,31 @@ button {
 .content {
     width: 100%;
     margin-top: 80px;
+    margin: 80px 30px 0px;
     display: flex;
     flex-direction: column;
+    background-color: #F0F2F5;
 }
 
 .home-page {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.totals-of-report {
+    margin: 10px 0px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.totals-of-report input {
+    width: 70px;
+    color: #FCA311;
+    margin: 0px 10px 0px;
+    border: 0px;
+    font-size: 16px;
 }
 
 /* texts */
@@ -186,15 +205,15 @@ td {
     padding: 15px 5px 15px;
 }
 
+td .display-total-hours {
+    width: 70px;
+    text-align: center;
+    border: 0px;
+}
+
 tr {
     text-align: center;
 }
-
-/*
-.table-reports td {
-    cursor: pointer;
-}
-*/
 
 /* hover of elements*/
 .add-button:hover {

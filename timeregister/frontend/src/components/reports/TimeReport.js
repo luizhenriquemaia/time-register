@@ -244,30 +244,31 @@ export default function TimeReport() {
         <div className="content">
             <h1 className="title-page">Time Report Of {nameEmployee}</h1>
             <h4 className="text-date-report">Date: {dateReport}</h4>
-            <label>Total of Worked Hours:
+            <div className="totals-of-report">
+                <label>Total of Worked Hours</label>
                 {totalHoursDay.length !== 0 ? 
                     <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly /> : 
                     <input type="text" value="0" readOnly />
                 }
-            </label>
-            <label>Total of Normal Hours:
-                {totalNormalHours.length !== 0 ?
-                    <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                    <input type="text" value="0" readOnly />
-                }
-            </label>
-            <label>Total of Extra 50% Hours:
-                {totalExtraHours50.length !== 0 ?
-                    <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                    <input type="text" value="0" readOnly />
-                }
-            </label>
-            <label>Total of Extra 100% Hours:
-                {totalExtraHours100.length !== 0 ?
-                    <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                    <input type="text" value="0" readOnly />
-                }
-            </label>
+                <label>Total of Normal Hours</label>
+                    {totalNormalHours.length !== 0 ?
+                        <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                        <input type="text" value="0" readOnly />
+                    }
+                
+                <label>Total of Extra 50% Hours</label>
+                    {totalExtraHours50.length !== 0 ?
+                        <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                        <input type="text" value="0" readOnly />
+                    }
+                <label>Total of Extra 100% Hours</label>
+                    {totalExtraHours100.length !== 0 ?
+                        <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                        <input type="text" value="0" readOnly />
+                    }
+            </div>
+            
+            
             <table>
                 <thead>
                     <tr>
@@ -277,7 +278,7 @@ export default function TimeReport() {
                         <th>Out Lunch</th>
                         <th>Out</th>
                         <th>Total Hours</th>
-                        <th>Total Normal Hours</th>
+                        <th>Total Normal</th>
                         <th>Total Extra 50%</th>
                         <th>Total Extra 100%</th>
                     </tr>
@@ -339,26 +340,26 @@ export default function TimeReport() {
                                     </td>
                                     <td>
                                         {totalHoursDay.length !== 0 ?
-                                            <input type="text" value={totalHoursDay[i]} readOnly /> :
-                                            <input type="text" value="0.00" readOnly />
+                                            <input type="text" value={totalHoursDay[i]} className="display-total-hours" readOnly /> :
+                                            <input type="text" value="0.00" className="display-total-hours" readOnly />
                                         }
                                     </td>
                                     <td>
                                         {totalNormalHours.length !== 0 ?
-                                            <input type="text" value={totalNormalHours[i]} readOnly /> :
-                                            <input type="text" value="0.00" readOnly />
+                                            <input type="text" value={totalNormalHours[i]} className="display-total-hours" readOnly /> :
+                                            <input type="text" value="0.00" className="display-total-hours" readOnly />
                                         }
                                     </td>
                                     <td>
                                         {totalExtraHours50.length !== 0 ?
-                                            <input type="text" value={totalExtraHours50[i]} readOnly /> :
-                                            <input type="text" value="0.00" readOnly />
+                                            <input type="text" value={totalExtraHours50[i]} className="display-total-hours" readOnly /> :
+                                            <input type="text" value="0.00" className="display-total-hours" readOnly />
                                         }
                                     </td>
                                     <td>
                                         {totalExtraHours100.length !== 0 ?
-                                            <input type="text" value={totalExtraHours100[i]} readOnly /> :
-                                            <input type="text" value="0.00" readOnly />
+                                            <input type="text" value={totalExtraHours100[i]} className="display-total-hours" readOnly /> :
+                                            <input type="text" value="0.00" className="display-total-hours" readOnly />
                                         }
                                     </td>
                                 </tr>
