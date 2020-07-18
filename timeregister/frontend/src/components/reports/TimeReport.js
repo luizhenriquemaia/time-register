@@ -122,12 +122,10 @@ export default function TimeReport() {
                 } else {
                     totalHour = transformHours(data[1].time).getTime() - transformHours(data[0].time).getTime()
                     totalHour += transformHours(data[3].time).getTime() - transformHours(data[2].time).getTime()
-                    totalHour = totalHour / 1000 / 3600
+                    totalHour = Math.round((totalHour / 1000 / 3600) * 100) / 100
                 }
                 totalHoursWorkDay.push(totalHour)
                 })
-            console.log(timesReport)
-            console.log(dataToTotalsState)
             setTotalHoursDay(totalHoursWorkDay)
         }
     }, [timesReport])
@@ -163,7 +161,7 @@ export default function TimeReport() {
         }
         dispatch(addTimeReport(timesForApi))
     }
-
+ 
     
     return (
         <div className="content">
@@ -171,7 +169,7 @@ export default function TimeReport() {
             <h4 className="text-date-report">Date: {dateReport}</h4>
             <label>Total of Worked Hours:
                 {totalHoursDay.length !== 0 ? 
-                    <input type="text" value={totalHoursDay.reduce((a, b) => a + b, 0)} readOnly /> : 
+                    <input type="text" value={Math.round(totalHoursDay.reduce((a, b) => a + b, 0) * 100) / 100} readOnly /> : 
                     <input type="text" value="0" readOnly />
                 }
             </label>
@@ -183,6 +181,7 @@ export default function TimeReport() {
                         <th>Entry Lunch</th>
                         <th>Out Lunch</th>
                         <th>Out</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -239,6 +238,12 @@ export default function TimeReport() {
                                                 )[0].time
                                             }
                                         />
+                                    </td>
+                                    <td>
+                                        {totalHoursDay.length !== 0 ?
+                                            <input type="text" value={totalHoursDay[i]} readOnly /> :
+                                            <input type="text" value="0.00" readOnly />
+                                        }
                                     </td>
                                 </tr>
                             ))
