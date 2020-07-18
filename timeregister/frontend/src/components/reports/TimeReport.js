@@ -206,10 +206,6 @@ export default function TimeReport() {
             setTotalExtraHours100(totalExtraHours100)
         }
     }, [timesReport])
-    console.log(totalHoursDay)
-    console.log(totalNormalHours)
-    console.log(totalExtraHours50)
-    console.log(totalExtraHours100)
 
     
     const handleChange = e => {
@@ -251,6 +247,24 @@ export default function TimeReport() {
             <label>Total of Worked Hours:
                 {totalHoursDay.length !== 0 ? 
                     <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly /> : 
+                    <input type="text" value="0" readOnly />
+                }
+            </label>
+            <label>Total of Normal Hours:
+                {totalNormalHours.length !== 0 ?
+                    <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                    <input type="text" value="0" readOnly />
+                }
+            </label>
+            <label>Total of Extra 50% Hours:
+                {totalExtraHours50.length !== 0 ?
+                    <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                    <input type="text" value="0" readOnly />
+                }
+            </label>
+            <label>Total of Extra 100% Hours:
+                {totalExtraHours100.length !== 0 ?
+                    <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly /> :
                     <input type="text" value="0" readOnly />
                 }
             </label>
