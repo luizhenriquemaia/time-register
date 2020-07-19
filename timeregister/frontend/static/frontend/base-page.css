@@ -44,10 +44,15 @@ a {
     left: 0;
     top: 0;
     justify-content: space-between;
+    flex-direction: column;
     background-image: url('./media/background-image.jpg');
     background-repeat: no-repeat;
     background-size: 1100px 1598px;
     background-position: 460px -370px;
+}
+
+.hidden-background {
+    background-color: #F7F7F7;
 }
 
 /* navbar */
@@ -87,14 +92,14 @@ nav ul {
 
 .navbar-horizontal {
     display: flex;
-    position: fixed;
-    height: 80px;
+    min-height: 8vh;
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
     top: 0;
     left: 0;
     font-family: 'Raleway-Bold';
+    background-color: #F7F7F7;
 }
 
 .navbar-neumorphic {
@@ -126,8 +131,7 @@ nav ul {
 /* contents */
 .content {
     width: 100%;
-    margin-top: 80px;
-    margin: 80px 0px 0px;
+    min-width: 92vh;
     display: flex;
     flex-direction: column;
 }

@@ -29,7 +29,7 @@ export default function Report() {
     
 
     return (
-        <div className="content">
+        <div className="content hidden-background">
             <h1 className="title-page">Report</h1>
             <table className="table-reports">
                 <thead>
