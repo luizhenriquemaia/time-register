@@ -6,7 +6,6 @@ import Navbar from './layout/Navbar'
 import Home from './layout/Home'
 import NewReport from './reports/NewReport'
 import Report from './reports/Report'
-import UnsentReport from './reports/UnsentReport'
 import TimeReport from './reports/TimeReport'
 // Redux things
 import { Provider } from 'react-redux'
@@ -25,7 +24,6 @@ export default function App() {
                         <Route exact path="/new-report" component={NewReport} />
                         <Route exact path="/report" component={Report} />
                         <Route exact path="/time-report/:idReport" component={TimeReport} />
-                        <Route exact path="/unsent-report" component={UnsentReport} />
                     </Switch>
                 </div>
             </Router>
