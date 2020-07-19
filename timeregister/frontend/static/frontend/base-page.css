@@ -99,14 +99,15 @@ nav ul {
 }
 
 .navbar-neumorphic .nav-link {
-    color: black;
-}
-
-.navbar-neumorphic .list-navbar li {
     padding: 15px 20px 15px;
+    color: black;
     border-radius: 5px;
     box-shadow: 5px 5px 15px #e8e9ea,
                 -5px -5px 15px white;
+}
+
+ .navbar-neumorphic .list-navbar li {
+    height: 100%;
 }
 
 
@@ -126,20 +127,6 @@ nav ul {
     align-items: center;
 }
 
-.totals-of-report {
-    margin: 10px 0px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.totals-of-report input {
-    width: 70px;
-    color: #FCA311;
-    margin: 0px 10px 0px;
-    border: 0px;
-    font-size: 16px;
-}
 
 /* texts */
 .title-page {
@@ -230,10 +217,38 @@ td .display-total-hours {
     width: 70px;
     text-align: center;
     border: 0px;
+    color: #FCA311;
+    font-size: 15px;
 }
 
 tr {
     text-align: center;
+}
+
+/* totals */
+
+.totals-of-report {
+    margin: 10px 0px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.totals-of-report input {
+    width: 70px;
+    color: #FCA311;
+    margin: 0px 10px 0px;
+    border: 0px;
+    font-size: 16px;
+}
+
+.display-results-table {
+    border-radius: 5px;
+    color: #FCA311;
+    padding: 5px 0px 5px;
+    box-shadow: 5px 5px 15px #e8e9ea,
+                -4px -4px 15px white;
+
 }
 
 /* hover of elements*/
