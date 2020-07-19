@@ -1,6 +1,8 @@
 @font-face {
     font-family: 'Raleway-Regular';
     src: url('./fonts/Raleway-Regular.ttf');
+    font-family: 'Raleway-Bold';
+    src: url('./fonts/Raleway-Bold.ttf');
 }
 
 /* general elements */
@@ -10,7 +12,9 @@
 
 body {
     font-family: 'Raleway-Regular';
-    background-color: #F0F2F5;
+    background-color: #F7F7F7;
+    color: #181818;
+    overflow-x: hidden;
 }
 
 input {
@@ -18,12 +22,17 @@ input {
     border-radius: 0;
     border-bottom: #14213D 1px solid;
     transition: 0.15s;
-    background-color: #F0F2F5;
+    background-color: #F7F7F7;
 }
 
 button {
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
     font-size: 16px;
+}
+
+a {
+    text-decoration: none;
+    color: #181818;
 }
 
 /* containers */
@@ -35,6 +44,10 @@ button {
     left: 0;
     top: 0;
     justify-content: space-between;
+    background-image: url('./media/background-image.jpg');
+    background-repeat: no-repeat;
+    background-size: 1100px 1598px;
+    background-position: 460px -370px;
 }
 
 /* navbar */
@@ -45,7 +58,7 @@ nav ul {
 
 .nav-link {
     text-decoration: none;
-    color: white;
+    color: #181818;
 }
 
 .list-navbar {
@@ -79,10 +92,9 @@ nav ul {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    background-color: black;
-    color: white;
     top: 0;
     left: 0;
+    font-family: 'Raleway-Bold';
 }
 
 .navbar-neumorphic {
@@ -115,20 +127,33 @@ nav ul {
 .content {
     width: 100%;
     margin-top: 80px;
-    margin: 80px 30px 0px;
+    margin: 80px 0px 0px;
     display: flex;
     flex-direction: column;
-    background-color: #F0F2F5;
 }
 
 .home-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: absolute;
+    top: 200px;
+    text-align: left;
+    margin-left: 50px;
 }
 
 
 /* texts */
+.wellcome-home-page {
+    letter-spacing: 0.05em;
+    font-size: 48px;
+    width: 632px;
+    text-transform: uppercase;
+}
+
+.sub-text-home-page {
+    letter-spacing: 0.05em;
+    font-size: 24px;
+    width: 632px;
+}
+
 .title-page {
     margin-top: 2em;
     margin-bottom: 3em;

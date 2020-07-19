@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default function Navbar() {
     return (
-        <nav className="navbar-neumorphic">
+        <nav className="navbar-horizontal">
             <ul className="list-navbar">
                 <li><Link to="/" className="nav-link">Home</Link></li>
             </ul>
