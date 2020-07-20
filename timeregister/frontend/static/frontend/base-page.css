@@ -14,7 +14,6 @@ body {
     font-family: 'Raleway-Regular';
     background-color: #F7F7F7;
     color: #181818;
-    overflow-x: hidden;
 }
 
 input {
@@ -123,7 +122,6 @@ nav ul {
 
 /* contents */
 .content {
-    width: 100vw;
     min-height: 92vh;
     padding-left: 50px;
     display: flex;
@@ -134,14 +132,13 @@ nav ul {
     background-image: url('./media/background-image.jpg');
     background-repeat: no-repeat;
     background-size: 1100px 1598px;
-    background-position: 460px -370px;
+    background-position: 460px -420px;
 }
 
 .home-page {
     display: flex;
     justify-content: center;
     text-align: left;
-    padding-left: 50px;
 }
 
 /* texts */
