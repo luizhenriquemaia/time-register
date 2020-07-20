@@ -4,7 +4,6 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
 import Navbar from './layout/Navbar'
 import Home from './layout/Home'
-import NewReport from './reports/NewReport'
 import Report from './reports/Report'
 import TimeReport from './reports/TimeReport'
 // Redux things
@@ -21,7 +20,6 @@ export default function App() {
                     <Navbar />
                     <Switch>
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/new-report" component={NewReport} />
                         <Route exact path="/report" component={Report} />
                         <Route exact path="/time-report/:idReport" component={TimeReport} />
                     </Switch>

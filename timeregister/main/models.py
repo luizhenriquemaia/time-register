@@ -49,7 +49,7 @@ class Report(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        new_report = d01Report(
+        new_report = Report(
             initialDate = validated_data['initialDate'],
             finalDate = validated_data['finalDate'],
             employee = Employee.objects.get(id=validated_data['employee_id']),
