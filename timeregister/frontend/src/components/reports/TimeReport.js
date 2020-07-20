@@ -241,7 +241,7 @@ export default function TimeReport() {
  
     
     return (
-        <div className="content hidden-background">
+        <div className="content">
             <h1 className="title-page">Time Report Of {nameEmployee}</h1>
             <h4 className="text-date-report">Date: {dateReport}</h4>
             <div className="totals-of-report">

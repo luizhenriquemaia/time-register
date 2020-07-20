@@ -58,7 +58,7 @@ export default function Report() {
     
 
     return (
-        <div className="content hidden-background">
+        <div className="content">
             <h1 className="title-page">Report</h1>
             <table className="table-reports">
                 <thead>

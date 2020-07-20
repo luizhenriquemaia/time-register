@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Home() {
     return (
-        <div className="content home-page">
+        <div className="content home-page show-background-image">
             <h1 className="wellcome-home-page">
                 WELLCOME TO TIME REGISTER
             </h1>
