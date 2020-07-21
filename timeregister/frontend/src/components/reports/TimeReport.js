@@ -5,21 +5,24 @@ import { getReport } from '../../actions/reports'
 import { addTimeReport, getTimeReportWithReport } from '../../actions/timeReport'
 
 
-
 export default function TimeReport() {
     const params = useParams()
     const dispatch = useDispatch()
+    const idReportParams = params.idReport
     const report = useSelector(state => state.reports.report)
     const timesOfReport = useSelector(state => state.timeReport.timeReport)
-    const idReportParams = params.idReport
+    const isReportsFromReportsComponent = useSelector(state => state.reports.isListOfReports)
+    const [reportFromBackEnd, setReportFromBackEnd] = useState({
+        "employeeName": "",
+        "typeOfContract": "",
+        "intialDate": "",
+        "finalDate": "",
+        "shortDates": ""
+    })
     const [idReport, setIdReport] = useState(-1)
-    const [nameEmployee, setNameEmployee] = useState('')
-    const [dateReport, setDateReport] = useState('')
-    const [typeContractOfReport, setTypeContractOfReport] = useState('')
-    const [initialDate, setInitialDate] = useState(new Date(0))
-    const [finalDate, setFinalDate] = useState(new Date(0))
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
+    const [isDatesLoaded, setIsDatesLoaded] = useState(false)
     const [timesReport, setTimesReport] = useState([])
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
     const [timesState, setTimesState] = useState([])
@@ -29,30 +32,40 @@ export default function TimeReport() {
     const [totalExtraHours100, setTotalExtraHours100] = useState([])
 
     useEffect(() => {
-        if (finalDate !== new Date(0)) {
-            var days = []
-            for (var i = new Date(initialDate); i <= finalDate; i.setDate(i.getDate() + 1)) {
+        if (reportFromBackEnd.finalDate != null && reportFromBackEnd.finalDate !== "") {
+            let days = []
+            for (let i = new Date(reportFromBackEnd.initialDate); i <= reportFromBackEnd.finalDate; i.setDate(i.getDate() + 1)) {
                 days.push(new Date(i))
             }
             setDaysReport(days)
         }
-    }, [finalDate])
+    }, [reportFromBackEnd])
 
     useEffect(() => {
-        if (report.length === undefined) {
-            setNameEmployee(report.employee.name)
-            const splitInitialDate = report.initialDate.split("-")
-            setInitialDate(new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]))
-            const splitFinallDate = report.finalDate.split("-")
-            setFinalDate(new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]))
-            setDateReport(`${report.initialDate} - ${report.finalDate}`)
-            setTypeContractOfReport(report.typeContract.description)
-            setShouldGetTimes(true)
+        if (daysReport != null) {
+            setIsDatesLoaded(true)
+        }
+    }, [daysReport])
+
+    useEffect(() => {
+        if (!isReportsFromReportsComponent) {
+            if (report != undefined && report.length !== 0) {
+                const splitInitialDate = report.initialDate.split("-")
+                const splitFinallDate = report.finalDate.split("-")
+                setReportFromBackEnd({
+                    "employeeName": report.employee.name,
+                    "initialDate": new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]),
+                    "finalDate": new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]),
+                    "typeOfContract": report.typeContract.description,
+                    "shortDates": `${report.initialDate} - ${report.finalDate}`
+                })
+                setShouldGetTimes(true)
+            }
         }
     }, [report])
 
     useEffect(() => {
-        if (timesOfReport !== undefined) {
+        if (timesOfReport != undefined) {
             if (timesOfReport.length !== 0) {
                 setTimesState(timesOfReport)
             }
@@ -62,27 +75,28 @@ export default function TimeReport() {
     useEffect(() => {
         if (timesState != null) {
             daysReport.map(date => {
-                var nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`
+                let nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 1)
-                var nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`
+                nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 2)
-                var nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`
+                nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 3)
-                var nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`
+                nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 4)
             })
         }
     }, [timesState])
 
+
     const checkIfDateIsSameAndReturnTime = (name, date, scheduleToCheck) => {
-        var timesChecked = timesState.map(time => {
-            var splitedDateTime = time.dateRegister.split("-")
-            var dateToCheck = new Date(splitedDateTime[0], splitedDateTime[1] - 1, splitedDateTime[2])
+        let timesChecked = timesState.map(time => {
+            let splitedDateTime = time.dateRegister.split("-")
+            let dateToCheck = new Date(splitedDateTime[0], splitedDateTime[1] - 1, splitedDateTime[2])
             if (date.getTime() === dateToCheck.getTime()) {
                 if (time.schedule_id === scheduleToCheck) return time.timeRegister
             }
         })
-        var timeToAddToState = timesChecked.filter(time => (time != null))
+        let timeToAddToState = timesChecked.filter(time => (time != null))
         if (timeToAddToState.length === 0) timeToAddToState = ["00:00:00"]
         setTimesReport(prevState => [
             ...prevState,
@@ -134,7 +148,7 @@ export default function TimeReport() {
         let totalNormalHours = 0
         let totalExtra50 = 0
         let totalExtra100 = 0
-        switch (typeContractOfReport) {
+        switch (reportFromBackEnd.typeContractOfReport) {
             case "Segunda a sábado com hora extra e almoço de 1:00hr":
                 if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
                 if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
@@ -242,8 +256,8 @@ export default function TimeReport() {
     
     return (
         <div className="content">
-            <h1 className="title-page">Time Report Of {nameEmployee}</h1>
-            <h4 className="text-date-report">Date: {dateReport}</h4>
+            <h1 className="title-page">Time Report Of {reportFromBackEnd.employeeName}</h1>
+            <h4 className="text-date-report">Date: {reportFromBackEnd.shortDates}</h4>
             <div className="totals-of-report">
                 <label>Total of Worked Hours</label>
                 <div className="display-results-table">
@@ -275,32 +289,32 @@ export default function TimeReport() {
                 </div>
             </div>
             
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Entry</th>
-                        <th>Entry Lunch</th>
-                        <th>Out Lunch</th>
-                        <th>Out</th>
-                        <th>Total Hours</th>
-                        <th>Total Normal</th>
-                        <th>Total Extra 50%</th>
-                        <th>Total Extra 100%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {timesReport !== undefined && timesReport != null && timesReport.length !== 0 ? 
-                        (daysReport.map((date, i) => (
+            {isDatesLoaded ? 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Entry</th>
+                            <th>Entry Lunch</th>
+                            <th>Out Lunch</th>
+                            <th>Out</th>
+                            <th>Total Hours</th>
+                            <th>Total Normal</th>
+                            <th>Total Extra 50%</th>
+                            <th>Total Extra 100%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {timesReport !== undefined && timesReport != null && timesReport.length !== 0 ?
+                            (daysReport.map((date, i) => (
                                 <tr key={i}>
                                     <td>
-                                        {`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
+                                        {`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
                                     </td>
                                     <td>
-                                        <input 
-                                            type="time" 
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`} 
+                                        <input
+                                            type="time"
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`}
                                             onChange={handleChange}
                                             value={
                                                 timesReport.filter(
@@ -310,9 +324,9 @@ export default function TimeReport() {
                                         />
                                     </td>
                                     <td>
-                                        <input 
-                                            type="time" 
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`} 
+                                        <input
+                                            type="time"
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`}
                                             onChange={handleChange}
                                             value={
                                                 timesReport.filter(
@@ -322,9 +336,9 @@ export default function TimeReport() {
                                         />
                                     </td>
                                     <td>
-                                        <input 
-                                            type="time" 
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`} 
+                                        <input
+                                            type="time"
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`}
                                             onChange={handleChange}
                                             value={
                                                 timesReport.filter(
@@ -334,9 +348,9 @@ export default function TimeReport() {
                                         />
                                     </td>
                                     <td>
-                                        <input 
-                                            type="time" 
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`} 
+                                        <input
+                                            type="time"
+                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`}
                                             onChange={handleChange}
                                             value={
                                                 timesReport.filter(
@@ -379,10 +393,13 @@ export default function TimeReport() {
                                     </td>
                                 </tr>
                             ))
-                        ) : <tr></tr>
-                    }
-                </tbody>
-            </table>
+                            ) : <tr></tr>
+                        }
+                    </tbody>
+                </table>
+                :
+                <h3>Loadling...</h3>
+            }
             <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
         </div>
     )
