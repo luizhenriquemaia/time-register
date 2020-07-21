@@ -1,11 +1,12 @@
-import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from '../actions/types.js'
+import { GET_REPORTS, GET_REPORT, DELETE_REPORT, ADD_REPORT } from '../actions/types.js'
 
 
 
 const initialState = {
     report: [],
     isReportAdded: false,
-    isLoading: true
+    isListOfReports: false,
+    isObjectReport: false
 }
 
 export default function (state = initialState, action) {
@@ -14,7 +15,15 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 report: action.payload,
-                isLoading: false
+                isListOfReports: true,
+                isObjectReport: false
+            }
+        case GET_REPORT:
+            return {
+                ...state,
+                report: action.payload,
+                isListOfReports: false,
+                isObjectReport: true
             }
         case DELETE_REPORT:
             return {

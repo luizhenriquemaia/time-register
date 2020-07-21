@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from './types'
+import { GET_REPORTS, GET_REPORT, DELETE_REPORT, ADD_REPORT } from './types'
 // import { createMessage, returnErrors } from './messages'
 
 
@@ -24,7 +24,7 @@ export function getReport(report) {
         axios.get(`/api/report/${report}`)
             .then(res => {
                 dispatch({
-                    type: GET_REPORTS,
+                    type: GET_REPORT,
                     payload: res.data
                 })
             })
