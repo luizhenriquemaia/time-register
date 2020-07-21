@@ -23,6 +23,7 @@ export default function TimeReport() {
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
     const [isDatesLoaded, setIsDatesLoaded] = useState(false)
+    const [isComponentDataLoading, setIsComponentDataLoading] = useState(true)
     const [timesReport, setTimesReport] = useState([])
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
     const [timesState, setTimesState] = useState([])
@@ -49,7 +50,7 @@ export default function TimeReport() {
 
     useEffect(() => {
         if (!isReportsFromReportsComponent) {
-            if (report != undefined && report.length !== 0) {
+            if (report != null && report.length !== 0) {
                 const splitInitialDate = report.initialDate.split("-")
                 const splitFinallDate = report.finalDate.split("-")
                 setReportFromBackEnd({
@@ -65,12 +66,26 @@ export default function TimeReport() {
     }, [report])
 
     useEffect(() => {
-        if (timesOfReport != undefined) {
-            if (timesOfReport.length !== 0) {
-                setTimesState(timesOfReport)
-            }
+        if (timesOfReport != undefined && timesOfReport.length !== 0) {
+            setTimesState(timesOfReport)
         }
     }, [timesOfReport])
+
+    useEffect(() => {
+        if (idReport != -1) {
+            setIsDatesLoaded(false)
+            dispatch(getReport(idReport))
+        }
+    }, [idReport])
+
+    useEffect(() => {
+        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReport))
+    }, [shouldGetTimes])
+
+    useEffect(() => {
+        setIdReport(idReportParams)
+        setIsComponentDataLoading(true)
+    }, [idReportParams])
 
     useEffect(() => {
         if (timesState != null) {
@@ -106,18 +121,6 @@ export default function TimeReport() {
             }]
         )
     }
-    
-    useEffect(() => {
-        if (idReport != -1) dispatch(getReport(idReport))
-    }, [idReport])
-
-    useEffect(() => {
-        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReport))
-    }, [shouldGetTimes])
-
-    useEffect(() => {
-        setIdReport(idReportParams)
-    }, [idReportParams])
 
     // function to transform a string of hours in a date object
     const transformHours = (stringHour) => {
@@ -218,6 +221,7 @@ export default function TimeReport() {
             setTotalNormalHours(totalNormalHours)
             setTotalExtraHours50(totalExtraHours50)
             setTotalExtraHours100(totalExtraHours100)
+            setIsComponentDataLoading(false)
         }
     }, [timesReport])
 
@@ -253,154 +257,160 @@ export default function TimeReport() {
         dispatch(addTimeReport(timesForApi))
     }
  
+    console.log(isDatesLoaded)
     
-    return (
-        <div className="content">
-            <h1 className="title-page">Time Report Of {reportFromBackEnd.employeeName}</h1>
-            <h4 className="text-date-report">Date: {reportFromBackEnd.shortDates}</h4>
-            <div className="totals-of-report">
-                <label>Total of Worked Hours</label>
-                <div className="display-results-table">
-                    {totalHoursDay.length !== 0 ? 
-                        <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly /> : 
-                        <input type="text" value="0" readOnly />
-                    }
-                </div>
-                <label>Total of Normal Hours</label>
-                <div className="display-results-table">
-                    {totalNormalHours.length !== 0 ?
-                        <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                        <input type="text" value="0" readOnly />
-                    }
-                </div>
-                <label>Total of Extra 50% Hours</label>
-                <div className="display-results-table">
-                    {totalExtraHours50.length !== 0 ?
-                        <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                        <input type="text" value="0" readOnly />
-                    }
-                </div>
-                <label>Total of Extra 100% Hours</label>
-                <div className="display-results-table">
-                    {totalExtraHours100.length !== 0 ?
-                        <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                        <input type="text" value="0" readOnly />
-                    }
-                </div>
-            </div>
-            
-            {isDatesLoaded ? 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Entry</th>
-                            <th>Entry Lunch</th>
-                            <th>Out Lunch</th>
-                            <th>Out</th>
-                            <th>Total Hours</th>
-                            <th>Total Normal</th>
-                            <th>Total Extra 50%</th>
-                            <th>Total Extra 100%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {timesReport !== undefined && timesReport != null && timesReport.length !== 0 ?
-                            (daysReport.map((date, i) => (
-                                <tr key={i}>
-                                    <td>
-                                        {`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="time"
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`}
-                                            onChange={handleChange}
-                                            value={
-                                                timesReport.filter(
-                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1` && time != null
-                                                )[0].time
-                                            }
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="time"
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`}
-                                            onChange={handleChange}
-                                            value={
-                                                timesReport.filter(
-                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2` && time != null
-                                                )[0].time
-                                            }
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="time"
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`}
-                                            onChange={handleChange}
-                                            value={
-                                                timesReport.filter(
-                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3` && time != null
-                                                )[0].time
-                                            }
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="time"
-                                            name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`}
-                                            onChange={handleChange}
-                                            value={
-                                                timesReport.filter(
-                                                    time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4` && time != null
-                                                )[0].time
-                                            }
-                                        />
-                                    </td>
-                                    <td>
-                                        <div className="display-results-table">
-                                            {totalHoursDay.length !== 0 ?
-                                                <input type="text" value={totalHoursDay[i]} className="display-total-hours" readOnly /> :
-                                                <input type="text" value="0.00" className="display-total-hours" readOnly />
-                                            }
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="display-results-table">
-                                            {totalNormalHours.length !== 0 ?
-                                                <input type="text" value={totalNormalHours[i]} className="display-total-hours" readOnly /> :
-                                                <input type="text" value="0.00" className="display-total-hours" readOnly />
-                                            }
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="display-results-table">
-                                            {totalExtraHours50.length !== 0 ?
-                                                <input type="text" value={totalExtraHours50[i]} className="display-total-hours" readOnly /> :
-                                                <input type="text" value="0.00" className="display-total-hours" readOnly />
-                                            }
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="display-results-table">
-                                            {totalExtraHours100.length !== 0 ?
-                                                <input type="text" value={totalExtraHours100[i]} className="display-total-hours" readOnly /> :
-                                                <input type="text" value="0.00" className="display-total-hours" readOnly />
-                                            }
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                            ) : <tr></tr>
+    if (!isComponentDataLoading) {
+        return (
+            <div className="content">
+                <h1 className="title-page">Time Report Of {reportFromBackEnd.employeeName}</h1>
+                <h4 className="text-date-report">Date: {reportFromBackEnd.shortDates}</h4>
+                <div className="totals-of-report">
+                    <label>Total of Worked Hours</label>
+                    <div className="display-results-table">
+                        {totalHoursDay.length !== 0 ?
+                            <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                            <input type="text" value="0" readOnly />
                         }
-                    </tbody>
-                </table>
-                :
-                <h3>Loadling...</h3>
-            }
-            <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
-        </div>
-    )
+                    </div>
+                    <label>Total of Normal Hours</label>
+                    <div className="display-results-table">
+                        {totalNormalHours.length !== 0 ?
+                            <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                            <input type="text" value="0" readOnly />
+                        }
+                    </div>
+                    <label>Total of Extra 50% Hours</label>
+                    <div className="display-results-table">
+                        {totalExtraHours50.length !== 0 ?
+                            <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                            <input type="text" value="0" readOnly />
+                        }
+                    </div>
+                    <label>Total of Extra 100% Hours</label>
+                    <div className="display-results-table">
+                        {totalExtraHours100.length !== 0 ?
+                            <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly /> :
+                            <input type="text" value="0" readOnly />
+                        }
+                    </div>
+                </div>
+
+                {isDatesLoaded ?
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Entry</th>
+                                <th>Entry Lunch</th>
+                                <th>Out Lunch</th>
+                                <th>Out</th>
+                                <th>Total Hours</th>
+                                <th>Total Normal</th>
+                                <th>Total Extra 50%</th>
+                                <th>Total Extra 100%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {timesReport != null && timesReport.length !== 0 ?
+                                (daysReport.map((date, i) => (
+                                    <tr key={i}>
+                                        <td>
+                                            {`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} - ${daysWeek[date.getDay()]}`}
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="time"
+                                                name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`}
+                                                onChange={handleChange}
+                                                value={
+                                                    timesReport.filter(
+                                                        time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1` && time != null
+                                                    )[0].time
+                                                }
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="time"
+                                                name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2`}
+                                                onChange={handleChange}
+                                                value={
+                                                    timesReport.filter(
+                                                        time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-2` && time != null
+                                                    )[0].time
+                                                }
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="time"
+                                                name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3`}
+                                                onChange={handleChange}
+                                                value={
+                                                    timesReport.filter(
+                                                        time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-3` && time != null
+                                                    )[0].time
+                                                }
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="time"
+                                                name={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4`}
+                                                onChange={handleChange}
+                                                value={
+                                                    timesReport.filter(
+                                                        time => time.name === `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-4` && time != null
+                                                    )[0].time
+                                                }
+                                            />
+                                        </td>
+                                        <td>
+                                            <div className="display-results-table">
+                                                {totalHoursDay.length !== 0 ?
+                                                    <input type="text" value={totalHoursDay[i]} className="display-total-hours" readOnly /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="display-results-table">
+                                                {totalNormalHours.length !== 0 ?
+                                                    <input type="text" value={totalNormalHours[i]} className="display-total-hours" readOnly /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="display-results-table">
+                                                {totalExtraHours50.length !== 0 ?
+                                                    <input type="text" value={totalExtraHours50[i]} className="display-total-hours" readOnly /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="display-results-table">
+                                                {totalExtraHours100.length !== 0 ?
+                                                    <input type="text" value={totalExtraHours100[i]} className="display-total-hours" readOnly /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                                ) : <tr></tr>
+                            }
+                        </tbody>
+                    </table>
+                    :
+                    <h3>Loadling...</h3>
+                }
+                <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
+            </div>
+        )
+    } else {
+        return <h3>Loading...</h3>
+    }
+        
 }
