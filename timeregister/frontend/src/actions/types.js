@@ -1,4 +1,5 @@
 export const GET_REPORTS = 'GET_REPORTS'
+export const GET_REPORT = 'GET_REPORT'
 export const DELETE_REPORT = 'DELETE_REPORT'
 export const ADD_REPORT = 'ADD_REPORT'
 export const GET_DETAILS_REPORT = 'GET_DETAILS_REPORT'
