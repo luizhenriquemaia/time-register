@@ -68,6 +68,8 @@ export default function TimeReport() {
     useEffect(() => {
         if (timesOfReport != undefined && timesOfReport.length !== 0) {
             setTimesState(timesOfReport)
+        } else if (timesOfReport === '') {
+            setIsComponentDataLoading(false)
         }
     }, [timesOfReport])
 
@@ -88,6 +90,7 @@ export default function TimeReport() {
     }, [idReportParams])
 
     useEffect(() => {
+        console.log(timesState)
         if (timesState != null) {
             daysReport.map(date => {
                 let nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`
@@ -228,8 +231,8 @@ export default function TimeReport() {
     
     const handleChange = e => {
         const { name, value } = e.target
-        var idTimeInTimesReport = 0
-        var timesReportCopy = [...timesReport]
+        let idTimeInTimesReport = 0
+        let timesReportCopy = [...timesReport]
         timesReport.map(time => {
             if (time.name === name) {
                 timesReportCopy[idTimeInTimesReport].time = value
@@ -242,11 +245,11 @@ export default function TimeReport() {
     const handleSubmit = e => {
         e.preventDefault()
         const timesForApi = []
-        for (var timeOfState  in timesReport) {
-            var dateSplited = timesReport[timeOfState].name.split("-")
-            var scheduleReportApi = dateSplited[3]
-            var timeSplited = timesReport[timeOfState].time.split(":")
-            var dateTimeReportTime = new Date(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1])
+        for (const timeOfState  in timesReport) {
+            let dateSplited = timesReport[timeOfState].name.split("-")
+            let scheduleReportApi = dateSplited[3]
+            let timeSplited = timesReport[timeOfState].time.split(":")
+            let dateTimeReportTime = new Date(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1])
             timesForApi.push({
                 dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDate()}`,
                 schedule_id: scheduleReportApi,
