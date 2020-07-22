@@ -23,6 +23,7 @@ export default function TimeReport() {
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
     const [isComponentDataLoading, setIsComponentDataLoading] = useState(true)
+    const [responseFromAPIIsEmpty, setResponseFromAPIIsEmpty] = useState(false)
     const [timesReport, setTimesReport] = useState([])
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
     const [timesState, setTimesState] = useState([])
@@ -62,6 +63,7 @@ export default function TimeReport() {
         if (timesOfReport != undefined && timesOfReport.length !== 0) {
             setTimesState(timesOfReport)
         } else if (timesOfReport === '') {
+            setResponseFromAPIIsEmpty(true)
             setIsComponentDataLoading(false)
         }
     }, [timesOfReport])
@@ -79,10 +81,15 @@ export default function TimeReport() {
     useEffect(() => {
         setIdReport(idReportParams)
         setIsComponentDataLoading(true)
+        setResponseFromAPIIsEmpty(false)
     }, [idReportParams])
 
+    // check what times has values from backend
     useEffect(() => {
-        if (daysReport != null) {
+        if (timesState != null || responseFromAPIIsEmpty) {
+            setIsComponentDataLoading(true)
+            console.log("entrou no loop")
+            setTimesReport([])
             daysReport.map(date => {
                 let nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 1)
@@ -94,7 +101,7 @@ export default function TimeReport() {
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 4)
             })
         }
-    }, [daysReport])
+    }, [timesState, daysReport])
 
 
     const checkIfDateIsSameAndReturnTime = (name, date, scheduleToCheck) => {
@@ -116,30 +123,32 @@ export default function TimeReport() {
         )
     }
 
-    // function to transform a string of hours in a date object
+    console.log(timesReport)
+
+    // transform a string of hours in a date object
     const transformHours = (stringHour) => {
         let splitedHours = stringHour.split(":")
         return new Date(0, 0, 0, splitedHours[0], splitedHours[1])
     }
 
-    // function to round value
+    // round value
     const roundWithDecimals = (value, numberOfDecimals) => {
         return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, 2)
     }
 
-    // function to check if a time is bigger that other
+    // check if a time is bigger that other
     const time1IsBiggerThanTime0 = (time0, time1) => {
         return transformHours(time1).getTime() > transformHours(time0).getTime() ? true : false
     }
 
-    // function to get diference between 2 time objects
+    // get diference between 2 time objects
     const differenceBetweenTimes = (time0, time1) => {
         let totalHour = 0
         totalHour = transformHours(time1).getTime() - transformHours(time0).getTime()
         return totalHour = totalHour / 1000 / 3600
     }
 
-    // function to return total of hours, extra hours 50% and extra hours 100%
+    // return total of hours, extra hours 50% and extra hours 100%
     const getHoursPerDay = (time0, time1, time2, time3, dayOfTime) => {
         let totalHour = 0
         let totalNormalHours = 0
@@ -391,8 +400,8 @@ export default function TimeReport() {
                                         </td>
                                     </tr>
                                 ))
-                                ) : <tr></tr>
-                            }
+                            ) : <tr></tr>
+                        }
                         </tbody>
                     </table>
                    
