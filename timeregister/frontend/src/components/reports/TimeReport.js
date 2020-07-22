@@ -22,7 +22,6 @@ export default function TimeReport() {
     const [idReport, setIdReport] = useState(-1)
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
-    const [isDatesLoaded, setIsDatesLoaded] = useState(false)
     const [isComponentDataLoading, setIsComponentDataLoading] = useState(true)
     const [timesReport, setTimesReport] = useState([])
     const [shouldGetTimes, setShouldGetTimes] = useState(false)
@@ -41,12 +40,6 @@ export default function TimeReport() {
             setDaysReport(days)
         }
     }, [reportFromBackEnd])
-
-    useEffect(() => {
-        if (daysReport != null) {
-            setIsDatesLoaded(true)
-        }
-    }, [daysReport])
 
     useEffect(() => {
         if (!isReportsFromReportsComponent) {
@@ -75,7 +68,6 @@ export default function TimeReport() {
 
     useEffect(() => {
         if (idReport != -1) {
-            setIsDatesLoaded(false)
             dispatch(getReport(idReport))
         }
     }, [idReport])
@@ -90,8 +82,7 @@ export default function TimeReport() {
     }, [idReportParams])
 
     useEffect(() => {
-        console.log(timesState)
-        if (timesState != null) {
+        if (daysReport != null) {
             daysReport.map(date => {
                 let nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 1)
@@ -103,7 +94,7 @@ export default function TimeReport() {
                 checkIfDateIsSameAndReturnTime(nameToCheckDate, date, 4)
             })
         }
-    }, [timesState])
+    }, [daysReport])
 
 
     const checkIfDateIsSameAndReturnTime = (name, date, scheduleToCheck) => {
@@ -154,7 +145,7 @@ export default function TimeReport() {
         let totalNormalHours = 0
         let totalExtra50 = 0
         let totalExtra100 = 0
-        switch (reportFromBackEnd.typeContractOfReport) {
+        switch (reportFromBackEnd.typeOfContract) {
             case "Segunda a sábado com hora extra e almoço de 1:00hr":
                 if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
                 if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
@@ -259,8 +250,7 @@ export default function TimeReport() {
         }
         dispatch(addTimeReport(timesForApi))
     }
- 
-    console.log(isDatesLoaded)
+
     
     if (!isComponentDataLoading) {
         return (
@@ -298,7 +288,6 @@ export default function TimeReport() {
                     </div>
                 </div>
 
-                {isDatesLoaded ?
                     <table>
                         <thead>
                             <tr>
@@ -406,9 +395,7 @@ export default function TimeReport() {
                             }
                         </tbody>
                     </table>
-                    :
-                    <h3>Loadling...</h3>
-                }
+                   
                 <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
             </div>
         )
