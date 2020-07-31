@@ -454,7 +454,7 @@ export default function TimeReport() {
                         </tbody>
                     </table>
                    
-                <button className="submit-button medium-button" onClick={handleSubmit}>Submit</button>
+                <button className="submit-button button-times" onClick={handleSubmit}>Submit</button>
             </div>
         )
     } else {

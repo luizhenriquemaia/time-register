@@ -109,7 +109,7 @@ nav ul {
 }
 
 .times-report-page {
-    grid-template-rows: 2% 8% 2% 1fr 0.2fr 1%;
+    grid-template-rows: 2% 20% 2% 1fr 5% 1%;
 }
 
 .reports-page {
@@ -206,6 +206,11 @@ form {
     grid-column: 3;
     align-self: center;
     justify-self: center;
+}
+
+.button-times {
+    margin-top: 100px;
+    margin-bottom: 40px;
 }
 
 .medium-button {
