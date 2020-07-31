@@ -24,11 +24,14 @@ body {
 
 input {
     border: 0;
-    border-radius: 0;
+    border-radius: 5px;
     border-bottom: #14213D 1px solid;
-    transition: 0.15s;
+    padding: 2.5px 2.5px;
+    transition: 0.3s;
     background-color: #F7F7F7;
+    caret-color: #14213D;
 }
+
 
 button {
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
@@ -106,7 +109,7 @@ nav ul {
 }
 
 .times-report-page {
-    grid-template-rows: 2% 0.5fr 2% 1fr 0.2fr 1%;
+    grid-template-rows: 2% 8% 2% 1fr 0.2fr 1%;
 }
 
 .reports-page {
@@ -316,13 +319,17 @@ tr {
 /* focus */
 input:focus {
     outline: none;
-    padding-bottom: 10px;
-    border-width: 2px;
-    border-color: #6E8F96;
+    border-color: #14213D;
 }
 
 select:focus {
     outline: none;
     border-width: 2px;
     border-color: #6E8F96;
+}
+
+/* set in up the color of focus input elements */
+input[type=time]:not(.browser-default):focus:not([readonly]) {
+    box-shadow: none;
+    background-color: #14213d49;
 }
