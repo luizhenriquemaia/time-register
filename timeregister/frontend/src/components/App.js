@@ -16,14 +16,12 @@ export default function App() {
     return (
         <Provider store={store}>
             <Router>
-                <div className="container">
-                    <Navbar />
-                    <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route exact path="/report" component={Report} />
-                        <Route exact path="/time-report/:idReport" component={TimeReport} />
-                    </Switch>
-                </div>
+                <Navbar />
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/report" component={Report} />
+                    <Route exact path="/time-report/:idReport" component={TimeReport} />
+                </Switch>
             </Router>
         </Provider>
     )

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { CancelSVG, AddSVG } from '../assets/svgsComponents'
+//import addIcon from '../add-icon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { getEmployees } from '../../actions/employees'
@@ -58,8 +60,8 @@ export default function Report() {
     
 
     return (
-        <div className="content">
-            <h1 className="title-page">Report</h1>
+        <div className="content reports-page">
+            <h1 className="title-page">Reports</h1>
             <table className="table-reports">
                 <thead>
                     <tr>
@@ -77,7 +79,11 @@ export default function Report() {
                             <td>{report.finalDate}</td>
                             <td>{report.employee.name}</td>
                             <td>{report.typeContract.description}</td>
-                            <td><button onClick={() => handleDelete(report.id)}>Delete</button></td>
+                            <td>
+                                <button className="icon-button" onClick={() => handleDelete(report.id)}>
+                                    <CancelSVG />
+                                </button>
+                            </td>
                         </tr>
                     ))}
                     <tr>
@@ -104,7 +110,9 @@ export default function Report() {
                             </select>
                         </td>
                         <td>
-                            <button onClick={() => handleAddReport()}>Add</button>
+                            <button className="icon-button" onClick={() => handleAddReport()}>
+                                <AddSVG />
+                            </button>
                         </td>
                     </tr>
                 </tbody>

@@ -88,7 +88,6 @@ export default function TimeReport() {
     useEffect(() => {
         if (timesState != null || responseFromAPIIsEmpty) {
             setIsComponentDataLoading(true)
-            console.log("entrou no loop")
             setTimesReport([])
             daysReport.map(date => {
                 let nameToCheckDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-1`
@@ -122,8 +121,6 @@ export default function TimeReport() {
             }]
         )
     }
-
-    console.log(timesReport)
 
     // transform a string of hours in a date object
     const transformHours = (stringHour) => {
@@ -263,7 +260,7 @@ export default function TimeReport() {
     
     if (!isComponentDataLoading) {
         return (
-            <div className="content">
+            <div className="content times-report-page">
                 <h1 className="title-page">Time Report Of {reportFromBackEnd.employeeName}</h1>
                 <h4 className="text-date-report">Date: {reportFromBackEnd.shortDates}</h4>
                 <div className="totals-of-report">
@@ -297,7 +294,7 @@ export default function TimeReport() {
                     </div>
                 </div>
 
-                    <table>
+                    <table className="times-report-table">
                         <thead>
                             <tr>
                                 <th>Date</th>
