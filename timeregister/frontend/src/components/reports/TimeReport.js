@@ -190,6 +190,58 @@ export default function TimeReport() {
                     }
                 }
                 break
+            case "Segunda a sexta com hora extra e almoço de 1:00hr":
+                if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
+                if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
+                if (daysReport[dayOfTime].getDay() === 0) {
+                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra100 = differenceBetweenTimes(time0, time1)
+                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra100 += differenceBetweenTimes(time2, time3)
+                } else if (daysReport[dayOfTime].getDay() === 6) {
+                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra50 = differenceBetweenTimes(time0, time1)
+                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra50 += differenceBetweenTimes(time2, time3)
+                } else {
+                    if (time1IsBiggerThanTime0(time0, time1)) {
+                        totalNormalHours = differenceBetweenTimes(time0, time1)
+                        if (totalNormalHours > 9) {
+                            totalExtra50 = totalNormalHours - 9
+                            totalNormalHours = 9
+                        }
+                    }
+                    if (time1IsBiggerThanTime0(time2, time3)) {
+                        totalNormalHours += differenceBetweenTimes(time2, time3)
+                        if (totalNormalHours > 9) {
+                            totalExtra50 = totalNormalHours - 9
+                            totalNormalHours = 9
+                        }
+                    }
+                }
+                break
+            case "Segunda a sexta com hora extra e almoço de 1:12hr":
+                if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
+                if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
+                if (daysReport[dayOfTime].getDay() === 0) {
+                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra100 = differenceBetweenTimes(time0, time1)
+                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra100 += differenceBetweenTimes(time2, time3)
+                } else if (daysReport[dayOfTime].getDay() === 6) {
+                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra50 = differenceBetweenTimes(time0, time1)
+                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra50 += differenceBetweenTimes(time2, time3)
+                } else {
+                    if (time1IsBiggerThanTime0(time0, time1)) {
+                        totalNormalHours = differenceBetweenTimes(time0, time1)
+                        if (totalNormalHours > 8.8) {
+                            totalExtra50 = totalNormalHours - 8.8
+                            totalNormalHours = 8.8
+                        }
+                    }
+                    if (time1IsBiggerThanTime0(time2, time3)) {
+                        totalNormalHours += differenceBetweenTimes(time2, time3)
+                        if (totalNormalHours > 8.8) {
+                            totalExtra50 = totalNormalHours - 8.8
+                            totalNormalHours = 8.8
+                        }
+                    }
+                }
+                break
             default:
                 console.log("HAVE TO MAKE THIS TYPE OF CONTRACT CASE")
         }
