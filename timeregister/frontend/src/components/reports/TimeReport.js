@@ -293,7 +293,7 @@ export default function TimeReport() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        const timesForApi = []
+        const timesForApi = [] 
         for (const timeOfState  in timesReport) {
             let dateSplited = timesReport[timeOfState].name.split("-")
             let scheduleReportApi = dateSplited[3]
@@ -306,7 +306,8 @@ export default function TimeReport() {
                 report_id: idReport
             })
         }
-        dispatch(addTimeReport(timesForApi))
+        const listOfData = { listOfData: timesForApi}
+        dispatch(addTimeReport(listOfData))
     }
 
     

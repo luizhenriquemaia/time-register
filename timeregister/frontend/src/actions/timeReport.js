@@ -8,7 +8,7 @@ export const getTimeReport = () => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_TIME_REPORTS,
-                payload: res.data
+                payload: res.data.data
             })
             console.log(res.data)
         })
@@ -20,7 +20,7 @@ export const getTimeReportWithReport = (idReport) => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_TIME_REPORTS_WITH_REPORT,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => console.log(err.response.data, err.response.status))
@@ -29,9 +29,9 @@ export const getTimeReportWithReport = (idReport) => dispatch => {
 export const addTimeReport = (timeReport) => dispatch => {
     axios.post("api/time-report/", timeReport)
         .then(res => {
-            dispatch({
+            dispatch({ 
                 type: ADD_TIME_REPORT,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => console.log(err.response.data, err.response.status))

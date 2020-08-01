@@ -10,7 +10,7 @@ export function getReports() {
             .then(res => {
                 dispatch({
                     type: GET_REPORTS,
-                    payload: res.data
+                    payload: res.data.data
                 })
             })
             .catch(err => console.log(err.response.data, err.response.status))
@@ -25,7 +25,7 @@ export function getReport(report) {
             .then(res => {
                 dispatch({
                     type: GET_REPORT,
-                    payload: res.data
+                    payload: res.data.data
                 })
             })
             .catch(err => console.log(err.response.data, err.response.status))
@@ -39,7 +39,7 @@ export const addReport = (report) => {
             .then(res => {
                 dispatch({
                     type: ADD_REPORT,
-                    payload: res.data
+                    payload: res.data.data
                 })
             })
             //.catch(err => dispatch(returnErrors(err.response.data, err.response.status)))

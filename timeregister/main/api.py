@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import (
     Employee, FunctionEmployee, Report, Schedule, TimesReport, TypeContract)
-from .serializers import (EmployeeSerializer, FunctionEmployeeSerializer,
+from .serializers import (EmployeeSerializer,
                           ReportRetrieveSerializer, ReportSerializer,
                           ScheduleSerializer, TimesReportSerializer,
                           TypeContractSerializer)
@@ -25,13 +25,6 @@ class TypeContractViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return TypeContract.objects.all()
-
-
-class FunctionEmployeeViewSet(viewsets.ModelViewSet):
-    serializer_class = FunctionEmployeeSerializer
-
-    def get_queryset(self):
-        return FunctionEmployee.objects.all()
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -123,23 +116,46 @@ class TimesReportViewSet(viewsets.ViewSet):
 
     def list(self, request):
         if request.GET.get("report"):
-            query_from_url = request.GET.get("report")
+            report_request = request.GET.get("report")
             try:
-                data_report_from_db = TimesReport.objects.filter(report_id=query_from_url)
+                Report.objects.get(id=report_request)
             except ObjectDoesNotExist:
-                return Response("", status=status.HTTP_204_NO_CONTENT)
+                return Response({
+                    "data": "",
+                    "message": "this report does not exists"
+                }, status=status.HTTP_400_BAD_REQUEST)
+            data_report_from_db = TimesReport.objects.filter(
+                report_id=report_request)
+            if len(data_report_from_db) == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
             serializer = TimesReportSerializer(data_report_from_db, many=True)
             if serializer.data:
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        else:    
-            queryset = TimesReport.objects.all()
-            serializer = TimesReportSerializer(queryset, many=True)
-            return Response(serializer.data)
+                return Response({
+                    "data": serializer.data,
+                    "message": ""
+                    }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "data": "",
+                "message": "you need to specify the report"
+            }, status=status.HTTP_400_BAD_REQUEST)
         
     def create(self, request):
-        for data in request.data:
+        for data in request.data['listOfData']:
+            try:
+                report_time = Report.objects.get(id=data['report_id'])
+            except ObjectDoesNotExist:
+                return Response({
+                    "data": "",
+                    "message": "no report founded"
+                }, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                Schedule.objects.get(id=data['schedule_id'])
+            except ObjectDoesNotExist:
+                return Response({
+                    "data": "",
+                    "message": "no report founded"
+                }, status=status.HTTP_400_BAD_REQUEST)
             serializer = TimesReportSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 new_report = serializer.save()
