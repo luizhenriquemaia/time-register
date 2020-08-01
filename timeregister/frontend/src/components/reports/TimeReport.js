@@ -319,29 +319,29 @@ export default function TimeReport() {
                     <label>Total of Worked Hours</label>
                     <div className="display-results-table">
                         {totalHoursDay.length !== 0 ?
-                            <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                            <input type="text" value="0" readOnly />
+                            <input type="text" value={roundWithDecimals(totalHoursDay.reduce((a, b) => a + b, 0), 2)} readOnly tabIndex={-1} /> :
+                            <input type="text" value="0" readOnly tabIndex={-1} />
                         }
                     </div>
                     <label>Total of Normal Hours</label>
                     <div className="display-results-table">
                         {totalNormalHours.length !== 0 ?
-                            <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                            <input type="text" value="0" readOnly />
+                            <input type="text" value={roundWithDecimals(totalNormalHours.reduce((a, b) => a + b, 0), 2)} readOnly tabIndex={-1} /> :
+                            <input type="text" value="0" readOnly tabIndex={-1} />
                         }
                     </div>
                     <label>Total of Extra 50% Hours</label>
                     <div className="display-results-table">
                         {totalExtraHours50.length !== 0 ?
-                            <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                            <input type="text" value="0" readOnly />
+                            <input type="text" value={roundWithDecimals(totalExtraHours50.reduce((a, b) => a + b, 0), 2)} readOnly tabIndex={-1} /> :
+                            <input type="text" value="0" readOnly tabIndex={-1} />
                         }
                     </div>
                     <label>Total of Extra 100% Hours</label>
                     <div className="display-results-table">
                         {totalExtraHours100.length !== 0 ?
-                            <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly /> :
-                            <input type="text" value="0" readOnly />
+                            <input type="text" value={roundWithDecimals(totalExtraHours100.reduce((a, b) => a + b, 0), 2)} readOnly tabIndex={-1} /> :
+                            <input type="text" value="0" readOnly tabIndex={-1} />
                         }
                     </div>
                 </div>
@@ -418,32 +418,32 @@ export default function TimeReport() {
                                         <td>
                                             <div className="display-results-table">
                                                 {totalHoursDay.length !== 0 ?
-                                                    <input type="text" value={totalHoursDay[i]} className="display-total-hours" readOnly /> :
-                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                    <input type="text" value={totalHoursDay[i]} className="display-total-hours" readOnly tabIndex={-1} /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly tabIndex={-1} />
                                                 }
                                             </div>
                                         </td>
                                         <td>
                                             <div className="display-results-table">
                                                 {totalNormalHours.length !== 0 ?
-                                                    <input type="text" value={totalNormalHours[i]} className="display-total-hours" readOnly /> :
-                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                    <input type="text" value={totalNormalHours[i]} className="display-total-hours" readOnly tabIndex={-1} /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly tabIndex={-1} />
                                                 }
                                             </div>
                                         </td>
                                         <td>
                                             <div className="display-results-table">
                                                 {totalExtraHours50.length !== 0 ?
-                                                    <input type="text" value={totalExtraHours50[i]} className="display-total-hours" readOnly /> :
-                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                    <input type="text" value={totalExtraHours50[i]} className="display-total-hours" readOnly tabIndex={-1} /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly tabIndex={-1} />
                                                 }
                                             </div>
                                         </td>
                                         <td>
                                             <div className="display-results-table">
                                                 {totalExtraHours100.length !== 0 ?
-                                                    <input type="text" value={totalExtraHours100[i]} className="display-total-hours" readOnly /> :
-                                                    <input type="text" value="0.00" className="display-total-hours" readOnly />
+                                                    <input type="text" value={totalExtraHours100[i]} className="display-total-hours" readOnly tabIndex={-1} /> :
+                                                    <input type="text" value="0.00" className="display-total-hours" readOnly tabIndex={-1} />
                                                 }
                                             </div>
                                         </td>
