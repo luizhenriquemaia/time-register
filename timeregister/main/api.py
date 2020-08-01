@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import (
-    Employee, FunctionEmployee, Report, Schedule, TimesReport, TypeContract)
+    Employee, Report, Schedule, TimesReport, TypeContract)
 from .serializers import (EmployeeSerializer,
                           ReportRetrieveSerializer, ReportSerializer,
                           ScheduleSerializer, TimesReportSerializer,
