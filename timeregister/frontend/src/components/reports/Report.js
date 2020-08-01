@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { CancelSVG, AddSVG } from '../assets/svgsComponents'
-//import addIcon from '../add-icon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import Select from 'react-select'
+import { CancelSVG, AddSVG } from '../assets/svgsComponents'
 import { getEmployees } from '../../actions/employees'
 import { getTypeContracts } from '../../actions/typeContract'
 import { getReports, addReport, deleteReport } from '../../actions/reports'
+
+
+const styleSelectReact = {
+    option: (provided, {isFocused, isSelected}) => ({
+        ...provided,
+        color: isSelected ? 'black' : isFocused ? 'black' : '#F7F7F7',
+        backgroundColor: isSelected ? '#F7F7F7' : isFocused ? '#C0E5ED' : '#6E8F96',
+        padding: 20,
+    }),
+    menu: (provided) => ({ 
+        ...provided, 
+        backgroundColor: '#6E8F96',
+        border: '6px solid transparent'
+    })
+    
+}
 
 
 export default function Report() {
@@ -24,9 +40,52 @@ export default function Report() {
     const [newReportState, setNewReportState] = useState({
         initialDate: "",
         finalDate: "",
-        employee: "",
-        typeContract: ""
+        employee: -1,
+        typeContract: -1
     })
+    const [optionsSelectEmployees, setOptionsSelectEmployees] = useState([{
+        value: -1, label: ""
+    }])
+    const [optionsSelectTypeContract, setOptionsSelectTypeContract] = useState([{
+        value: -1, label: ""
+    }])
+
+    const getUniqueValues = (array, valueToCompare) => {
+        const uniqueArray = array
+            // store the comparison values in array
+            .map(element => element[valueToCompare])
+            // store the keys of the unique objects
+            .map((element, index, final) => final.indexOf(element) === index && index)
+            // eliminate the dead keys & store unique objects
+            .filter(element => array[element])
+            .map(element => array[element])
+        return uniqueArray
+    }
+
+    /* set the options states for the selects */
+    useEffect(() => {
+        if (employees != undefined && employees.length !== 0) {
+            let listOptionsToState = []
+            employees.map(employee => {
+                listOptionsToState.push({
+                    value: employee.id, label: employee.name
+                })
+            })
+            setOptionsSelectEmployees(getUniqueValues(listOptionsToState, "value"))
+        }
+    }, [employees])
+
+    useEffect(() => {
+        if (typeContracts != undefined && typeContracts.length !== 0) {
+            let listOptionsToState = []
+            typeContracts.map(typeContract => {
+                listOptionsToState.push({
+                    value: typeContract.id, label: typeContract.description
+                })
+            })
+            setOptionsSelectTypeContract(getUniqueValues(listOptionsToState, "value"))
+        }
+    }, [typeContracts])
 
     useEffect(() => {
         if (reports.length !== undefined) setReportsState(reports)
@@ -50,12 +109,38 @@ export default function Report() {
         })
     }
 
+    const handleSelectChange = (valueOfObject, objectWhoCalls) => {
+        if (objectWhoCalls.action === "select-option") {
+            setNewReportState({
+                ...newReportState,
+                [objectWhoCalls.name]: valueOfObject.value
+            })
+        } else if (objectWhoCalls.action === "clear") {
+            setNewReportState({
+                ...newReportState,
+                [objectWhoCalls.name]: ""
+            })
+        }
+    }
+
     const handleAddReport = e => {
         const { initialDate, finalDate, } = newReportState
         const employee_id = newReportState["employee"]
         const typeContract_id = newReportState["typeContract"]
-        const newReport = { employee_id, typeContract_id, initialDate, finalDate }
-        dispatch(addReport(newReport))
+        if (initialDate === "" || finalDate === "") {
+            console.log("invalid date")
+        } else {
+            if (employee_id === -1 || employee_id === "") {
+                console.log("invalid employee")
+            } else {
+                if (typeContract_id === -1 || typeContract_id === "") {
+                    console.log("invalid type of contract")    
+                } else {
+                    const newReport = { employee_id, typeContract_id, initialDate, finalDate }
+                    dispatch(addReport(newReport))
+                }
+            }
+        }
     }
     
 
@@ -94,20 +179,24 @@ export default function Report() {
                             <input type="date" name="finalDate" onChange={handleChange} />
                         </td>
                         <td>
-                            <select id="employees" name="employee" onChange={handleChange}>
-                                <option value="0"></option>
-                                {employees.map(employee => (
-                                    <option value={employee.id} key={employee.id}>{employee.name} - {employee.function}</option>
-                                ))}
-                            </select>
+                            <Select 
+                                styles={styleSelectReact}
+                                options={optionsSelectEmployees}
+                                isSearchable={true}
+                                isClearable={true}
+                                id="employees" name="employee"
+                                onChange={handleSelectChange}
+                            />
                         </td>
                         <td>
-                            <select id="typeContract" name="typeContract" onChange={handleChange}>
-                                <option value="0"></option>
-                                {typeContracts.map(typeContract => (
-                                    <option value={typeContract.id} key={typeContract.id}>{typeContract.description}</option>
-                                ))}
-                            </select>
+                            <Select
+                                styles={styleSelectReact}
+                                options={optionsSelectTypeContract}
+                                isSearchable={true}
+                                isClearable={true}
+                                id="typeContract" name="typeContract"
+                                onChange={handleSelectChange}
+                            />
                         </td>
                         <td>
                             <button className="icon-button" onClick={() => handleAddReport()}>
