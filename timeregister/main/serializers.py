@@ -3,7 +3,7 @@ import json
 from rest_framework import serializers
 
 from .models import (
-    Employee, FunctionEmployee, Report, Schedule, TimesReport, TypeContract)
+    Employee, Report, Schedule, TimesReport, TypeContract)
 
 
 # Schedule Serializer
@@ -18,18 +18,12 @@ class TypeContractSerializer(serializers.ModelSerializer):
         model = TypeContract
         fields = '__all__'
 
-# Function Employee Serializer
-class FunctionEmployeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FunctionEmployee
-        fields = '__all__'
-
 
 # Employee Serializer
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ['id', 'name', 'function']
+        fields = ['id', 'name']
 
 
 # Report Serializer

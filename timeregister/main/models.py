@@ -19,19 +19,9 @@ class TypeContract(models.Model):
         return self.description
 
 
-class FunctionEmployee(models.Model):
-    description = models.CharField(max_length=200)
-    objects = models.Manager()
-
-    def __str__(self):
-        return self.description
-
-
 class Employee(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
-    # set null = false in production
-    function = models.ForeignKey(FunctionEmployee, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def __str__(self):
