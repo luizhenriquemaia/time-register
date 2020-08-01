@@ -1,6 +1,7 @@
 import React from 'react'
 // import { useSelector } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
+import Login from './auth/Login'
 import Home from './layout/Home'
 import Report from './reports/Report'
 import TimeReport from './reports/TimeReport'
@@ -29,6 +30,7 @@ import TimeReport from './reports/TimeReport'
 export default function Routes() {
     return (
         <Switch>
+            <Route exact path="/login" component={Login} />
             <Route exact path="/" component={Home} />
             <Route exact path="/report" component={Report} />
             <Route exact path="/time-report/:idReport" component={TimeReport} />
