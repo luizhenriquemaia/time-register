@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { LOGIN_SUCCESS, LOGIN_FAIL  } from './types'
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS  } from './types'
 
 
 export const tokenConfig = getState => {
@@ -35,4 +35,10 @@ export const loginUser = (username, password) => dispatch => {
                 type: LOGIN_FAIL
             })
         })
+}
+
+export const logoutUser = () => (dispatch, getState) => {
+    dispatch({
+        type: LOGOUT_SUCCESS
+    })
 }

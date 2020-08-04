@@ -11,7 +11,7 @@ export default function Navbar() {
             </ul>
             <ul className="list-navbar">
                 <li><Link to="/report" className="nav-link">Reports</Link></li>
-                <li>Sign Out</li>
+                <li><Link to="/logout" className="nav-link">Sign Out</Link></li>
             </ul>
         </nav>
     )
