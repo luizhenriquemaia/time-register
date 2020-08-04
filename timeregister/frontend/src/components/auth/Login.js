@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { loginUser } from '../../actions/auth'
 
 
 export default function Login() {
@@ -9,7 +10,7 @@ export default function Login() {
         username: "",
         password: ""
     })
-    //const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
 
     const handleOnSubmit = e => {
@@ -26,40 +27,24 @@ export default function Login() {
         })
     }
 
-    /* if (isAuthenticated) {
+    if (isAuthenticated) {
         return <Redirect to="/" />
     } else {
         return (
-            <main className="content login">
-                <section className="section-main-box login-section">
-                    <div className="content-box">
-                        <form className="data-box" onSubmit={handleOnSubmit}>
-                            <label>Nome</label>
-                            <input type="text" name="username" value={loginState.username} onChange={handleOnChange} />
-                            <label>Senha</label>
-                            <input type="password" name="password" value={loginState.password} onChange={handleOnChange} />
-                            <button type="submit">Login</button>
-                        </form>
+            <div className="content login-page show-background-image">
+                <form className="login-form" onSubmit={handleOnSubmit}>
+                    <div className="form-input">
+                        <label>Email</label>
+                        <input type="text" name="username" value={loginState.username} onChange={handleOnChange} />
                     </div>
-                </section>
-            </main>
+                    <div className="form-input">
+                        <label>Password</label>
+                        <input type="password" name="password" value={loginState.password} onChange={handleOnChange} />
+                    </div>
+                    <button type="submit" className="submit-button">Login</button>
+                </form>
+            </div>
         )
-
-    } */
-    return (
-        <div className="content login-page show-background-image">
-            <form className="login-form" onSubmit={handleOnSubmit}>
-                <div className="form-input">
-                    <label>Email</label>
-                    <input type="text" name="username" value={loginState.username} onChange={handleOnChange} />
-                </div>
-                <div className="form-input">
-                    <label>Password</label>
-                    <input type="password" name="password" value={loginState.password} onChange={handleOnChange} />
-                </div>
-                <button type="submit" className="submit-button">Login</button>
-            </form>
-        </div>
-    )
+    }
 }
 
