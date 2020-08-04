@@ -56,7 +56,7 @@ class ReportTestsWithoutData(TestCase):
     
     def test_get_all_reports_with_no_reports(self):
         response = self.client.get('/api/report/')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 204) 
 
 
 class ReportTestsWithData(TestCase):

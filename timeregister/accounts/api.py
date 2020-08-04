@@ -1,31 +1,41 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from knox.models import AuthToken
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 
-from .serializers import LoginSerializer, UserSerializer
+from .serializer import UserSerializer, RegisterSerializer
 
 
-class LoginAPI(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        token = AuthToken.objects.create(user)[1]
-        return Response({
-            "user": UserSerializer(user, 
-            context=self.get_serializer_context()).data,
-            "token": token
-        })
+class RegisterAPI(viewsets.ViewSet):
+    def create(self, request):
+        if User.objects.filter(username=request.data['username']).exists():
+            return Response({
+                "data": "",
+                "message": "this username is already taken"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(email=request.data['email']).exists():
+            return Response({
+                "data": "",
+                "message": "this email is already registred"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
+            return Response({
+                "data": serializer.data,
+                "message": "registered user"
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                "data": serializer.errors,
+                "message": "error registring user"
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 # get the token and retrieve the user
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [
-        permissions.IsAuthenticated
+        permissions.IsAuthenticated,
     ]
     serializer_class = UserSerializer
 
