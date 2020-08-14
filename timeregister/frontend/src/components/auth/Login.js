@@ -32,6 +32,7 @@ export default function Login() {
     } else {
         return (
             <div className="content login-page show-background-image">
+                <h1 className="title-page title-login-page">TIME REGISTER</h1>
                 <form className="login-form" onSubmit={handleOnSubmit}>
                     <div className="form-input">
                         <label>Email</label>

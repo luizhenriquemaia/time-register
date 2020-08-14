@@ -152,6 +152,10 @@ nav ul {
     padding: 20px 0px;
 }
 
+.title-login-page {
+    grid-column: 2/3;
+}
+
 .text-date-report {
     text-align: right;
     grid-row: 2;
