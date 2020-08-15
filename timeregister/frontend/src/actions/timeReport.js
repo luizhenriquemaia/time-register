@@ -28,11 +28,14 @@ export const getTimeReportWithReport = (idReport) => dispatch => {
 export const addTimeReport = (timeReport) => dispatch => {
     axios.post("api/time-report/", timeReport)
         .then(res => {
+            console.log(res)
             dispatch({ 
                 type: ADD_TIME_REPORT,
                 payload: res.data.data
             })
             dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+        .catch(err => {
+            console.log(err.response)
+            dispatch(returnErrors(err.response.data.message, err.response.status))})
 }

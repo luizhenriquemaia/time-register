@@ -25,7 +25,7 @@ export default function (state = initialState, action) {
         case ADD_TIME_REPORT:
             return {
                 ...state,
-                timeReport: [...state.timeReport, action.payload]
+                timeReport: action.payload
             }
         default:
             return state
