@@ -1,15 +1,21 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import Login from './auth/Login'
 import Logout from './auth/Logout'
 import Home from './layout/Home'
 import Report from './reports/Report'
 import TimeReport from './reports/TimeReport'
+import { loadUser } from '../actions/auth'
 
 
 const PrivateRoute = ({ component, ...options }) => {
+    const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
+    useEffect(() => {
+        dispatch(loadUser())
+    }, [])
+
     return (
         <Route
             {...options}
