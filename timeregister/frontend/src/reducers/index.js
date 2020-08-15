@@ -5,6 +5,8 @@ import typeContracts from './typeContract'
 import reports from './reports'
 import errors from './errors'
 import auth from './auth'
+import info from './info'
+import messages from './messages'
 
 
 export default combineReducers({
@@ -14,4 +16,6 @@ export default combineReducers({
     typeContracts,
     reports,
     errors,
+    info,
+    messages,
 })

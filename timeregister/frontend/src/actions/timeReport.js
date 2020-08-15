@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { returnErrors, returnSuccess } from './messages'
 import { GET_TIME_REPORTS, GET_TIME_REPORTS_WITH_REPORT, DELETE_TIME_REPORT, ADD_TIME_REPORT } from './types'
-// import { createMessage, returnErrors } from './messages'
 
 
 export const getTimeReport = () => dispatch => {
@@ -10,9 +10,8 @@ export const getTimeReport = () => dispatch => {
                 type: GET_TIME_REPORTS,
                 payload: res.data.data
             })
-            console.log(res.data)
         })
-        .catch(err => console.log(err.response.data, err.response.status))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
 
 export const getTimeReportWithReport = (idReport) => dispatch => {
@@ -23,7 +22,7 @@ export const getTimeReportWithReport = (idReport) => dispatch => {
                 payload: res.data.data
             })
         })
-        .catch(err => console.log(err.response.data, err.response.status))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
 
 export const addTimeReport = (timeReport) => dispatch => {
@@ -33,6 +32,7 @@ export const addTimeReport = (timeReport) => dispatch => {
                 type: ADD_TIME_REPORT,
                 payload: res.data.data
             })
+            dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => console.log(err.response.data, err.response.status))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }

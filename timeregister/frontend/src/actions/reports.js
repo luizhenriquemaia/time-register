@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { returnErrors, returnSuccess } from './messages'
 import { GET_REPORTS, GET_REPORT, DELETE_REPORT, ADD_REPORT } from './types'
-// import { createMessage, returnErrors } from './messages'
 
 
 // GET REPORTS
@@ -12,14 +12,14 @@ export function getReports() {
                     type: GET_REPORTS,
                     payload: res.data.data
                 })
+                dispatch(returnSuccess(res.data.message, res.status))
             })
-            .catch(err => console.log(err.response.data, err.response.status))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
     }
 }
 
 // RETRIEVE REPORT
 export function getReport(report) {
-    //console.log(`report ${report}`)
     return dispatch => {
         axios.get(`/api/report/${report}`)
             .then(res => {
@@ -27,8 +27,9 @@ export function getReport(report) {
                     type: GET_REPORT,
                     payload: res.data.data
                 })
+                dispatch(returnSuccess(res.data.message, res.status))
             })
-            .catch(err => console.log(err.response.data, err.response.status))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
     }
 }
 
@@ -41,9 +42,9 @@ export const addReport = (report) => {
                     type: ADD_REPORT,
                     payload: res.data.data
                 })
+                dispatch(returnSuccess(res.data.message, res.status))
             })
-            //.catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.message, err.response.status)))
     }
 }
 
@@ -56,8 +57,8 @@ export const deleteReport = (id) => {
                     type: DELETE_REPORT,
                     payload: id
                 })
+                dispatch(returnSuccess(res.data.message, res.status))
             })
-            // .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
     }
 }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { returnErrors } from './messages'
 import { GET_TYPE_CONTRACT, DELETE_TYPE_CONTRACT, ADD_TYPE_CONTRACT } from './types'
 
 
@@ -12,8 +13,6 @@ export function getTypeContracts() {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
     }
 }

@@ -1,19 +1,45 @@
 import axios from 'axios'
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS  } from './types'
+import { returnErrors } from './messages'
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, USER_LOADING, USER_LOADED, AUTH_ERROR} from './types'
 
 
 export const tokenConfig = getState => {
-    const token = getState().auth.token
+    const token = getState().auth.access
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
     if (token) {
-        config.headers['Authorization'] = `Token ${token}`
+        config.headers['Authorization'] = `Bearer ${token}`
     }
     return config
 }
+
+
+export const loadUser = () => (dispatch, getState) => {
+    dispatch({ type: USER_LOADING })
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const token = getState().auth.access
+    const requestBody = JSON.stringify({ token })
+    axios.post('api/auth/token/verify/', requestBody, config)
+        .then(res => {
+            dispatch({
+                type: USER_LOADED,
+                payload: res.data
+            })
+        }).catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status))
+            dispatch({
+                type: AUTH_ERROR
+            })
+        })
+}
+
 
 export const loginUser = (username, password) => dispatch => {
     const config = {
@@ -29,8 +55,7 @@ export const loginUser = (username, password) => dispatch => {
                 payload: res.data
             })
         }).catch(err => {
-            console.log(err.response.data.detail, err.response.status)
-            //dispatch(returnErrors(err.response.data.detail, err.response.status))
+            dispatch(returnErrors(err.response.data.detail, err.response.status))
             dispatch({
                 type: LOGIN_FAIL
             })

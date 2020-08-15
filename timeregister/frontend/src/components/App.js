@@ -1,22 +1,35 @@
-// React things
 import React from 'react'
 import { HashRouter as Router } from 'react-router-dom'
-// Components
+
 import Navbar from './layout/Navbar'
 import Routes from './routes'
-// Redux things
+
 import { Provider } from 'react-redux'
 import store from '../store'
 import "babel-polyfill"
+
+import { Provider as AlertProvider } from 'react-alert'
+import AlertTemplate from 'react-alert-template-basic'
+import Alerts from './layout/Alerts'
+
+
+
+const alertOptions = {
+    timeout: 3000,
+    position: 'top center'
+}
 
 
 export default function App() {
     return (
         <Provider store={store}>
-            <Router>
-                <Navbar />
-                <Routes />
-            </Router>
+            <AlertProvider template={AlertTemplate} {...alertOptions}>
+                <Router>
+                    <Alerts />
+                    <Navbar />
+                    <Routes />
+                </Router>
+            </AlertProvider>
         </Provider>
     )
 }
