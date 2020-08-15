@@ -141,24 +141,38 @@ class TimesReportViewSet(viewsets.ViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
         
     def create(self, request):
-        for data in request.data['listOfData']:
-            try:
-                report_time = Report.objects.get(id=data['report_id'])
-            except ObjectDoesNotExist:
-                return Response({
-                    "data": "",
-                    "message": "no report founded"
-                }, status=status.HTTP_400_BAD_REQUEST)
-            try:
-                Schedule.objects.get(id=data['schedule_id'])
-            except ObjectDoesNotExist:
-                return Response({
-                    "data": "",
-                    "message": "no report founded"
-                }, status=status.HTTP_400_BAD_REQUEST)
-            serializer = TimesReportSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                new_report = serializer.save()
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        times_added = []
+        try:
+            for data in request.data['listOfData']:
+                try:
+                    report_time = Report.objects.get(id=data['report_id'])
+                except ObjectDoesNotExist:
+                    return Response({
+                        "data": "",
+                        "message": "no report founded"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    Schedule.objects.get(id=data['schedule_id'])
+                except ObjectDoesNotExist:
+                    return Response({
+                        "data": "",
+                        "message": "no report founded"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                serializer = TimesReportSerializer(data=data)
+                if serializer.is_valid(raise_exception=True):
+                    new_report = serializer.save()
+                    times_added.append(serializer.data)
+                else:
+                    return Response({
+                        "data": serializer.errors,
+                        "message": "bad request"
+                        }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "data": times_added,
+                "message": "times added"
+            }, status=status.HTTP_201_CREATED)
+        except:
+            return Response({
+                "data": serializer.errors,
+                "message": "bad request"
+                }, status=status.HTTP_200_OK)
