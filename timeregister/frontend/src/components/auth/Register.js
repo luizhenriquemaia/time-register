@@ -14,8 +14,7 @@ export default function Login() {
         password: "",
         password2: ""
     })
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-
+    const statusResponse = useSelector(state => state.info.status)
 
     const handleOnSubmit = e => {
         e.preventDefault()
@@ -39,8 +38,8 @@ export default function Login() {
         })
     }
 
-    if (isAuthenticated) {
-        return <Redirect to="/login" />
+    if (statusResponse === 201) {
+        return <Redirect to='/login' />
     } else {
         return (
             <div className="content login-page show-background-image">
