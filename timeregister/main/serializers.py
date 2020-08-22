@@ -21,13 +21,15 @@ class TypeContractSerializer(serializers.ModelSerializer):
 
 # Employee Serializer
 class EmployeeSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Employee
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'owner']
 
 
 # Report Serializer
 class ReportSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     employee = EmployeeSerializer(read_only=True)
     employee_id = serializers.IntegerField()
     typeContract = TypeContractSerializer(read_only=True)
@@ -35,7 +37,7 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ['id', 'initialDate', 'finalDate',
-                  'employee', 'employee_id', 'typeContract', 'typeContract_id']
+                  'employee', 'employee_id', 'typeContract', 'typeContract_id', 'owner']
 
     def create(self, validated_data):
         return Report.create(Report, **validated_data)
@@ -46,6 +48,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
 # Report Retrieve Serializer
 class ReportRetrieveSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     employee = EmployeeSerializer(read_only=False)
     employee_id = serializers.IntegerField()
     typeContract = TypeContractSerializer(read_only=False)
@@ -54,11 +57,12 @@ class ReportRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ['id', 'initialDate', 'finalDate',
-                  'employee', 'employee_id', 'typeContract', 'typeContract_id']
+                  'employee', 'employee_id', 'typeContract', 'typeContract_id', 'owner']
     
 
 # Time's Report Serializer
 class TimesReportSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     schedule = ScheduleSerializer(read_only=True)
     schedule_id = serializers.IntegerField()
     report = ReportSerializer(read_only=True)
@@ -67,7 +71,7 @@ class TimesReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimesReport
         fields = ['id', 'dateRegister', 'schedule', 'schedule_id',
-                  'timeRegister', 'report', 'report_id']
+                  'timeRegister', 'report', 'report_id', 'owner']
     
     def create(self, validated_data):
         return TimesReport.create(TimesReport, **validated_data)

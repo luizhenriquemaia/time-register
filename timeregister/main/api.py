@@ -14,30 +14,34 @@ from .serializers import (EmployeeSerializer,
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ScheduleSerializer
 
     def get_queryset(self):
-        return Schedule.objects.all()
+        return Schedule.objects.filter(owner=self.request.user)
 
 
 class TypeContractViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = TypeContractSerializer
 
     def get_queryset(self):
-        return TypeContract.objects.all()
+        return TypeContract.objects.filter(owner=self.request.user)
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = EmployeeSerializer
 
     def get_queryset(self):
-        return Employee.objects.all()
+        return Employee.objects.filter(owner=self.request.user)
 
 
 class ReportViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = Report.objects.all()
+        queryset = Report.objects.filter(owner=self.request.user)
         if len(queryset) == 0:
             return Response(status=status.HTTP_204_NO_CONTENT) 
         else:
@@ -112,6 +116,7 @@ class ReportViewSet(viewsets.ViewSet):
 
 
 class TimesReportViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     serializer = TimesReportSerializer
 
     def list(self, request):
@@ -125,7 +130,7 @@ class TimesReportViewSet(viewsets.ViewSet):
                     "message": "this report does not exists"
                 }, status=status.HTTP_400_BAD_REQUEST)
             data_report_from_db = TimesReport.objects.filter(
-                report_id=report_request)
+                report_id=report_request, owner=self.request.user)
             if len(data_report_from_db) == 0:
                 return Response(status=status.HTTP_204_NO_CONTENT)
             serializer = TimesReportSerializer(data_report_from_db, many=True)
