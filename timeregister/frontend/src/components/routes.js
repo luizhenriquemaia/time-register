@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import Login from './auth/Login'
 import Logout from './auth/Logout'
+import Register from './auth/Register'
 import Home from './layout/Home'
 import Report from './reports/Report'
 import TimeReport from './reports/TimeReport'
@@ -38,6 +39,7 @@ export default function Routes() {
     return (
         <Switch>
             <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
             <PrivateRoute exact path="/logout" component={Logout} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/report" component={Report} />
