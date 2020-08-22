@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { Redirect, Link } from 'react-router-dom'
-import { loginUser } from '../../actions/auth'
+import { registerUser } from '../../actions/auth'
 
 
 export default function Login() {
@@ -11,7 +11,7 @@ export default function Login() {
     const [newUserState, setNewUserState] = useState({
         username: "",
         email: "",
-        password1: "",
+        password: "",
         password2: ""
     })
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
@@ -19,10 +19,12 @@ export default function Login() {
 
     const handleOnSubmit = e => {
         e.preventDefault()
-        const { username, email, password1, password2 } = newUserState
-        if (username !== "" && email !== "" && password1 !== "" && password2 !== "") {
-            if (password1 !== password2) {
+        const { username, email, password, password2 } = newUserState
+        if (username !== "" && email !== "" && password !== "" && password2 !== "") {
+            if (password !== password2) {
                 alert.error("passwords do not match")
+            } else {
+                dispatch(registerUser(newUserState))
             }
         } else {
             alert.error("all fields are required")
@@ -55,7 +57,7 @@ export default function Login() {
                         </div>
                         <div className="form-input">
                             <label>Password</label>
-                            <input type="password" name="password1" value={newUserState.password1} onChange={handleOnChange} />
+                            <input type="password" name="password" value={newUserState.password} onChange={handleOnChange} />
                         </div>
                         <div className="form-input">
                             <label>Repeat Password</label>

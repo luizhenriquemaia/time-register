@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { returnErrors } from './messages'
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, USER_LOADING, USER_LOADED, AUTH_ERROR} from './types'
+import { returnErrors, returnSuccess } from './messages'
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, USER_LOADING, USER_LOADED, AUTH_ERROR, REGISTER_USER} from './types'
 
 
 export const tokenConfig = getState => {
@@ -66,4 +66,18 @@ export const logoutUser = () => (dispatch, getState) => {
     dispatch({
         type: LOGOUT_SUCCESS
     })
+}
+
+
+export const registerUser = (newUser) => {
+    return dispatch => {
+        axios.post('/api/auth/register/', newUser)
+            .then(res => {
+                dispatch({
+                    type: REGISTER_USER,
+                    payload: res.data.data
+                })
+                dispatch(returnSuccess(res.data.message, res.status))
+            }).catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+    }
 }

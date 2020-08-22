@@ -33,7 +33,7 @@ class RegisterUserTest(TestCase):
         response = self.client.post('/api/auth/register/', json_data, headers = {"Content-Type": "application/json"})
         response_body_data = json.loads(response.content.decode("UTF-8"))
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response_body_data['message'], "registered user")
+        self.assertEqual(response_body_data['message'], "user registered")
         self.assertTrue(response_body_data['data'])
     
     def test_register_with_existent_user(self):

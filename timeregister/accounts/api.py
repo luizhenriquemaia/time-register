@@ -23,7 +23,7 @@ class RegisterAPI(viewsets.ViewSet):
             user = serializer.save()
             return Response({
                 "data": serializer.data,
-                "message": "registered user"
+                "message": "user registered"
             }, status=status.HTTP_201_CREATED)
         else:
             return Response({
