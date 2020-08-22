@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
 from datetime import date
-
 
 class Schedule(models.Model):
     description = models.CharField(max_length=50)
@@ -22,6 +22,8 @@ class TypeContract(models.Model):
 class Employee(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
+    owner = models.ForeignKey(
+        User, related_name="employees", on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def __str__(self):
@@ -36,6 +38,8 @@ class Report(models.Model):
     # set null = false in production
     typeContract = models.ForeignKey(
         TypeContract, on_delete=models.CASCADE, null=True, related_name='typeContract')
+    owner = models.ForeignKey(
+        User, related_name="reports", on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -72,6 +76,8 @@ class TimesReport(models.Model):
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
     timeRegister = models.TimeField()
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        User, related_name="times_report", on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):

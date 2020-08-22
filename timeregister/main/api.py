@@ -39,7 +39,7 @@ class ReportViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Report.objects.all()
         if len(queryset) == 0:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT) 
         else:
             serializer = ReportSerializer(queryset, many=True)
             return Response({
@@ -64,7 +64,7 @@ class ReportViewSet(viewsets.ViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
         serializer = ReportSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            new_report = serializer.save()
+            new_report = serializer.save(owner=self.request.user)
             return Response({
                 "data": serializer.data,
                 "message": "report added"
@@ -160,7 +160,7 @@ class TimesReportViewSet(viewsets.ViewSet):
                     }, status=status.HTTP_400_BAD_REQUEST)
                 serializer = TimesReportSerializer(data=data)
                 if serializer.is_valid(raise_exception=True):
-                    new_report = serializer.save()
+                    new_report = serializer.save(owner=self.request.user)
                     times_added.append(serializer.data)
                 else:
                     return Response({
