@@ -24,7 +24,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Employee
-        fields = ['id', 'name', 'owner']
+        fields = ['id', 'name', 'function', 'description', 'active', 'owner']
+    
+    def destroy(self, id):
+        return Employee.destroy(Report, id)
 
 
 # Report Serializer

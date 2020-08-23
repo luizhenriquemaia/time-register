@@ -29,12 +29,54 @@ class TypeContractViewSet(viewsets.ModelViewSet):
         return TypeContract.objects.filter(owner=self.request.user)
 
 
-class EmployeeViewSet(viewsets.ModelViewSet):
+class EmployeeViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = EmployeeSerializer
 
-    def get_queryset(self):
-        return Employee.objects.filter(owner=self.request.user)
+    def list(self, request):
+        queryset = Employee.objects.filter(owner=self.request.user)
+        if len(queryset) == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            serializer = EmployeeSerializer(queryset, many=True)
+            return Response({
+                "data": serializer.data,
+                "message": ""
+            }, status=status.HTTP_200_OK)
+    
+    def create(self, request):
+        try:
+            if request.data['name'] and request.data['function'] and request.data['description']:
+                serializer = EmployeeSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    new_employee = serializer.save(owner=self.request.user)
+                    return Response({
+                        "data": serializer.data,
+                        "message": "employee added"
+                    }, status=status.HTTP_201_CREATED)
+                return Response({
+                    "data": serializer.errors,
+                    "message": "error adding employee"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({
+                "data": "",
+                "message": "not enougth data to add a employee"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        try:
+            Employee.objects.get(id=pk)
+        except ObjectDoesNotExist:
+            return Response({
+                "data": "",
+                "message": "no employee founded"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = EmployeeSerializer
+        deleted_employee = serializer.destroy(serializer, id=pk)
+        return Response({
+            "data": "",
+            "message": "employee deleted"
+        }, status=status.HTTP_204_NO_CONTENT)
 
 
 class ReportViewSet(viewsets.ViewSet):

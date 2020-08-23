@@ -21,13 +21,20 @@ class TypeContract(models.Model):
 
 class Employee(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=True)
+    function = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=200, null=True)
+    active = models.BooleanField(default=True)
     owner = models.ForeignKey(
         User, related_name="employees", on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def __str__(self):
         return self.name
+    
+    def destroy(self, id):
+        employee = Employee.objects.get(id=id)
+        employee.delete()
 
 
 class Report(models.Model):

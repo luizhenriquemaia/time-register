@@ -27,9 +27,13 @@ def login_user(username):
     response_body_data = json.loads(response.content.decode("UTF-8"))
     return response_body_data['access']
 
-def add_new_employee():
+def add_new_employee(user_test):
     employee_test = Employee(
-        name="Employee Test"
+        name="Employee Test",
+        function="function test",
+        description="employee name, function",
+        active=True,
+        owner=user_test
     )
     employee_test.save()
     return employee_test
@@ -91,16 +95,14 @@ class ReportTestsWithData(TestCase):
         self.client = Client()
         self.user_test = add_user('user_test', 'usertest@test.com')
         self.token = login_user('user_test')
-        self.employee_test = add_new_employee()
+        self.employee_test = add_new_employee(self.user_test)
         self.contract_test = add_new_type_of_contract()
         self.report_test = add_new_report(self.employee_test, self.contract_test, self.user_test)
     
     def test_get_all_reports(self):
-        print(f'\n\n\nBearer {self.token}\n\n\n')
         header = {'HTTP_AUTHORIZATION': f'Bearer {self.token}'}
         response = self.client.get(
             '/api/report/', **header)
-        print(f'\n\nresponse {response}\n\n')
         response_body_data = json.loads(response.content.decode("UTF-8"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['content-type'], 'application/json')
@@ -205,7 +207,7 @@ class TimesReportTestsWithData(TestCase):
         self.client = Client()
         self.user_test = add_user('user_test', 'usertest@test.com')
         self.token = login_user('user_test')
-        self.employee_test = add_new_employee()
+        self.employee_test = add_new_employee(self.user_test)
         self.contract_test = add_new_type_of_contract()
         self.report_test = add_new_report(
             self.employee_test, self.contract_test, self.user_test)
