@@ -18,7 +18,7 @@ export default function Alerts() {
         if (infoMessage === "generic get message") {
             setShouldResetMessage(true)
         } else {
-            if (messageState === "" && !shouldResetMessage && infoMessage !== "") {
+            if (messageState === "" && !shouldResetMessage && infoMessage !== null ) {
                 setMessageState(infoMessage)
             } else {
                 setShouldResetMessage(false)
@@ -40,8 +40,8 @@ export default function Alerts() {
                 if (infoStatus >= 500) alert.error("Erro interno do servidor")
                 if (infoStatus >= 400 && infoStatus < 500) alert.error(messageState)
                 if (infoStatus >= 200 && infoStatus < 400 && messageState) alert.success(messageState)
-                setShouldResetMessage(true)
             }
+            setShouldResetMessage(true)
         }
     }, [messageState])
 

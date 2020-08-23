@@ -14,6 +14,8 @@ export default function Navbar() {
                 </ul>
                 <ul className="list-navbar">
                     <li><Link to="/report" className="nav-link">Reports</Link></li>
+                    <li><Link to="/employee" className="nav-link">Employees</Link></li>
+                    <li><Link to="/types-of-contract" className="nav-link">Types Contract</Link></li>
                     <li><Link to="/logout" className="nav-link">Sign Out</Link></li>
                 </ul>
             </nav>

@@ -8,9 +8,16 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case GET_EMPLOYEES:
-            return {
-                ...state,
-                employee: action.payload
+            if (action.payload.legth === undefined) {
+                return {
+                    ...state,
+                    employee: []
+                }
+            } else {
+                return {
+                    ...state,
+                    employee: action.payload
+                }
             }
         case DELETE_EMPLOYEE:
             return {

@@ -51,7 +51,7 @@ export const deleteReport = (id) => (dispatch, getState) => {
                 type: DELETE_REPORT,
                 payload: id
             })
-            dispatch(returnSuccess(res.data.message, res.status))
+            dispatch(returnSuccess("report deleted", res.status))
         })
         .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
