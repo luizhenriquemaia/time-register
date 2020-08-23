@@ -88,7 +88,7 @@ export default function Report() {
     }, [typeContracts])
 
     useEffect(() => {
-        if (reports.length !== undefined) setReportsState(reports)
+        if (reports !== undefined && reports.length !== 0) setReportsState(reports)
     }, [reports])
 
     useEffect(() => {
@@ -159,17 +159,20 @@ export default function Report() {
                 </thead>
                 <tbody>
                     {reportsState.map(report => (
-                        <tr key={report.id} >
-                            <td onClick={() => handleClick(report.id)} >{report.initialDate}</td>
-                            <td>{report.finalDate}</td>
-                            <td>{report.employee.name}</td>
-                            <td>{report.typeContract.description}</td>
-                            <td>
-                                <button className="icon-button" onClick={() => handleDelete(report.id)}>
-                                    <CancelSVG />
-                                </button>
-                            </td>
-                        </tr>
+                        report.id !== "" ? 
+                                <tr key={report.id} >
+                                    <td onClick={() => handleClick(report.id)} >{report.initialDate}</td>
+                                    <td>{report.finalDate}</td>
+                                    <td>{report.employee.name}</td>
+                                    <td>{report.typeContract.description}</td>
+                                    <td>
+                                        <button className="icon-button" onClick={() => handleDelete(report.id)}>
+                                            <CancelSVG />
+                                        </button>
+                                    </td>
+                                </tr>
+                            : 
+                                <tr key={report.id} ></tr>
                     ))}
                     <tr>
                         <td>
