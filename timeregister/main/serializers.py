@@ -18,7 +18,7 @@ class TypeContractSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = TypeContract
-        fields = ['description', 'hoursSunday', 'hoursMonday', 'hoursTuesday',
+        fields = ['id', 'description', 'hoursSunday', 'hoursMonday', 'hoursTuesday',
             'hoursWednesday', 'hoursThursday', 'hoursFriday', 'hoursSaturday',
             'owner']
     
