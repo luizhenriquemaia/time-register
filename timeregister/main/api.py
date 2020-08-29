@@ -21,12 +21,44 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         return Schedule.objects.filter(owner=self.request.user)
 
 
-class TypeContractViewSet(viewsets.ModelViewSet):
+class TypeContractViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = TypeContractSerializer
-
-    def get_queryset(self):
-        return TypeContract.objects.filter(owner=self.request.user)
+    
+    def list(self, request):
+        queryset = TypeContract.objects.filter(owner=self.request.user)
+        if len(queryset) == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            serializer = TypeContractSerializer(queryset, many=True)
+            return Response({
+                "data": serializer.data,
+                "message": ""
+            }, status=status.HTTP_200_OK)
+    
+    def create(self, request):
+        try:
+            if request.data['description'] and request.data['hoursSunday'] and request.data['hoursMonday'] and request.data['hoursTuesday'] and request.data['hoursWednesday'] and request.data['hoursThursday'] and request.data['hoursFriday'] and request.data['hoursSaturday']:
+                serializer = TypeContractSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    new_type_of_contract = serializer.save(owner=self.request.user)
+                    return Response({
+                        "data": serializer.data,
+                        "message": "type of contract added"
+                    }, status=status.HTTP_201_CREATED)
+                return Response({
+                    "data": serializer.errors,
+                    "message": "error adding type of contract"
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    "data": "",
+                    "message": "not enought data to add a new type of contract"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({
+                "data": "",
+                "message": "error adding type of contract"
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EmployeeViewSet(viewsets.ViewSet):
@@ -220,6 +252,6 @@ class TimesReportViewSet(viewsets.ViewSet):
             }, status=status.HTTP_201_CREATED)
         except:
             return Response({
-                "data": serializer.errors,
+                "data": "",
                 "message": "bad request"
                 }, status=status.HTTP_200_OK)

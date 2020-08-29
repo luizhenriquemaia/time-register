@@ -12,11 +12,18 @@ class ScheduleSerializer(serializers.ModelSerializer):
         model = Schedule
         fields = '__all__'
 
+
 # TypeContract Serializer
 class TypeContractSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = TypeContract
-        fields = '__all__'
+        fields = ['description', 'hoursSunday', 'hoursMonday', 'hoursTuesday',
+            'hoursWednesday', 'hoursThursday', 'hoursFriday', 'hoursSaturday',
+            'owner']
+    
+    def destroy(self, id):
+        return TypeContract.destroy(TypeContract, id)
 
 
 # Employee Serializer
@@ -27,7 +34,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'function', 'description', 'active', 'owner']
     
     def destroy(self, id):
-        return Employee.destroy(Report, id)
+        return Employee.destroy(Employee, id)
 
 
 # Report Serializer

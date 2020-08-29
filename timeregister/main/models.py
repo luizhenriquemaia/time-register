@@ -12,11 +12,23 @@ class Schedule(models.Model):
 
 class TypeContract(models.Model):
     description = models.CharField(max_length=200)
-    durationLunch = models.TimeField()
+    hoursSunday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    hoursMonday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    hoursTuesday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    hoursWednesday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    hoursThursday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    hoursFriday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    hoursSaturday = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    owner = models.ForeignKey(
+        User, related_name="typeContract", on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def __str__(self):
         return self.description
+    
+    def destroy(self, id):
+        type_contract = TypeContract.objects.get(id=id)
+        type_contract.delete()
 
 
 class Employee(models.Model):

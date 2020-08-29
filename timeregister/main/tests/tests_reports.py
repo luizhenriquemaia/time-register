@@ -38,13 +38,21 @@ def add_new_employee(user_test):
     employee_test.save()
     return employee_test
 
-def add_new_type_of_contract():
-    contract_test = TypeContract(
-        description="Type test",
-        durationLunch=time(1, 0)
+
+def add_new_type_of_contract(user_test):
+    type_of_contract_test = TypeContract(
+        description="type test",
+        hoursSunday=0,
+        hoursMonday=9,
+        hoursTuesday=9,
+        hoursWednesday=9,
+        hoursThursday=9,
+        hoursFriday=8,
+        hoursSaturday=4,
+        owner=user_test
     )
-    contract_test.save()
-    return contract_test
+    type_of_contract_test.save()
+    return type_of_contract_test
 
 
 def add_new_report(employee, typeOfContract, user):
@@ -96,7 +104,7 @@ class ReportTestsWithData(TestCase):
         self.user_test = add_user('user_test', 'usertest@test.com')
         self.token = login_user('user_test')
         self.employee_test = add_new_employee(self.user_test)
-        self.contract_test = add_new_type_of_contract()
+        self.contract_test = add_new_type_of_contract(self.user_test)
         self.report_test = add_new_report(self.employee_test, self.contract_test, self.user_test)
     
     def test_get_all_reports(self):
@@ -208,7 +216,7 @@ class TimesReportTestsWithData(TestCase):
         self.user_test = add_user('user_test', 'usertest@test.com')
         self.token = login_user('user_test')
         self.employee_test = add_new_employee(self.user_test)
-        self.contract_test = add_new_type_of_contract()
+        self.contract_test = add_new_type_of_contract(self.user_test)
         self.report_test = add_new_report(
             self.employee_test, self.contract_test, self.user_test)
         self.schedule_test = add_new_schedule()
