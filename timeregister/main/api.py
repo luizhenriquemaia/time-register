@@ -37,7 +37,7 @@ class TypeContractViewSet(viewsets.ViewSet):
     
     def create(self, request):
         try:
-            if request.data['description'] and request.data['hoursSunday'] and request.data['hoursMonday'] and request.data['hoursTuesday'] and request.data['hoursWednesday'] and request.data['hoursThursday'] and request.data['hoursFriday'] and request.data['hoursSaturday']:
+            if request.data['description'] and (request.data['hoursSunday'] or request.data['hoursSunday'] == 0) and (request.data['hoursMonday'] or request.data['hoursMonday'] == 0) and (request.data['hoursTuesday'] or request.data['hoursTuesday'] == 0) and (request.data['hoursWednesday'] or request.data['hoursWednesday'] == 0) and (request.data['hoursThursday'] or request.data['hoursThursday'] == 0) and (request.data['hoursFriday'] or request.data['hoursFriday'] == 0) and (request.data['hoursSaturday'] or request.data['hoursSaturday'] == 0):
                 serializer = TypeContractSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=True):
                     new_type_of_contract = serializer.save(owner=self.request.user)
