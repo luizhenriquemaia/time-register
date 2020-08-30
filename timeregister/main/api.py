@@ -69,7 +69,6 @@ class TypeContractViewSet(viewsets.ViewSet):
     
     def create(self, request):
         try:
-            print(request.data)
             if request.data['description'] and (request.data['hoursSunday'] or request.data['hoursSunday'] == 0) and (request.data['hoursMonday'] or request.data['hoursMonday'] == 0) and (request.data['hoursTuesday'] or request.data['hoursTuesday'] == 0) and (request.data['hoursWednesday'] or request.data['hoursWednesday'] == 0) and (request.data['hoursThursday'] or request.data['hoursThursday'] == 0) and (request.data['hoursFriday'] or request.data['hoursFriday'] == 0) and (request.data['hoursSaturday'] or request.data['hoursSaturday'] == 0):
                 data_to_serializer = {
                     "description": request.data['description'],
