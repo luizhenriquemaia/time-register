@@ -55,7 +55,7 @@ export default function Employee() {
     }, [typesOfContract])
 
     useEffect(() => {
-        console.log(statusResponse)
+        console.log(statusResponse === 201)
         if (statusResponse === 201) {
             setNewTypeOfContractState({
                 description: "",
@@ -86,7 +86,7 @@ export default function Employee() {
         }
     }
 
-
+    
     return (
         <div className="content reports-page">
             <h1 className="title-page">Types of Contract</h1>
@@ -123,14 +123,14 @@ export default function Employee() {
                         ))
                     }
                     <tr>
-                        <td><input type="text" name="description" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursSunday" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursMonday" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursTuesday" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursWednesday" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursThursday" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursFriday" onChange={handleChange} /></td>
-                        <td><input type="time" name="hoursSaturday" onChange={handleChange} /></td>
+                        <td><input type="text" name="description" onChange={handleChange} value={newTypeOfContractState.description} /></td>
+                        <td><input type="time" name="hoursSunday" onChange={handleChange} value={newTypeOfContractState.hoursSunday} /></td>
+                        <td><input type="time" name="hoursMonday" onChange={handleChange} value={newTypeOfContractState.hoursMonday} /></td>
+                        <td><input type="time" name="hoursTuesday" onChange={handleChange} value={newTypeOfContractState.hoursTuesday} /></td>
+                        <td><input type="time" name="hoursWednesday" onChange={handleChange} value={newTypeOfContractState.hoursWednesday} /></td>
+                        <td><input type="time" name="hoursThursday" onChange={handleChange} value={newTypeOfContractState.hoursThursday} /></td>
+                        <td><input type="time" name="hoursFriday" onChange={handleChange} value={newTypeOfContractState.hoursFriday} /></td>
+                        <td><input type="time" name="hoursSaturday" onChange={handleChange} value={newTypeOfContractState.hoursSaturday} /></td>
                         <td>
                             <button className="icon-button" onClick={() => handleAddNewTypeContract()}>
                                 <AddSVG />
