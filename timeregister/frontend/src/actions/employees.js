@@ -23,7 +23,6 @@ export const getEmployees = () => (dispatch, getState) => {
 export const addEmployee = (employee) => (dispatch, getState) => {
     axios.post("api/employee/", employee, tokenConfig(getState))
         .then(res => {
-            console.log(res)
             dispatch({
                 type: ADD_EMPLOYEE,
                 payload: res.data.data
@@ -31,7 +30,6 @@ export const addEmployee = (employee) => (dispatch, getState) => {
             dispatch(returnSuccess(res.data.message, res.status))
         })
         .catch(err => {
-            console.log(err)
             dispatch(returnErrors(err.response.data.message, err.response.status))})
 }
 

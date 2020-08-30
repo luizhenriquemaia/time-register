@@ -36,7 +36,7 @@ export default function Alerts() {
 
     useEffect(() => {
         if (messageState) {
-            if (!messageState.token) {
+            if (!messageState.token) {                
                 if (infoStatus >= 500) alert.error("Erro interno do servidor")
                 if (infoStatus >= 400 && infoStatus < 500) alert.error(messageState)
                 if (infoStatus >= 200 && infoStatus < 400 && messageState) alert.success(messageState)

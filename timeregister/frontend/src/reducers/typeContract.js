@@ -1,4 +1,4 @@
-import { GET_TYPE_CONTRACT, DELETE_TYPE_CONTRACT, ADD_TYPE_CONTRACT } from '../actions/types.js'
+import { GET_TYPE_CONTRACT, ADD_TYPE_CONTRACT } from '../actions/types.js'
 
 
 const initialState = {
@@ -11,11 +11,6 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 typeContract: action.payload
-            }
-        case DELETE_TYPE_CONTRACT:
-            return {
-                ...state,
-                typeContract: state.typeContract.filter(typeContract => typeContract.id !== action.payload)
             }
         case ADD_TYPE_CONTRACT:
             return {

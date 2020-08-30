@@ -8,6 +8,7 @@ import Home from './layout/Home'
 import Report from './reports/Report'
 import TimeReport from './reports/TimeReport'
 import Employee from './employees/Employee'
+import TypeContract from './employees/TypeContract'
 import { loadUser } from '../actions/auth'
 
 
@@ -45,6 +46,7 @@ export default function Routes() {
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/report" component={Report} />
             <PrivateRoute exact path="/employee" component={Employee} />
+            <PrivateRoute exact path="/types-of-contract" component={TypeContract} />
             <PrivateRoute exact path="/time-report/:idReport" component={TimeReport} />
         </Switch>
     )
