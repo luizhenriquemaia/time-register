@@ -14,20 +14,24 @@ export const getReports = () => (dispatch, getState) => {
             })
             dispatch(returnSuccess(res.data.message, res.status))
         })
-    .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+    .catch(err => {
+        dispatch(returnErrors(err.response.data.message, err.response.status))})
 }
 
 // RETRIEVE REPORT
 export const getReport = (report) => (dispatch, getState) => {
     axios.get(`/api/report/${report}`, tokenConfig(getState))
         .then(res => {
+            //console.log(res)
             dispatch({
                 type: GET_REPORT,
                 payload: res.data.data
             })
             dispatch(returnSuccess(res.data.message, res.status))
         })
-    .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+    .catch(err => {
+        //console.log(err)
+        dispatch(returnErrors(err.response.data.message, err.response.status))})
 }
 
 // ADD REPORT
@@ -40,7 +44,8 @@ export const addReport = (report) => (dispatch, getState) => {
             })
             dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.message, err.response.status)))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data.message, err.response.status))})
 }
 
 // DELETE REPORT

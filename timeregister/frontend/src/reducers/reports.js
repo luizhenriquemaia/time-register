@@ -4,7 +4,6 @@ import { GET_REPORTS, GET_REPORT, DELETE_REPORT, ADD_REPORT } from '../actions/t
 
 const initialState = {
     report: [],
-    isReportAdded: false,
     isListOfReports: false,
     isObjectReport: false
 }
@@ -12,11 +11,18 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case GET_REPORTS:
-            return {
-                ...state,
-                report: action.payload,
-                isListOfReports: true,
-                isObjectReport: false
+            if (action.payload === "") {
+                return {
+                    ...state,
+                    report: [],
+                    isListOfReports: true
+                }
+            } else {
+                return {
+                    ...state,
+                    report: action.payload,
+                    isListOfReports: true
+                }
             }
         case GET_REPORT:
             return {
@@ -33,8 +39,7 @@ export default function (state = initialState, action) {
         case ADD_REPORT:
             return {
                 ...state,
-                report: [...state.report, action.payload],
-                isReportAdded: true
+                report: [...state.report, action.payload]
             }
         default:
             return state

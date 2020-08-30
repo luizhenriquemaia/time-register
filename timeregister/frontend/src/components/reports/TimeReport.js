@@ -19,7 +19,6 @@ export default function TimeReport() {
         "finalDate": "",
         "shortDates": ""
     })
-    const [idReport, setIdReport] = useState(-1)
     const [daysReport, setDaysReport] = useState([])
     const daysWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
     const [isComponentDataLoading, setIsComponentDataLoading] = useState(true)
@@ -31,6 +30,12 @@ export default function TimeReport() {
     const [totalNormalHours, setTotalNormalHours] = useState([])
     const [totalExtraHours50, setTotalExtraHours50] = useState([])
     const [totalExtraHours100, setTotalExtraHours100] = useState([])
+
+    useEffect(() => {
+        dispatch(getReport(idReportParams))
+        setIsComponentDataLoading(true)
+        setResponseFromAPIIsEmpty(false)
+    }, [])
 
     useEffect(() => {
         if (reportFromBackEnd.finalDate != null && reportFromBackEnd.finalDate !== "") {
@@ -68,21 +73,11 @@ export default function TimeReport() {
         }
     }, [timesOfReport])
 
-    useEffect(() => {
-        if (idReport != -1) {
-            dispatch(getReport(idReport))
-        }
-    }, [idReport])
 
     useEffect(() => {
-        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReport))
+        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReportParams))
     }, [shouldGetTimes])
 
-    useEffect(() => {
-        setIdReport(idReportParams)
-        setIsComponentDataLoading(true)
-        setResponseFromAPIIsEmpty(false)
-    }, [idReportParams])
 
     // check what times has values from backend
     useEffect(() => {
@@ -303,7 +298,7 @@ export default function TimeReport() {
                 dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDate()}`,
                 schedule_id: scheduleReportApi,
                 timeRegister: `${dateTimeReportTime.getHours()}:${dateTimeReportTime.getMinutes()}`,
-                report_id: idReport
+                report_id: idReportParams
             })
         }
         const listOfData = { listOfData: timesForApi}
