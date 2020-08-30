@@ -13,6 +13,23 @@ from .serializers import (EmployeeSerializer,
                           TypeContractSerializer)
 
 
+def transform_time_in_decimals(time):
+    splited_time = time.split(":")
+    hours = int(splited_time[0])
+    minutes = int(splited_time[1])
+    return hours + round(minutes / 60, 2)
+
+def transform_decimals_in_time(decimal_number):
+    decimal_number = float(decimal_number)
+    hours = int(decimal_number)
+    minutes = str(int(round((decimal_number % 1) * 60, 0)))
+    if len(minutes) < 2:
+        return f"{hours}:0{minutes}"
+    else:
+        return f"{hours}:{minutes}"
+
+
+
 class ScheduleViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ScheduleSerializer
@@ -23,26 +40,63 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 class TypeContractViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def list(self, request):
         queryset = TypeContract.objects.filter(owner=self.request.user)
         if len(queryset) == 0:
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             serializer = TypeContractSerializer(queryset, many=True)
+            data_to_frontend = []
+            for typeContract in serializer.data:
+                data_to_frontend.append(
+                    {
+                        "id": typeContract['id'],
+                        "description": typeContract['description'],
+                        "hoursSunday": transform_decimals_in_time(typeContract['hoursSunday']),
+                        "hoursMonday": transform_decimals_in_time(typeContract['hoursMonday']),
+                        "hoursTuesday": transform_decimals_in_time(typeContract['hoursTuesday']),
+                        "hoursWednesday": transform_decimals_in_time(typeContract['hoursWednesday']),
+                        "hoursThursday": transform_decimals_in_time(typeContract['hoursThursday']),
+                        "hoursFriday": transform_decimals_in_time(typeContract['hoursFriday']),
+                        "hoursSaturday": transform_decimals_in_time(typeContract['hoursSaturday']),
+                    }
+                )
             return Response({
-                "data": serializer.data,
+                "data": data_to_frontend,
                 "message": ""
             }, status=status.HTTP_200_OK)
     
     def create(self, request):
         try:
+            print(request.data)
             if request.data['description'] and (request.data['hoursSunday'] or request.data['hoursSunday'] == 0) and (request.data['hoursMonday'] or request.data['hoursMonday'] == 0) and (request.data['hoursTuesday'] or request.data['hoursTuesday'] == 0) and (request.data['hoursWednesday'] or request.data['hoursWednesday'] == 0) and (request.data['hoursThursday'] or request.data['hoursThursday'] == 0) and (request.data['hoursFriday'] or request.data['hoursFriday'] == 0) and (request.data['hoursSaturday'] or request.data['hoursSaturday'] == 0):
-                serializer = TypeContractSerializer(data=request.data)
+                data_to_serializer = {
+                    "description": request.data['description'],
+                    "hoursSunday": transform_time_in_decimals(request.data['hoursSunday']),
+                    "hoursMonday": transform_time_in_decimals(request.data['hoursMonday']),
+                    "hoursTuesday": transform_time_in_decimals(request.data['hoursTuesday']),
+                    "hoursWednesday": transform_time_in_decimals(request.data['hoursWednesday']),
+                    "hoursThursday": transform_time_in_decimals(request.data['hoursThursday']),
+                    "hoursFriday": transform_time_in_decimals(request.data['hoursFriday']),
+                    "hoursSaturday": transform_time_in_decimals(request.data['hoursSaturday']),
+                }
+                serializer = TypeContractSerializer(data=data_to_serializer)
                 if serializer.is_valid(raise_exception=True):
                     new_type_of_contract = serializer.save(owner=self.request.user)
+                    data_to_frontend = {
+                        "id": serializer.data['id'],
+                        "description": serializer.data['description'],
+                        "hoursSunday": transform_decimals_in_time(serializer.data['hoursSunday']),
+                        "hoursMonday": transform_decimals_in_time(serializer.data['hoursMonday']),
+                        "hoursTuesday": transform_decimals_in_time(serializer.data['hoursTuesday']),
+                        "hoursWednesday": transform_decimals_in_time(serializer.data['hoursWednesday']),
+                        "hoursThursday": transform_decimals_in_time(serializer.data['hoursThursday']),
+                        "hoursFriday": transform_decimals_in_time(serializer.data['hoursFriday']),
+                        "hoursSaturday": transform_decimals_in_time(serializer.data['hoursSaturday']),
+                    }
                     return Response({
-                        "data": serializer.data,
+                        "data": data_to_frontend,
                         "message": "type of contract added"
                     }, status=status.HTTP_201_CREATED)
                 return Response({
