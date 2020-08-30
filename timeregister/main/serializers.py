@@ -48,9 +48,6 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
         fields = ['id', 'initialDate', 'finalDate',
                   'employee', 'employee_id', 'typeContract', 'typeContract_id', 'owner']
-
-    def create(self, validated_data):
-        return Report.create(Report, **validated_data)
     
     def destroy(self, id):
         return Report.destroy(Report, id)

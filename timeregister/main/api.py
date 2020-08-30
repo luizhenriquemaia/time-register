@@ -169,6 +169,7 @@ class ReportViewSet(viewsets.ViewSet):
 
     def list(self, request):
         queryset = Report.objects.filter(owner=self.request.user)
+
         if len(queryset) == 0:
             return Response(status=status.HTTP_204_NO_CONTENT) 
         else:

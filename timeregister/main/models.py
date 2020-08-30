@@ -60,16 +60,6 @@ class Report(models.Model):
     owner = models.ForeignKey(
         User, related_name="reports", on_delete=models.CASCADE, null=True)
     objects = models.Manager()
-
-    def create(self, **validated_data):
-        new_report = Report(
-            initialDate = validated_data['initialDate'],
-            finalDate = validated_data['finalDate'],
-            employee = Employee.objects.get(id=validated_data['employee_id']),
-            typeContract = TypeContract.objects.get(id=validated_data['typeContract_id'])
-        )
-        new_report.save()
-        return new_report
     
     def destroy(self, id):
         report = Report.objects.get(id=id)
@@ -84,7 +74,8 @@ class Report(models.Model):
             "employee_id": report.employee_id,
             "employee": Employee.objects.get(id=report.employee_id).__dict__,
             "typeContract_id": report.typeContract_id,
-            "typeContract": TypeContract.objects.get(id=report.typeContract_id).__dict__
+            "typeContract": TypeContract.objects.get(id=report.typeContract_id).__dict__,
+            "owner": report.owner
         }
         return report_dict
 
