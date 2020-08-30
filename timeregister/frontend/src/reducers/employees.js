@@ -8,7 +8,7 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case GET_EMPLOYEES:
-            if (action.payload.legth === undefined) {
+            if (action.payload.length === undefined) {
                 return {
                     ...state,
                     employee: []

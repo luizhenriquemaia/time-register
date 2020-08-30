@@ -10,7 +10,7 @@ export const getEmployees = () => (dispatch, getState) => {
     .then(res => {
         dispatch({
                 type: GET_EMPLOYEES,
-            payload: res.data.data
+                payload: res.data.data
             })
         })
         .catch(
