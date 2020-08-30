@@ -124,7 +124,7 @@ nav ul {
 }
 
 .reports-page {
-    grid-template-rows: 2% 100px 2% 1fr 0.2fr 1%;
+    grid-template-rows: 100px 100px 10px 1fr 150px 10px;
 }
 
 
