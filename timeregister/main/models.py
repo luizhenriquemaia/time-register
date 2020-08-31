@@ -86,14 +86,18 @@ class TimesReport(models.Model):
     def create(self, **validated_data):
         if TimesReport.objects.filter(dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule'], report=validated_data['report_id']).exists():
             report = TimesReport.objects.get(
-                dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule'], report=validated_data['report_id'])
+                dateRegister=validated_data['dateRegister'], 
+                schedule=validated_data['schedule'], 
+                report=validated_data['report_id']
+                )
             report.timeRegister = validated_data['timeRegister']
         else:
             report = TimesReport(
                 dateRegister=validated_data['dateRegister'],
                 schedule= validated_data['schedule'],
                 timeRegister=validated_data['timeRegister'],
-                report= Report.objects.get(id=validated_data['report_id'])
+                report= Report.objects.get(id=validated_data['report_id']),
+                owner=validated_data['owner']
             )
         report.save()
         return report
