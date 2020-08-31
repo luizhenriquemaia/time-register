@@ -97,7 +97,7 @@ class TimesReport(models.Model):
                 schedule= validated_data['schedule'],
                 timeRegister=validated_data['timeRegister'],
                 report= Report.objects.get(id=validated_data['report_id']),
-                owner=validated_data['owner']
+                owner=User.objects.get(username=validated_data['owner'])
             )
         report.save()
         return report

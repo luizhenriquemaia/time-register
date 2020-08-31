@@ -31,22 +31,14 @@ export default function TimeReport() {
     const [totalExtraHours50, setTotalExtraHours50] = useState([])
     const [totalExtraHours100, setTotalExtraHours100] = useState([])
 
+
     useEffect(() => {
         dispatch(getReport(idReportParams))
         setIsComponentDataLoading(true)
         setResponseFromAPIIsEmpty(false)
     }, [])
 
-    useEffect(() => {
-        if (reportFromBackEnd.finalDate != null && reportFromBackEnd.finalDate !== "") {
-            let days = []
-            for (let i = new Date(reportFromBackEnd.initialDate); i <= reportFromBackEnd.finalDate; i.setDate(i.getDate() + 1)) {
-                days.push(new Date(i))
-            }
-            setDaysReport(days)
-        }
-    }, [reportFromBackEnd])
-
+    // set report from backend state
     useEffect(() => {
         if (!isReportsFromReportsComponent) {
             if (report != null && report.length !== 0) {
@@ -71,6 +63,23 @@ export default function TimeReport() {
         }
     }, [report])
 
+    // set dates between the final date and initial date of report from backend
+    useEffect(() => {
+        if (reportFromBackEnd.finalDate != null && reportFromBackEnd.finalDate !== "") {
+            let days = []
+            for (let i = new Date(reportFromBackEnd.initialDate); i <= reportFromBackEnd.finalDate; i.setDate(i.getDate() + 1)) {
+                days.push(new Date(i))
+            }
+            setDaysReport(days)
+        }
+    }, [reportFromBackEnd])
+
+    // get times of report
+    useEffect(() => {
+        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReportParams))
+    }, [shouldGetTimes])
+
+    // set time state
     useEffect(() => {
         if (timesOfReport != undefined && timesOfReport.length !== 0) {
             setTimesState(timesOfReport)
@@ -79,11 +88,6 @@ export default function TimeReport() {
             setIsComponentDataLoading(false)
         }
     }, [timesOfReport])
-
-
-    useEffect(() => {
-        if (shouldGetTimes) dispatch(getTimeReportWithReport(idReportParams))
-    }, [shouldGetTimes])
 
 
     // check what times has values from backend
@@ -110,7 +114,7 @@ export default function TimeReport() {
             let splitedDateTime = time.dateRegister.split("-")
             let dateToCheck = new Date(splitedDateTime[0], splitedDateTime[1] - 1, splitedDateTime[2])
             if (date.getTime() === dateToCheck.getTime()) {
-                if (time.schedule_id === scheduleToCheck) return time.timeRegister
+                if (time.schedule === scheduleToCheck) return time.timeRegister
             }
         })
         let timeToAddToState = timesChecked.filter(time => (time != null))
@@ -273,7 +277,7 @@ export default function TimeReport() {
             let dateTimeReportTime = new Date(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1])
             timesForApi.push({
                 dateRegister: `${dateTimeReportTime.getFullYear()}-${dateTimeReportTime.getMonth()}-${dateTimeReportTime.getDate()}`,
-                schedule_id: scheduleReportApi,
+                schedule: scheduleReportApi,
                 timeRegister: `${dateTimeReportTime.getHours()}:${dateTimeReportTime.getMinutes()}`,
                 report_id: idReportParams
             })
@@ -282,7 +286,6 @@ export default function TimeReport() {
         dispatch(addTimeReport(listOfData))
     }
 
-    
     if (!isComponentDataLoading) {
         return (
             <div className="content times-report-page">
