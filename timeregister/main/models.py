@@ -2,13 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import date
 
-class Schedule(models.Model):
-    description = models.CharField(max_length=50)
-    objects = models.Manager()
-
-    def __str__(self):
-        return self.description
-
 
 class TypeContract(models.Model):
     description = models.CharField(max_length=200)
@@ -83,7 +76,7 @@ class Report(models.Model):
 # Change back to other viewset approach
 class TimesReport(models.Model):
     dateRegister = models.DateField(default=date(2000, 1, 1))
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
+    schedule = models.IntegerField(default=0)
     timeRegister = models.TimeField()
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
     owner = models.ForeignKey(
@@ -91,14 +84,14 @@ class TimesReport(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        if TimesReport.objects.filter(dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule_id'], report=validated_data['report_id']).exists():
+        if TimesReport.objects.filter(dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule'], report=validated_data['report_id']).exists():
             report = TimesReport.objects.get(
-                dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule_id'], report=validated_data['report_id'])
+                dateRegister=validated_data['dateRegister'], schedule=validated_data['schedule'], report=validated_data['report_id'])
             report.timeRegister = validated_data['timeRegister']
         else:
             report = TimesReport(
                 dateRegister=validated_data['dateRegister'],
-                schedule= Schedule.objects.get(id=validated_data['schedule_id']),
+                schedule= validated_data['schedule'],
                 timeRegister=validated_data['timeRegister'],
                 report= Report.objects.get(id=validated_data['report_id'])
             )

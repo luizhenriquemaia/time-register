@@ -6,11 +6,10 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import (
-    Employee, Report, Schedule, TimesReport, TypeContract)
+    Employee, Report, TimesReport, TypeContract)
 from .serializers import (EmployeeSerializer,
                           ReportRetrieveSerializer, ReportSerializer,
-                          ScheduleSerializer, TimesReportSerializer,
-                          TypeContractSerializer)
+                          TimesReportSerializer, TypeContractSerializer)
 
 
 def transform_time_in_decimals(time):
@@ -28,15 +27,6 @@ def transform_decimals_in_time(decimal_number):
         return f"{hours}:0{minutes}"
     else:
         return f"{hours}:{minutes}"
-
-
-
-class ScheduleViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = ScheduleSerializer
-
-    def get_queryset(self):
-        return Schedule.objects.filter(owner=self.request.user)
 
 
 class TypeContractViewSet(viewsets.ViewSet):
@@ -293,12 +283,10 @@ class TimesReportViewSet(viewsets.ViewSet):
                         "data": "",
                         "message": "no report founded"
                     }, status=status.HTTP_400_BAD_REQUEST)
-                try:
-                    Schedule.objects.get(id=data['schedule_id'])
-                except ObjectDoesNotExist:
+                if data['schedule'] != '1' and data['schedule'] != '2' and data['schedule'] != '3' and data['schedule'] != '4':
                     return Response({
                         "data": "",
-                        "message": "no report founded"
+                        "message": "invalid schedule"
                     }, status=status.HTTP_400_BAD_REQUEST)
                 serializer = TimesReportSerializer(data=data)
                 if serializer.is_valid(raise_exception=True):
@@ -317,4 +305,4 @@ class TimesReportViewSet(viewsets.ViewSet):
             return Response({
                 "data": "",
                 "message": "bad request"
-                }, status=status.HTTP_200_OK)
+                }, status=status.HTTP_400_BAD_REQUEST)

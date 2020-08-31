@@ -3,14 +3,7 @@ import json
 from rest_framework import serializers
 
 from .models import (
-    Employee, Report, Schedule, TimesReport, TypeContract)
-
-
-# Schedule Serializer
-class ScheduleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Schedule
-        fields = '__all__'
+    Employee, Report, TimesReport, TypeContract)
 
 
 # TypeContract Serializer
@@ -70,14 +63,12 @@ class ReportRetrieveSerializer(serializers.ModelSerializer):
 # Time's Report Serializer
 class TimesReportSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    schedule = ScheduleSerializer(read_only=True)
-    schedule_id = serializers.IntegerField()
     report = ReportSerializer(read_only=True)
     report_id = serializers.IntegerField()
 
     class Meta:
         model = TimesReport
-        fields = ['id', 'dateRegister', 'schedule', 'schedule_id',
+        fields = ['id', 'dateRegister', 'schedule',
                   'timeRegister', 'report', 'report_id', 'owner']
     
     def create(self, validated_data):
