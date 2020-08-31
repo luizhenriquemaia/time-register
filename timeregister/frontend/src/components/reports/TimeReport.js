@@ -56,8 +56,15 @@ export default function TimeReport() {
                     "employeeName": report.employee.name,
                     "initialDate": new Date(splitInitialDate[0], splitInitialDate[1] - 1, splitInitialDate[2]),
                     "finalDate": new Date(splitFinallDate[0], splitFinallDate[1] - 1, splitFinallDate[2]),
+                    "shortDates": `${report.initialDate} - ${report.finalDate}`,
                     "typeOfContract": report.typeContract.description,
-                    "shortDates": `${report.initialDate} - ${report.finalDate}`
+                    "hoursSunday": report.typeContract.hoursSunday,
+                    "hoursMonday": report.typeContract.hoursMonday,
+                    "hoursTuesday": report.typeContract.hoursTuesday,
+                    "hoursWednesday": report.typeContract.hoursWednesday,
+                    "hoursThursday": report.typeContract.hoursThursday,
+                    "hoursFriday": report.typeContract.hoursFriday,
+                    "hoursSaturday": report.typeContract.hoursSaturday
                 })
                 setShouldGetTimes(true)
             }
@@ -123,6 +130,14 @@ export default function TimeReport() {
         return new Date(0, 0, 0, splitedHours[0], splitedHours[1])
     }
 
+    // transform a string of hours in decimal
+    const transformHoursInDecimals = (stringHour) => {
+        let splitedHours = stringHour.split(":")
+        let hours = parseInt(splitedHours[0])
+        let minutes = parseInt(splitedHours[1])
+        return hours + roundWithDecimals(minutes / 60, 2)
+    }
+
     // round value
     const roundWithDecimals = (value, numberOfDecimals) => {
         return Math.round(value * Math.pow(10, numberOfDecimals)) / Math.pow(10, 2)
@@ -140,107 +155,69 @@ export default function TimeReport() {
         return totalHour = totalHour / 1000 / 3600
     }
 
-    // return total of hours, extra hours 50% and extra hours 100%
-    const getHoursPerDay = (time0, time1, time2, time3, dayOfTime) => {
+    // calculate total of hours
+    const calcHours = (normalHoursDay, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch) => {
         let totalHour = 0
         let totalNormalHours = 0
         let totalExtra50 = 0
         let totalExtra100 = 0
-        switch (reportFromBackEnd.typeOfContract) {
-            case "Segunda a sábado com hora extra e almoço de 1:00hr":
-                if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
-                if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
-                if (daysReport[dayOfTime].getDay() === 0) {
-                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra100 = differenceBetweenTimes(time0, time1)
-                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra100 += differenceBetweenTimes(time2, time3)
-                } else if (daysReport[dayOfTime].getDay() === 6) {
-                    if (time1IsBiggerThanTime0(time0, time1)) {
-                        totalNormalHours = differenceBetweenTimes(time0, time1)
-                        if (totalNormalHours > 5) {
-                            totalExtra50 = totalNormalHours - 5
-                            totalNormalHours = 5
-                        }
-                    }
-                    if (time1IsBiggerThanTime0(time2, time3)) {
-                        totalNormalHours += differenceBetweenTimes(time2, time3)
-                        if (totalNormalHours > 5) {
-                            totalExtra50 = totalNormalHours - 5
-                            totalNormalHours = 5
-                        }
-                    }
-                } else {
-                    if (time1IsBiggerThanTime0(time0, time1)) {
-                        totalNormalHours = differenceBetweenTimes(time0, time1)
-                        if (totalNormalHours > 8) {
-                            totalExtra50 = totalNormalHours - 8
-                            totalNormalHours = 8
-                        }
-                    }
-                    if (time1IsBiggerThanTime0(time2, time3)) {
-                        totalNormalHours += differenceBetweenTimes(time2, time3)
-                        if (totalNormalHours > 8) {
-                            totalExtra50 = totalNormalHours - 8
-                            totalNormalHours = 8
-                        }
-                    }
+
+        if (time1IsBigger) totalHour = totalHoursBeforeLunch
+        if (time3IsBigger) totalHour += totalHoursAfterLunch
+
+        const normalHoursDayDecimal = transformHoursInDecimals(normalHoursDay)
+        if(differenceBetweenTimes(normalHoursDay, "00:00") === 0) {
+            if (time1IsBigger) totalExtra100 = totalHoursBeforeLunch
+            if (time3IsBigger) totalExtra100 += totalHoursAfterLunch
+        } else {
+            if (time1IsBigger) {
+                totalNormalHours = totalHoursBeforeLunch
+                if (totalNormalHours > normalHoursDayDecimal) {
+                    totalExtra50 = totalNormalHours - normalHoursDayDecimal
+                    totalNormalHours = normalHoursDayDecimal
                 }
-                break
-            case "Segunda a sexta com hora extra e almoço de 1:00hr":
-                if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
-                if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
-                if (daysReport[dayOfTime].getDay() === 0) {
-                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra100 = differenceBetweenTimes(time0, time1)
-                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra100 += differenceBetweenTimes(time2, time3)
-                } else if (daysReport[dayOfTime].getDay() === 6) {
-                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra50 = differenceBetweenTimes(time0, time1)
-                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra50 += differenceBetweenTimes(time2, time3)
-                } else {
-                    if (time1IsBiggerThanTime0(time0, time1)) {
-                        totalNormalHours = differenceBetweenTimes(time0, time1)
-                        if (totalNormalHours > 9) {
-                            totalExtra50 = totalNormalHours - 9
-                            totalNormalHours = 9
-                        }
-                    }
-                    if (time1IsBiggerThanTime0(time2, time3)) {
-                        totalNormalHours += differenceBetweenTimes(time2, time3)
-                        if (totalNormalHours > 9) {
-                            totalExtra50 = totalNormalHours - 9
-                            totalNormalHours = 9
-                        }
-                    }
+            }
+            if (time3IsBigger) {
+                totalNormalHours += totalHoursAfterLunch
+                if (totalNormalHours > normalHoursDayDecimal) {
+                    totalExtra50 = totalNormalHours - normalHoursDayDecimal
+                    totalNormalHours = normalHoursDayDecimal
                 }
-                break
-            case "Segunda a sexta com hora extra e almoço de 1:12hr":
-                if (time1IsBiggerThanTime0(time0, time1)) totalHour = differenceBetweenTimes(time0, time1)
-                if (time1IsBiggerThanTime0(time2, time3)) totalHour += differenceBetweenTimes(time2, time3)
-                if (daysReport[dayOfTime].getDay() === 0) {
-                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra100 = differenceBetweenTimes(time0, time1)
-                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra100 += differenceBetweenTimes(time2, time3)
-                } else if (daysReport[dayOfTime].getDay() === 6) {
-                    if (time1IsBiggerThanTime0(time0, time1)) totalExtra50 = differenceBetweenTimes(time0, time1)
-                    if (time1IsBiggerThanTime0(time2, time3)) totalExtra50 += differenceBetweenTimes(time2, time3)
-                } else {
-                    if (time1IsBiggerThanTime0(time0, time1)) {
-                        totalNormalHours = differenceBetweenTimes(time0, time1)
-                        if (totalNormalHours > 8.8) {
-                            totalExtra50 = totalNormalHours - 8.8
-                            totalNormalHours = 8.8
-                        }
-                    }
-                    if (time1IsBiggerThanTime0(time2, time3)) {
-                        totalNormalHours += differenceBetweenTimes(time2, time3)
-                        if (totalNormalHours > 8.8) {
-                            totalExtra50 = totalNormalHours - 8.8
-                            totalNormalHours = 8.8
-                        }
-                    }
-                }
-                break
-            default:
-                console.log("HAVE TO MAKE THIS TYPE OF CONTRACT CASE")
+            }
         }
         return [roundWithDecimals(totalHour, 2), roundWithDecimals(totalNormalHours, 2), roundWithDecimals(totalExtra50, 2), roundWithDecimals(totalExtra100, 2)]
+    }
+
+    // return total of hours, extra hours 50% and extra hours 100%
+    const getHoursPerDay = (time0, time1, time2, time3, dayOfTime) => {
+        let time1IsBigger = false
+        let time3IsBigger = false
+        let totalHoursBeforeLunch = 0
+        let totalHoursAfterLunch = 0
+        
+        time1IsBiggerThanTime0(time0, time1) ? time1IsBigger = true : time1IsBigger = false
+        time1IsBiggerThanTime0(time2, time3) ? time3IsBigger = true : time3IsBigger = false
+        totalHoursBeforeLunch = differenceBetweenTimes(time0, time1)
+        totalHoursAfterLunch = differenceBetweenTimes(time2, time3)
+
+        switch (daysReport[dayOfTime].getDay()) {
+            case 0:
+                return calcHours(reportFromBackEnd.hoursSunday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            case 1:
+                return calcHours(reportFromBackEnd.hoursMonday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            case 2:
+                return calcHours(reportFromBackEnd.hoursTuesday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            case 3:
+                return calcHours(reportFromBackEnd.hoursWednesday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            case 4:
+                return calcHours(reportFromBackEnd.hoursThursday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            case 5:
+                return calcHours(reportFromBackEnd.hoursFriday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            case 6:
+                return calcHours(reportFromBackEnd.hoursSaturday, time1IsBigger, time3IsBigger, totalHoursBeforeLunch, totalHoursAfterLunch)
+            default:
+                break
+        }
     }
 
     // set total of hours to state
