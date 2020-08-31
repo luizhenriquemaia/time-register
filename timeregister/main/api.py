@@ -19,6 +19,7 @@ def transform_time_in_decimals(time):
     minutes = int(splited_time[1])
     return hours + round(minutes / 60, 2)
 
+
 def transform_decimals_in_time(decimal_number):
     decimal_number = float(decimal_number)
     hours = int(decimal_number)
@@ -232,6 +233,14 @@ class ReportViewSet(viewsets.ViewSet):
         report = Report.retrieve(Report, id=pk)
         serializer = ReportRetrieveSerializer(data=report)
         if serializer.is_valid(raise_exception=True):
+            # converting data from decimals to hours for frontend
+            serializer.data['typeContract']['hoursSunday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursSunday'])
+            serializer.data['typeContract']['hoursMonday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursMonday'])
+            serializer.data['typeContract']['hoursTuesday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursTuesday'])
+            serializer.data['typeContract']['hoursWednesday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursWednesday'])
+            serializer.data['typeContract']['hoursThursday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursThursday'])
+            serializer.data['typeContract']['hoursFriday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursFriday'])
+            serializer.data['typeContract']['hoursSaturday'] = transform_decimals_in_time(serializer.data['typeContract']['hoursSaturday'])
             return Response({
                 "data": serializer.data,
                 "message": ""
